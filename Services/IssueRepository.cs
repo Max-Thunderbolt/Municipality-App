@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Municipality_App.Models;
 
-namespace Municipality_App
+namespace Municipality_App.Services
 {
     public static class IssueRepository
     {

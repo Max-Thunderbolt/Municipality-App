@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Municipality_App
+namespace Municipality_App.Models
 {
     public class IssueReport
     {

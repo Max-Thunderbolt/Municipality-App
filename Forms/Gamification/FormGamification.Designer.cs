@@ -1,4 +1,4 @@
-namespace Municipality_App
+namespace Municipality_App.Forms.Gamification
 {
     partial class FormGamification
     {

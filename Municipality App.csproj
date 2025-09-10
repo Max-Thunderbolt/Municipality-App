@@ -52,52 +52,46 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Forms\Main\FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormMain.Designer.cs">
+    <Compile Include="Forms\Main\FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormEngagement.cs">
+    <Compile Include="Forms\Engagement\FormEngagement.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormEngagement.Designer.cs">
+    <Compile Include="Forms\Engagement\FormEngagement.Designer.cs">
       <DependentUpon>FormEngagement.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormGamification.cs">
+    <Compile Include="Forms\Gamification\FormGamification.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormGamification.Designer.cs">
+    <Compile Include="Forms\Gamification\FormGamification.Designer.cs">
       <DependentUpon>FormGamification.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormReportIssue.cs">
+    <Compile Include="Forms\Issues\FormReportIssue.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormReportIssue.Designer.cs">
+    <Compile Include="Forms\Issues\FormReportIssue.Designer.cs">
       <DependentUpon>FormReportIssue.cs</DependentUpon>
     </Compile>
-    <Compile Include="GamificationService.cs" />
-    <Compile Include="IssueReport.cs" />
-    <Compile Include="IssueRepository.cs" />
-    <Compile Include="UserProfile.cs" />
+    <Compile Include="Services\GamificationService.cs" />
+    <Compile Include="Models\IssueReport.cs" />
+    <Compile Include="Services\IssueRepository.cs" />
+    <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormMain.resx">
+    <EmbeddedResource Include="Forms\Main\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormReportIssue.resx">
+    <EmbeddedResource Include="Forms\Issues\FormReportIssue.resx">
       <DependentUpon>FormReportIssue.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormEngagement.resx">
+    <EmbeddedResource Include="Forms\Engagement\FormEngagement.resx">
       <DependentUpon>FormEngagement.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormGamification.resx">
+    <EmbeddedResource Include="Forms\Gamification\FormGamification.resx">
       <DependentUpon>FormGamification.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -1,8 +1,9 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using Municipality_App.Services;
 
-namespace Municipality_App
+namespace Municipality_App.Forms.Gamification
 {
     public partial class FormGamification : Form
     {

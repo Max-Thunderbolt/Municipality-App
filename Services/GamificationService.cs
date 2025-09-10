@@ -1,9 +1,10 @@
 using System;
 using System.IO;
 using System.Linq;
+using Municipality_App.Models;
 using Newtonsoft.Json;
 
-namespace Municipality_App
+namespace Municipality_App.Services
 {
     public static class GamificationService
     {

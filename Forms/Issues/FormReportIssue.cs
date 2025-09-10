@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Municipality_App.Models;
+using Municipality_App.Services;
 
-namespace Municipality_App
+namespace Municipality_App.Forms.Issues
 {
     public partial class FormReportIssue : Form
     {
