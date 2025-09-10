@@ -31,10 +31,8 @@ namespace Municipality_App.Services
                     var json = File.ReadAllText(StorageFilePath);
                     _profile = JsonConvert.DeserializeObject<UserProfile>(json);
 
-                    // Handle migration from old text file format
                     if (_profile == null)
                     {
-                        // Try to read old format
                         var oldFilePath = StorageFilePath.Replace(".json", ".txt");
                         if (File.Exists(oldFilePath))
                         {
@@ -42,7 +40,7 @@ namespace Municipality_App.Services
                             if (int.TryParse(text, out int points) && points >= 0)
                             {
                                 _profile = new UserProfile { Points = points };
-                                File.Delete(oldFilePath); // Remove old file
+                                File.Delete(oldFilePath);
                             }
                         }
                     }
@@ -117,7 +115,6 @@ namespace Municipality_App.Services
         public static int GetLevel()
         {
             EnsureInitialized();
-            // Simple leveling: every 100 points is a level
             return Math.Max(1, (_profile.Points / 100) + 1);
         }
 
@@ -142,7 +139,6 @@ namespace Municipality_App.Services
 
         private static void CheckAndUnlockBadges()
         {
-            // Check point-based badges
             if (!_profile.UnlockedBadges.Contains("First Steps") && _profile.Points >= 10)
                 _profile.UnlockedBadges.Add("First Steps");
 
@@ -155,7 +151,6 @@ namespace Municipality_App.Services
             if (!_profile.UnlockedBadges.Contains("Community Leader") && _profile.Points >= 500)
                 _profile.UnlockedBadges.Add("Community Leader");
 
-            // Check issue-based badges
             if (
                 !_profile.UnlockedBadges.Contains("Issue Reporter")
                 && _profile.SubmittedIssues.Count >= 1
@@ -174,7 +169,6 @@ namespace Municipality_App.Services
             )
                 _profile.UnlockedBadges.Add("Community Champion");
 
-            // Check event-based badges
             var eventCount = _profile.Activities.Count(a => a.Type == "event_attended");
             if (!_profile.UnlockedBadges.Contains("Event Attendee") && eventCount >= 1)
                 _profile.UnlockedBadges.Add("Event Attendee");
@@ -182,7 +176,6 @@ namespace Municipality_App.Services
             if (!_profile.UnlockedBadges.Contains("Regular Attendee") && eventCount >= 3)
                 _profile.UnlockedBadges.Add("Regular Attendee");
 
-            // Check announcement-based badges
             var announcementCount = _profile.Activities.Count(a => a.Type == "announcement_read");
             if (!_profile.UnlockedBadges.Contains("Informed Citizen") && announcementCount >= 5)
                 _profile.UnlockedBadges.Add("Informed Citizen");
