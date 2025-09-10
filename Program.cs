@@ -16,6 +16,7 @@ namespace Municipality_App
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            GamificationService.Initialize();
             Application.Run(new FormMain());
         }
     }

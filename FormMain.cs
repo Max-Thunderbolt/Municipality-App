@@ -17,5 +17,21 @@ namespace Municipality_App
                 form.ShowDialog(this);
             }
         }
+
+        private void buttonEvents_Click(object sender, EventArgs e)
+        {
+            using (var form = new FormEngagement())
+            {
+                form.ShowDialog(this);
+            }
+        }
+
+        private void progressToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var form = new FormGamification())
+            {
+                form.ShowDialog(this);
+            }
+        }
     }
 }

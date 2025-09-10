@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import
+    Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
+    Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"
+  />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -44,6 +47,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Form1.cs">
@@ -58,14 +64,28 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormEngagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormEngagement.Designer.cs">
+      <DependentUpon>FormEngagement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormGamification.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormGamification.Designer.cs">
+      <DependentUpon>FormGamification.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormReportIssue.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormReportIssue.Designer.cs">
       <DependentUpon>FormReportIssue.cs</DependentUpon>
     </Compile>
+    <Compile Include="GamificationService.cs" />
     <Compile Include="IssueReport.cs" />
     <Compile Include="IssueRepository.cs" />
+    <Compile Include="UserProfile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormMain.resx">
@@ -73,6 +93,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormReportIssue.resx">
       <DependentUpon>FormReportIssue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormEngagement.resx">
+      <DependentUpon>FormEngagement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormGamification.resx">
+      <DependentUpon>FormGamification.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -95,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

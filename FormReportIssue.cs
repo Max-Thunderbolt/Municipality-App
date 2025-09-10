@@ -157,7 +157,21 @@ namespace Municipality_App
                 AttachmentFilePaths = _attachments.ToList(),
             };
 
+            // Add to both repository and user profile
             IssueRepository.Add(issue);
+            GamificationService.AddIssue(issue);
+
+            // Award points: base for submission + bonuses for details
+            int points = 10; // base for submitting a report
+            if (!string.IsNullOrWhiteSpace(location))
+                points += 5;
+            if (!string.IsNullOrWhiteSpace(category))
+                points += 5;
+            if (!string.IsNullOrWhiteSpace(description) && description.Length >= 50)
+                points += 10; // detailed description
+            if (_attachments.Count > 0)
+                points += Math.Min(20, _attachments.Count * 5); // up to +20 for attachments
+            GamificationService.AddPoints(points, "Issue submitted", "issue_submitted", issue.Id);
 
             progressEngagement.Value = 100;
             labelEngagement.Text = "Thank you! Your report has been submitted successfully.";
