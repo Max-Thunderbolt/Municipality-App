@@ -3,20 +3,47 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using MaterialSkin;
+using MaterialSkin.Controls;
 using Municipality_App.Models;
 using Municipality_App.Services;
 
 namespace Municipality_App.Forms.Issues
 {
-    public partial class FormReportIssue : Form
+    public partial class FormReportIssue : MaterialForm
     {
         private readonly List<string> _attachments = new List<string>();
 
         public FormReportIssue()
         {
             InitializeComponent();
+            ApplyMaterialTheme();
             PopulateCategories();
             SetupProgressTracking();
+        }
+
+        private void ApplyMaterialTheme()
+        {
+            var materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+            materialSkinManager.ColorScheme = new ColorScheme(
+                Primary.Blue600,
+                Primary.Blue700,
+                Primary.Blue500,
+                Accent.Blue400,
+                TextShade.WHITE
+            );
+
+            // Configure form for MaterialSkin borderless design
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.StartPosition = FormStartPosition.CenterParent;
+
+            // Additional styling to prevent rendering artifacts
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
+            this.SetStyle(ControlStyles.DoubleBuffer, true);
+            this.SetStyle(ControlStyles.ResizeRedraw, true);
         }
 
         private void PopulateCategories()

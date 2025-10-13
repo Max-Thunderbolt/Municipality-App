@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using MaterialSkin;
+using MaterialSkin.Controls;
 using Municipality_App.Models;
 using Municipality_App.Services;
 
 namespace Municipality_App.Forms.Engagement
 {
-    public partial class FormEngagement : Form
+    public partial class FormEngagement : MaterialForm
     {
         private List<Event> _currentEvents = new List<Event>();
         private List<Announcement> _currentAnnouncements = new List<Announcement>();
@@ -16,9 +18,34 @@ namespace Municipality_App.Forms.Engagement
         public FormEngagement()
         {
             InitializeComponent();
+            ApplyMaterialTheme();
             LoadData();
             SetupEventHandlers();
             PopulateComboBoxes();
+        }
+
+        private void ApplyMaterialTheme()
+        {
+            var materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+            materialSkinManager.ColorScheme = new ColorScheme(
+                Primary.Blue600,
+                Primary.Blue700,
+                Primary.Blue500,
+                Accent.Blue400,
+                TextShade.WHITE
+            );
+
+            // Configure form for MaterialSkin borderless design
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.StartPosition = FormStartPosition.CenterParent;
+
+            // Additional styling to prevent rendering artifacts
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
+            this.SetStyle(ControlStyles.DoubleBuffer, true);
+            this.SetStyle(ControlStyles.ResizeRedraw, true);
         }
 
         private void LoadData()
@@ -403,5 +430,7 @@ namespace Municipality_App.Forms.Engagement
 
             return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
         }
+
+        private void FormEngagement_Load(object sender, EventArgs e) { }
     }
 }

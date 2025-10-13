@@ -1,16 +1,43 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using MaterialSkin;
+using MaterialSkin.Controls;
 using Municipality_App.Services;
 
 namespace Municipality_App.Forms.Gamification
 {
-    public partial class FormGamification : Form
+    public partial class FormGamification : MaterialForm
     {
         public FormGamification()
         {
             InitializeComponent();
+            ApplyMaterialTheme();
             LoadGamificationData();
+        }
+
+        private void ApplyMaterialTheme()
+        {
+            var materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+            materialSkinManager.ColorScheme = new ColorScheme(
+                Primary.Blue600,
+                Primary.Blue700,
+                Primary.Blue500,
+                Accent.Blue400,
+                TextShade.WHITE
+            );
+
+            // Configure form for MaterialSkin borderless design
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.StartPosition = FormStartPosition.CenterParent;
+
+            // Additional styling to prevent rendering artifacts
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
+            this.SetStyle(ControlStyles.DoubleBuffer, true);
+            this.SetStyle(ControlStyles.ResizeRedraw, true);
         }
 
         private void LoadGamificationData()

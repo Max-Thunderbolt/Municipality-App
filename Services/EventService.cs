@@ -138,7 +138,7 @@ namespace Municipality_App.Services
         {
             return _eventLookup
                 .Values.Where(e =>
-                    e.EventLocation.Contains(location, StringComparison.OrdinalIgnoreCase)
+                    e.EventLocation.Contains(location) // , StringComparison.OrdinalIgnoreCase
                 )
                 .OrderBy(e => e.EventDate)
                 .ToList();

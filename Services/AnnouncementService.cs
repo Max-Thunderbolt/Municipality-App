@@ -156,7 +156,7 @@ namespace Municipality_App.Services
             return _announcementLookup
                 .Values.Where(a =>
                     a.AnnouncementLocation != null
-                    && a.AnnouncementLocation.Contains(location, StringComparison.OrdinalIgnoreCase)
+                    && a.AnnouncementLocation.Contains(location) // ,StringComparison.OrdinalIgnoreCase
                 )
                 .OrderByDescending(a => a.AnnouncementDate)
                 .ToList();

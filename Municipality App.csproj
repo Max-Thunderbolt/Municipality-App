@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import
-    Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
-    Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"
-  />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -36,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MaterialSkin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MaterialSkin.0.2.1\lib\MaterialSkin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -77,9 +77,17 @@
       <DependentUpon>FormReportIssue.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\GamificationService.cs" />
-    <Compile Include="Models\IssueReport.cs" />
+    <Compile Include="Services\RecommendationService.cs" />
+    <Compile Include="Services\SearchService.cs" />
     <Compile Include="Services\IssueRepository.cs" />
+    <Compile Include="Services\EventService.cs" />
+    <Compile Include="Services\AnnouncementService.cs" />
+    <Compile Include="Models\IssueReport.cs" />
+    <Compile Include="Models\UserSearch.cs" />
     <Compile Include="Models\UserProfile.cs" />
+    <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\EventRegistration.cs" />
+    <Compile Include="Models\Announcement.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\Main\FormMain.resx">

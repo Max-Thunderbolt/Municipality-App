@@ -1,6 +1,10 @@
+using MaterialSkin;
+using MaterialSkin.Controls;
+
+
 namespace Municipality_App.Forms.Main
 {
-	partial class FormMain
+	partial class FormMain : MaterialForm     
 	{
 		private System.ComponentModel.IContainer components = null;
 
@@ -15,7 +19,6 @@ namespace Municipality_App.Forms.Main
 
 		private void InitializeComponent()
 		{
-            this.labelTitle = new System.Windows.Forms.Label();
             this.buttonReportIssues = new System.Windows.Forms.Button();
             this.buttonEvents = new System.Windows.Forms.Button();
             this.buttonStatus = new System.Windows.Forms.Button();
@@ -25,19 +28,11 @@ namespace Municipality_App.Forms.Main
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // labelTitle
-            // 
-            this.labelTitle.AutoSize = true;
-            this.labelTitle.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
-            this.labelTitle.Location = new System.Drawing.Point(78, 35);
-            this.labelTitle.Name = "labelTitle";
-            this.labelTitle.Size = new System.Drawing.Size(319, 25);
-            this.labelTitle.TabIndex = 0;
-            this.labelTitle.Text = "Municipality Services - Main Menu";
-            // 
             // buttonReportIssues
             // 
             this.buttonReportIssues.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.buttonReportIssues.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonReportIssues.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonReportIssues.ForeColor = System.Drawing.Color.White;
             this.buttonReportIssues.Location = new System.Drawing.Point(112, 83);
             this.buttonReportIssues.Name = "buttonReportIssues";
@@ -49,24 +44,31 @@ namespace Municipality_App.Forms.Main
             // 
             // buttonEvents
             // 
-            this.buttonEvents.Enabled = true;
+            this.buttonEvents.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.buttonEvents.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonEvents.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonEvents.ForeColor = System.Drawing.Color.White;
             this.buttonEvents.Location = new System.Drawing.Point(112, 129);
             this.buttonEvents.Name = "buttonEvents";
             this.buttonEvents.Size = new System.Drawing.Size(260, 40);
             this.buttonEvents.TabIndex = 2;
             this.buttonEvents.Text = "Events and Announcements";
-            this.buttonEvents.UseVisualStyleBackColor = true;
+            this.buttonEvents.UseVisualStyleBackColor = false;
             this.buttonEvents.Click += new System.EventHandler(this.buttonEvents_Click);
             // 
             // buttonStatus
             // 
+            this.buttonStatus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.buttonStatus.Enabled = false;
+            this.buttonStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonStatus.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.buttonStatus.Location = new System.Drawing.Point(112, 175);
             this.buttonStatus.Name = "buttonStatus";
             this.buttonStatus.Size = new System.Drawing.Size(260, 40);
             this.buttonStatus.TabIndex = 3;
             this.buttonStatus.Text = "Service Request Status (coming soon)";
-            this.buttonStatus.UseVisualStyleBackColor = true;
+            this.buttonStatus.UseVisualStyleBackColor = false;
             // 
             // menuStrip1
             // 
@@ -83,13 +85,13 @@ namespace Municipality_App.Forms.Main
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.progressToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(87, 20);
             this.viewToolStripMenuItem.Text = "View Activity";
             // 
             // progressToolStripMenuItem
             // 
             this.progressToolStripMenuItem.Name = "progressToolStripMenuItem";
-            this.progressToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.progressToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.progressToolStripMenuItem.Text = "Your Progress";
             this.progressToolStripMenuItem.Click += new System.EventHandler(this.progressToolStripMenuItem_Click);
             // 
@@ -101,11 +103,9 @@ namespace Municipality_App.Forms.Main
             this.Controls.Add(this.buttonStatus);
             this.Controls.Add(this.buttonEvents);
             this.Controls.Add(this.buttonReportIssues);
-            this.Controls.Add(this.labelTitle);
             this.Controls.Add(this.menuStrip1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MainMenuStrip = this.menuStrip1;
-            this.MaximizeBox = false;
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Municipality Services";
@@ -115,8 +115,6 @@ namespace Municipality_App.Forms.Main
             this.PerformLayout();
 
 		}
-
-		private System.Windows.Forms.Label labelTitle;
 		private System.Windows.Forms.Button buttonReportIssues;
 		private System.Windows.Forms.Button buttonEvents;
 		private System.Windows.Forms.Button buttonStatus;
