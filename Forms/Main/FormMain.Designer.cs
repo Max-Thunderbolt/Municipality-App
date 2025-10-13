@@ -49,12 +49,12 @@ namespace Municipality_App.Forms.Main
             // 
             // buttonEvents
             // 
-            this.buttonEvents.Enabled = false;
+            this.buttonEvents.Enabled = true;
             this.buttonEvents.Location = new System.Drawing.Point(112, 129);
             this.buttonEvents.Name = "buttonEvents";
             this.buttonEvents.Size = new System.Drawing.Size(260, 40);
             this.buttonEvents.TabIndex = 2;
-            this.buttonEvents.Text = "Events and Announcements (Coming soon)";
+            this.buttonEvents.Text = "Events and Announcements";
             this.buttonEvents.UseVisualStyleBackColor = true;
             this.buttonEvents.Click += new System.EventHandler(this.buttonEvents_Click);
             // 

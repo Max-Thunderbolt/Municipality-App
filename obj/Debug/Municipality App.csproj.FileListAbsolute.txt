@@ -14,3 +14,4 @@ C:\Users\maxat\OneDrive - ADvTECH Ltd\Varsity College\2025\Semester 2\PROG7312\P
 C:\Users\maxat\OneDrive - ADvTECH Ltd\Varsity College\2025\Semester 2\PROG7312\POE\Municipality App\obj\Debug\Municipality_App.Forms.Issues.FormReportIssue.resources
 C:\Users\maxat\OneDrive - ADvTECH Ltd\Varsity College\2025\Semester 2\PROG7312\POE\Municipality App\obj\Debug\Municipality_App.Forms.Engagement.FormEngagement.resources
 C:\Users\maxat\OneDrive - ADvTECH Ltd\Varsity College\2025\Semester 2\PROG7312\POE\Municipality App\obj\Debug\Municipality_App.Forms.Gamification.FormGamification.resources
+C:\Users\maxat\OneDrive - ADvTECH Ltd\Varsity College\2025\Semester 2\PROG7312\POE\Municipality App\obj\Debug\Municipality App.exe.config

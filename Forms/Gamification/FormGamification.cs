@@ -22,14 +22,12 @@ namespace Municipality_App.Forms.Gamification
                 var level = GamificationService.GetLevel();
                 var unlockedBadges = GamificationService.GetUnlockedBadges();
 
-                // Display basic stats
                 labelPoints.Text = $"Total Points: {profile.Points}";
                 labelLevel.Text = $"Current Level: {level}";
                 labelCurrentBadge.Text = $"Current Badge: {currentBadge}";
                 labelIssuesSubmitted.Text = $"Issues Submitted: {profile.SubmittedIssues.Count}";
                 labelActivities.Text = $"Total Activities: {profile.Activities.Count}";
 
-                // Display unlocked badges
                 listBoxBadges.Items.Clear();
                 if (unlockedBadges.Length > 0)
                 {
@@ -43,7 +41,6 @@ namespace Municipality_App.Forms.Gamification
                     listBoxBadges.Items.Add("No badges unlocked yet. Keep participating!");
                 }
 
-                // Display recent activities
                 listBoxActivities.Items.Clear();
                 var recentActivities = profile
                     .Activities.OrderByDescending(a => a.Timestamp)
@@ -65,7 +62,6 @@ namespace Municipality_App.Forms.Gamification
                     listBoxActivities.Items.Add("No activities yet. Start by reporting an issue!");
                 }
 
-                // Display submitted issues summary
                 listBoxIssues.Items.Clear();
                 if (profile.SubmittedIssues.Count > 0)
                 {

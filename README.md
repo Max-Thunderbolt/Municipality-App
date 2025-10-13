@@ -181,6 +181,64 @@ The application features 11 different badges:
 - **Progress Tracking**: Real-time progress indicators
 - **File Attachments**: Support for images and documents
 - **Clean Architecture**: Proper separation of concerns
+- **Advanced Data Structures**: Priority queues, hash tables, stacks, and dictionaries
+- **Recommendation System**: AI-powered suggestions based on user behavior
+- **Search Analytics**: Comprehensive search tracking and analysis
+- **Event Management**: Full event lifecycle management with registration
+- **Announcement System**: Categorized announcement delivery and tracking
+
+### Advanced Data Structures & Algorithms
+
+The application implements several advanced data structures and algorithms for optimal performance:
+
+#### **Priority Queue (EventService)**
+
+- **Purpose**: Events sorted by date and priority
+- **Implementation**: `SortedDictionary<DateTime, List<Event>>`
+- **Benefits**: O(log n) insertion, O(1) access to highest priority items
+- **Usage**: Event scheduling and management
+
+#### **Hash Table (AnnouncementService)**
+
+- **Purpose**: Fast announcement lookup by category
+- **Implementation**: `Dictionary<string, List<Announcement>>`
+- **Benefits**: O(1) average case lookup time
+- **Usage**: Categorized announcement storage and retrieval
+
+#### **Stack (Event Registration History)**
+
+- **Purpose**: LIFO (Last In, First Out) event registration tracking
+- **Implementation**: `Stack<EventRegistration>`
+- **Benefits**: O(1) push/pop operations
+- **Usage**: Registration history and undo functionality
+
+#### **Sorted Dictionary (Search Analytics)**
+
+- **Purpose**: Search patterns sorted by timestamp
+- **Implementation**: `SortedDictionary<DateTime, UserSearch>`
+- **Benefits**: Chronological ordering with efficient range queries
+- **Usage**: Search history and analytics
+
+#### **Set (User Interests)**
+
+- **Purpose**: Unique user interest tracking
+- **Implementation**: `HashSet<string>`
+- **Benefits**: O(1) add/remove operations, automatic uniqueness
+- **Usage**: User preference management
+
+#### **Queue (Notifications)**
+
+- **Purpose**: FIFO (First In, First Out) notification delivery
+- **Implementation**: `Queue<string>`
+- **Benefits**: O(1) enqueue/dequeue operations
+- **Usage**: Event and announcement notifications
+
+#### **Recommendation Algorithm**
+
+- **Purpose**: Personalized content suggestions
+- **Implementation**: Multi-factor scoring system
+- **Factors**: User interests, search history, activity level, recency
+- **Benefits**: Improved user engagement and content discovery
 
 ### Namespace Structure
 
@@ -202,18 +260,61 @@ Municipality_App                    // Root namespace
 - **MSBuild Host Error**: Use Visual Studio instead of command line
 - **Resource Generation**: Ensure all .resx files are properly linked
 - **Missing References**: Restore NuGet packages
+- **Designer Errors**: If form designer shows errors, rebuild the solution
+- **Assembly Loading**: Ensure all referenced assemblies are in the correct location
 
 ### Runtime Issues
 
 - **File Access**: Ensure write permissions to `%LocalAppData%`
 - **JSON Parsing**: Delete `user_profile.json` to reset user data
 - **Form Display**: Check that all form files are in correct directories
+- **Memory Issues**: Close and reopen the application if memory usage is high
+- **Threading Issues**: All UI operations are performed on the main thread
 
 ### Data Issues
 
 - **Reset Progress**: Delete `%LocalAppData%\MunicipalityApp\user_profile.json`
 - **Migration**: Old text files are automatically converted to JSON
 - **Corruption**: JSON files are validated on load
+- **Data Loss**: Regular backups are recommended for user profiles
+- **Search Issues**: Clear search history if search functionality stops working
+
+### Advanced Data Structure Issues
+
+- **Priority Queue**: Events are automatically sorted by date
+- **Hash Table**: Announcements are indexed by category for fast lookup
+- **Stack Operations**: Event registration history uses LIFO (Last In, First Out)
+- **Dictionary Performance**: Large datasets may require optimization
+- **Memory Management**: Advanced data structures are automatically garbage collected
+
+### Performance Issues
+
+- **Slow Loading**: Large user profiles may take time to load
+- **Search Performance**: Complex searches may be slow with large datasets
+- **Memory Usage**: Monitor memory usage with large numbers of events/announcements
+- **UI Responsiveness**: Long-running operations are handled asynchronously
+
+### Network Issues
+
+- **Offline Mode**: Application works completely offline
+- **Data Synchronization**: No network connectivity required
+- **File Sharing**: User profiles can be shared between installations
+
+### Common Error Messages
+
+- **"File not found"**: Check file paths and permissions
+- **"Invalid JSON"**: Delete corrupted JSON files to reset
+- **"Access denied"**: Run as administrator or check file permissions
+- **"Out of memory"**: Close other applications or restart the system
+- **"Form not found"**: Ensure all form files are properly compiled
+
+### Debugging Tips
+
+- **Enable Debug Mode**: Set configuration to Debug for detailed error messages
+- **Check Event Logs**: Windows Event Viewer may contain additional error details
+- **Verify Dependencies**: Ensure all required .NET Framework components are installed
+- **Test Data**: Use sample data to test functionality before using real data
+- **Backup Data**: Always backup user profiles before making changes
 
 ## Future Enhancements
 
