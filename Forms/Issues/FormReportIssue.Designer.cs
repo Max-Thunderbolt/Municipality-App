@@ -24,10 +24,9 @@ namespace Municipality_App.Forms.Issues
             this.comboCategory = new System.Windows.Forms.ComboBox();
             this.labelDescription = new MaterialSkin.Controls.MaterialLabel();
             this.richDescription = new System.Windows.Forms.RichTextBox();
-            this.buttonAttach = new System.Windows.Forms.Button();
+            this.buttonAttach = new MaterialSkin.Controls.MaterialRaisedButton();
             this.listAttachments = new System.Windows.Forms.ListBox();
-            this.buttonSubmit = new System.Windows.Forms.Button();
-            this.buttonBack = new System.Windows.Forms.Button();
+            this.buttonSubmit = new MaterialSkin.Controls.MaterialRaisedButton();
             this.progressEngagement = new System.Windows.Forms.ProgressBar();
             this.labelEngagement = new MaterialSkin.Controls.MaterialLabel();
             this.SuspendLayout();
@@ -105,8 +104,11 @@ namespace Municipality_App.Forms.Issues
             // 
             // buttonAttach
             // 
-            this.buttonAttach.Location = new System.Drawing.Point(312, 347);
+            this.buttonAttach.Depth = 0;
+            this.buttonAttach.Location = new System.Drawing.Point(12, 318);
+            this.buttonAttach.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonAttach.Name = "buttonAttach";
+            this.buttonAttach.Primary = true;
             this.buttonAttach.Size = new System.Drawing.Size(120, 30);
             this.buttonAttach.TabIndex = 7;
             this.buttonAttach.Text = "Attach Files";
@@ -116,32 +118,23 @@ namespace Municipality_App.Forms.Issues
             // listAttachments
             // 
             this.listAttachments.FormattingEnabled = true;
-            this.listAttachments.Location = new System.Drawing.Point(12, 347);
+            this.listAttachments.Location = new System.Drawing.Point(12, 354);
             this.listAttachments.Name = "listAttachments";
             this.listAttachments.Size = new System.Drawing.Size(284, 69);
             this.listAttachments.TabIndex = 8;
             // 
             // buttonSubmit
             // 
-            this.buttonSubmit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            this.buttonSubmit.ForeColor = System.Drawing.Color.White;
-            this.buttonSubmit.Location = new System.Drawing.Point(315, 439);
+            this.buttonSubmit.Depth = 0;
+            this.buttonSubmit.Location = new System.Drawing.Point(167, 439);
+            this.buttonSubmit.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonSubmit.Name = "buttonSubmit";
+            this.buttonSubmit.Primary = true;
             this.buttonSubmit.Size = new System.Drawing.Size(120, 36);
             this.buttonSubmit.TabIndex = 10;
             this.buttonSubmit.Text = "Submit";
-            this.buttonSubmit.UseVisualStyleBackColor = false;
+            this.buttonSubmit.UseVisualStyleBackColor = true;
             this.buttonSubmit.Click += new System.EventHandler(this.buttonSubmit_Click);
-            // 
-            // buttonBack
-            // 
-            this.buttonBack.Location = new System.Drawing.Point(15, 439);
-            this.buttonBack.Name = "buttonBack";
-            this.buttonBack.Size = new System.Drawing.Size(120, 36);
-            this.buttonBack.TabIndex = 9;
-            this.buttonBack.Text = "Back to Main Menu";
-            this.buttonBack.UseVisualStyleBackColor = true;
-            this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
             // 
             // progressEngagement
             // 
@@ -171,7 +164,6 @@ namespace Municipality_App.Forms.Issues
             this.ClientSize = new System.Drawing.Size(451, 541);
             this.Controls.Add(this.labelEngagement);
             this.Controls.Add(this.progressEngagement);
-            this.Controls.Add(this.buttonBack);
             this.Controls.Add(this.buttonSubmit);
             this.Controls.Add(this.listAttachments);
             this.Controls.Add(this.buttonAttach);
@@ -194,13 +186,10 @@ namespace Municipality_App.Forms.Issues
 		private System.Windows.Forms.ComboBox comboCategory;
 		private MaterialSkin.Controls.MaterialLabel labelDescription;
 		private System.Windows.Forms.RichTextBox richDescription;
-		private System.Windows.Forms.Button buttonAttach;
+		private MaterialSkin.Controls.MaterialRaisedButton buttonAttach;
 		private System.Windows.Forms.ListBox listAttachments;
-		private System.Windows.Forms.Button buttonSubmit;
-		private System.Windows.Forms.Button buttonBack;
+		private MaterialSkin.Controls.MaterialRaisedButton buttonSubmit;
 		private System.Windows.Forms.ProgressBar progressEngagement;
 		private MaterialSkin.Controls.MaterialLabel labelEngagement;
     }
 }
-
-

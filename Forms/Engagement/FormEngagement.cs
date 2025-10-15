@@ -19,33 +19,31 @@ namespace Municipality_App.Forms.Engagement
         {
             InitializeComponent();
             ApplyMaterialTheme();
+            ConfigureFormStyles();
             LoadData();
             SetupEventHandlers();
             PopulateComboBoxes();
         }
 
-        private void ApplyMaterialTheme()
+        // Configure form styles for better rendering
+        private void ConfigureFormStyles()
         {
-            var materialSkinManager = MaterialSkinManager.Instance;
-            materialSkinManager.AddFormToManage(this);
-            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-            materialSkinManager.ColorScheme = new ColorScheme(
-                Primary.Blue600,
-                Primary.Blue700,
-                Primary.Blue500,
-                Accent.Blue400,
-                TextShade.WHITE
-            );
-
-            // Configure form for MaterialSkin borderless design
-            this.FormBorderStyle = FormBorderStyle.None;
-            this.StartPosition = FormStartPosition.CenterParent;
-
-            // Additional styling to prevent rendering artifacts
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             this.SetStyle(ControlStyles.UserPaint, true);
             this.SetStyle(ControlStyles.DoubleBuffer, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
+            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+        }
+
+        private void ApplyMaterialTheme()
+        {
+            ThemeService.ApplyTheme(this, isMainForm: false);
+
+            // Configure responsive layout
+            var optimalSize = ThemeService.ResponsiveLayout.GetOptimalFormSize(
+                ThemeService.FormSizes.EngagementForm
+            );
+            this.Size = optimalSize;
         }
 
         private void LoadData()
@@ -54,6 +52,7 @@ namespace Municipality_App.Forms.Engagement
             LoadAnnouncements();
             LoadRecommendations();
             UpdateStatistics();
+            UpdateAdaptiveButton(); // Set initial button text
         }
 
         private void LoadEvents()
@@ -121,6 +120,9 @@ namespace Municipality_App.Forms.Engagement
             textBoxSearch.TextChanged += TextBoxSearch_TextChanged;
             comboBoxCategory.SelectedIndexChanged += ComboBoxCategory_SelectedIndexChanged;
             comboBoxLocation.SelectedIndexChanged += ComboBoxLocation_SelectedIndexChanged;
+            tabControl.SelectedIndexChanged += TabControl_SelectedIndexChanged;
+            listBoxRecommendations.SelectedIndexChanged +=
+                ListBoxRecommendations_SelectedIndexChanged;
         }
 
         private void TextBoxSearch_TextChanged(object sender, EventArgs e)
@@ -130,6 +132,7 @@ namespace Municipality_App.Forms.Engagement
             {
                 LoadEvents();
                 LoadAnnouncements();
+                LoadRecommendations();
                 return;
             }
 
@@ -160,6 +163,66 @@ namespace Municipality_App.Forms.Engagement
                     $"{announcement.AnnouncementTitle} - {announcement.AnnouncementDate:MMM dd}"
                 );
             }
+
+            // Search recommendations
+            SearchRecommendations(searchQuery);
+        }
+
+        private void SearchRecommendations(string searchQuery)
+        {
+            if (string.IsNullOrEmpty(searchQuery))
+            {
+                LoadRecommendations();
+                return;
+            }
+
+            // Filter recommendations based on search query
+            var filteredRecommendations = _recommendations
+                .Where(rec =>
+                {
+                    if (rec is Event evt)
+                    {
+                        return evt.EventName.ToLower().Contains(searchQuery.ToLower())
+                            || evt.EventDescription.ToLower().Contains(searchQuery.ToLower())
+                            || evt.EventLocation.ToLower().Contains(searchQuery.ToLower())
+                            || evt.EventCategory.ToLower().Contains(searchQuery.ToLower());
+                    }
+                    else if (rec is Announcement announcement)
+                    {
+                        return announcement
+                                .AnnouncementTitle.ToLower()
+                                .Contains(searchQuery.ToLower())
+                            || announcement
+                                .AnnouncementDescription.ToLower()
+                                .Contains(searchQuery.ToLower())
+                            || announcement
+                                .AnnouncementLocation.ToLower()
+                                .Contains(searchQuery.ToLower())
+                            || announcement
+                                .AnnouncementCategory.ToLower()
+                                .Contains(searchQuery.ToLower());
+                    }
+                    return false;
+                })
+                .ToList();
+
+            // Update recommendations listbox
+            listBoxRecommendations.Items.Clear();
+            foreach (var rec in filteredRecommendations.Take(10))
+            {
+                if (rec is Event evt)
+                {
+                    listBoxRecommendations.Items.Add(
+                        $"🎪 {evt.EventName} - {evt.EventDate:MMM dd}"
+                    );
+                }
+                else if (rec is Announcement announcement)
+                {
+                    listBoxRecommendations.Items.Add(
+                        $"📢 {announcement.AnnouncementTitle} - {announcement.AnnouncementDate:MMM dd}"
+                    );
+                }
+            }
         }
 
         private void ComboBoxCategory_SelectedIndexChanged(object sender, EventArgs e)
@@ -169,6 +232,7 @@ namespace Municipality_App.Forms.Engagement
             {
                 LoadEvents();
                 LoadAnnouncements();
+                LoadRecommendations();
                 return;
             }
 
@@ -191,6 +255,9 @@ namespace Municipality_App.Forms.Engagement
                     $"{announcement.AnnouncementTitle} - {announcement.AnnouncementDate:MMM dd}"
                 );
             }
+
+            // Filter recommendations by category
+            FilterRecommendationsByCategory(selectedCategory);
         }
 
         private void ComboBoxLocation_SelectedIndexChanged(object sender, EventArgs e)
@@ -200,6 +267,7 @@ namespace Municipality_App.Forms.Engagement
             {
                 LoadEvents();
                 LoadAnnouncements();
+                LoadRecommendations();
                 return;
             }
 
@@ -222,56 +290,176 @@ namespace Municipality_App.Forms.Engagement
                     $"{announcement.AnnouncementTitle} - {announcement.AnnouncementDate:MMM dd}"
                 );
             }
+
+            // Filter recommendations by location
+            FilterRecommendationsByLocation(selectedLocation);
+        }
+
+        private void FilterRecommendationsByCategory(string selectedCategory)
+        {
+            var filteredRecommendations = _recommendations
+                .Where(rec =>
+                {
+                    if (rec is Event evt)
+                    {
+                        return evt.EventCategory.ToLower().Equals(selectedCategory.ToLower());
+                    }
+                    else if (rec is Announcement announcement)
+                    {
+                        return announcement
+                            .AnnouncementCategory.ToLower()
+                            .Equals(selectedCategory.ToLower());
+                    }
+                    return false;
+                })
+                .ToList();
+
+            // Update recommendations listbox
+            listBoxRecommendations.Items.Clear();
+            foreach (var rec in filteredRecommendations.Take(10))
+            {
+                if (rec is Event evt)
+                {
+                    listBoxRecommendations.Items.Add(
+                        $"🎪 {evt.EventName} - {evt.EventDate:MMM dd}"
+                    );
+                }
+                else if (rec is Announcement announcement)
+                {
+                    listBoxRecommendations.Items.Add(
+                        $"📢 {announcement.AnnouncementTitle} - {announcement.AnnouncementDate:MMM dd}"
+                    );
+                }
+            }
+        }
+
+        private void FilterRecommendationsByLocation(string selectedLocation)
+        {
+            var filteredRecommendations = _recommendations
+                .Where(rec =>
+                {
+                    if (rec is Event evt)
+                    {
+                        return evt.EventLocation.ToLower().Equals(selectedLocation.ToLower());
+                    }
+                    else if (rec is Announcement announcement)
+                    {
+                        return announcement
+                            .AnnouncementLocation.ToLower()
+                            .Equals(selectedLocation.ToLower());
+                    }
+                    return false;
+                })
+                .ToList();
+
+            // Update recommendations listbox
+            listBoxRecommendations.Items.Clear();
+            foreach (var rec in filteredRecommendations.Take(10))
+            {
+                if (rec is Event evt)
+                {
+                    listBoxRecommendations.Items.Add(
+                        $"🎪 {evt.EventName} - {evt.EventDate:MMM dd}"
+                    );
+                }
+                else if (rec is Announcement announcement)
+                {
+                    listBoxRecommendations.Items.Add(
+                        $"📢 {announcement.AnnouncementTitle} - {announcement.AnnouncementDate:MMM dd}"
+                    );
+                }
+            }
         }
 
         private void buttonRegisterEvent_Click(object sender, EventArgs e)
         {
             if (listBoxEvents.SelectedIndex < 0)
             {
-                MessageBox.Show(
+                FeedbackService.ShowWarning(
                     "Please select an event to register for.",
-                    "No Event Selected",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
+                    "No Event Selected"
                 );
                 return;
             }
 
             var selectedEvent = _currentEvents[listBoxEvents.SelectedIndex];
 
-            // Simple registration dialog
+            // Enhanced registration dialog with validation
             var userName = ShowInputDialog("Enter your name:", "Event Registration");
             if (string.IsNullOrEmpty(userName))
+            {
+                FeedbackService.ShowWarning(
+                    "Name is required for registration.",
+                    "Missing Information"
+                );
                 return;
+            }
 
             var userEmail = ShowInputDialog("Enter your email:", "Event Registration");
             if (string.IsNullOrEmpty(userEmail))
+            {
+                FeedbackService.ShowWarning(
+                    "Email is required for registration.",
+                    "Missing Information"
+                );
                 return;
-
-            if (EventService.RegisterForEvent(selectedEvent.EventId, userName, userEmail))
-            {
-                GamificationService.AddPoints(
-                    25,
-                    "Registered for event",
-                    "event_registration",
-                    selectedEvent.EventId
-                );
-                MessageBox.Show(
-                    $"Successfully registered for {selectedEvent.EventName}!",
-                    "Registration Confirmed",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
-                );
-                LoadData(); // Refresh data
             }
-            else
+
+            // Validate email format
+            if (!IsValidEmail(userEmail))
             {
-                MessageBox.Show(
-                    "Registration failed. Please try again.",
-                    "Registration Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                FeedbackService.ShowError("Please enter a valid email address.", "Invalid Email");
+                return;
+            }
+
+            // Show progress for registration
+            using (
+                var progress = FeedbackService.ShowProgress(
+                    "Registering...",
+                    "Processing your registration..."
+                )
+            )
+            {
+                if (EventService.RegisterForEvent(selectedEvent.EventId, userName, userEmail))
+                {
+                    GamificationService.AddPoints(
+                        25,
+                        "Registered for event",
+                        "event_registration",
+                        selectedEvent.EventId
+                    );
+
+                    // Record form completion for engagement tracking
+                    GamificationService.RecordFormCompletion("event_registration");
+
+                    FeedbackService.ShowSuccess(
+                        $"Successfully registered for {selectedEvent.EventName}!\n\n"
+                            + $"You will receive a confirmation email at {userEmail}.\n\n"
+                            + $"You earned 25 points for registering!",
+                        "Registration Confirmed"
+                    );
+                    LoadData(); // Refresh data
+                }
+                else
+                {
+                    FeedbackService.ShowError(
+                        "Registration failed. This event may be full or no longer available.\nPlease try again or contact support.",
+                        "Registration Error"
+                    );
+                }
+            }
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
             }
         }
 
@@ -279,11 +467,9 @@ namespace Municipality_App.Forms.Engagement
         {
             if (listBoxAnnouncements.SelectedIndex < 0)
             {
-                MessageBox.Show(
+                FeedbackService.ShowWarning(
                     "Please select an announcement to read.",
-                    "No Announcement Selected",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
+                    "No Announcement Selected"
                 );
                 return;
             }
@@ -293,22 +479,24 @@ namespace Municipality_App.Forms.Engagement
             // Mark as read
             AnnouncementService.MarkAnnouncementAsRead(selectedAnnouncement.AnnouncementId);
 
-            // Show announcement details
+            // Show announcement details in a formatted dialog
             var details =
                 $"Title: {selectedAnnouncement.AnnouncementTitle}\n\n"
-                + $"Description: {selectedAnnouncement.AnnouncementDescription}\n\n"
+                + $"Description:\n{selectedAnnouncement.AnnouncementDescription}\n\n"
                 + $"Category: {selectedAnnouncement.AnnouncementCategory}\n"
                 + $"Location: {selectedAnnouncement.AnnouncementLocation}\n"
-                + $"Date: {selectedAnnouncement.AnnouncementDate:MMM dd, yyyy}";
+                + $"Date: {selectedAnnouncement.AnnouncementDate:MMMM dd, yyyy 'at' HH:mm}";
 
-            MessageBox.Show(
-                details,
-                "Announcement Details",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
+            FeedbackService.ShowDetails("Announcement Details", details);
+
+            // Award points and show feedback
+            GamificationService.AddPoints(5, "Read announcement", "announcement_read");
+            GamificationService.RecordFormCompletion("announcement_read");
+            FeedbackService.ShowToast(
+                "You earned 5 points for reading this announcement!",
+                ToastType.Success
             );
 
-            GamificationService.AddPoints(5, "Read announcement", "announcement_read");
             LoadData(); // Refresh data
         }
 
@@ -317,15 +505,467 @@ namespace Municipality_App.Forms.Engagement
             LoadData();
         }
 
+        private void buttonJoinChallenge_Click(object sender, EventArgs e)
+        {
+            ShowCommunityChallengesDialog();
+        }
+
+        private void ShowCommunityChallengesDialog()
+        {
+            var challenges = GamificationService.GetActiveChallenges();
+            var profile = GamificationService.GetProfile();
+
+            var challengeForm = new Form()
+            {
+                Text = "Community Challenges",
+                Size = new System.Drawing.Size(500, 400),
+                StartPosition = FormStartPosition.CenterParent,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false,
+                MinimizeBox = false,
+            };
+
+            var labelTitle = new Label()
+            {
+                Text = "Join Community Challenges:",
+                Location = new System.Drawing.Point(20, 20),
+                Size = new System.Drawing.Size(450, 20),
+                Font = new System.Drawing.Font("Arial", 12, System.Drawing.FontStyle.Bold),
+            };
+
+            var listBoxChallenges = new ListBox()
+            {
+                Location = new System.Drawing.Point(20, 50),
+                Size = new System.Drawing.Size(450, 250),
+                SelectionMode = SelectionMode.One,
+            };
+
+            foreach (var challenge in challenges)
+            {
+                var isParticipated = profile.ParticipatedChallenges.Any(pc =>
+                    pc.Id == challenge.Id
+                );
+                var status = isParticipated ? "✓ Participated" : "Available";
+                listBoxChallenges.Items.Add(
+                    $"{challenge.Title} ({challenge.PointsReward} pts) - {status}"
+                );
+            }
+
+            var buttonJoin = new Button()
+            {
+                Text = "Join Challenge",
+                Location = new System.Drawing.Point(20, 320),
+                Size = new System.Drawing.Size(100, 30),
+                Enabled = false,
+            };
+
+            var buttonClose = new Button()
+            {
+                Text = "Close",
+                Location = new System.Drawing.Point(370, 320),
+                Size = new System.Drawing.Size(100, 30),
+                DialogResult = DialogResult.OK,
+            };
+
+            listBoxChallenges.SelectedIndexChanged += (s, ev) =>
+            {
+                buttonJoin.Enabled = listBoxChallenges.SelectedIndex >= 0;
+            };
+
+            buttonJoin.Click += (s, ev) =>
+            {
+                if (listBoxChallenges.SelectedIndex >= 0)
+                {
+                    var selectedChallenge = challenges[listBoxChallenges.SelectedIndex];
+                    var isAlreadyParticipated = profile.ParticipatedChallenges.Any(pc =>
+                        pc.Id == selectedChallenge.Id
+                    );
+
+                    if (!isAlreadyParticipated)
+                    {
+                        GamificationService.ParticipateInChallenge(selectedChallenge.Id);
+                        FeedbackService.ShowSuccess(
+                            $"You joined the '{selectedChallenge.Title}' challenge!\nYou earned {selectedChallenge.PointsReward} points!",
+                            "Challenge Joined"
+                        );
+                        challengeForm.Close();
+                    }
+                    else
+                    {
+                        FeedbackService.ShowWarning(
+                            "You have already participated in this challenge!",
+                            "Already Participated"
+                        );
+                    }
+                }
+            };
+
+            challengeForm.Controls.AddRange(
+                new Control[] { labelTitle, listBoxChallenges, buttonJoin, buttonClose }
+            );
+            challengeForm.ShowDialog();
+        }
+
         private void buttonClose_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
+        private void buttonShare_Click(object sender, EventArgs e)
+        {
+            ShowSocialSharingDialog();
+        }
+
+        private void ShowSocialSharingDialog()
+        {
+            var shareForm = new Form()
+            {
+                Text = "Share Your Engagement",
+                Size = new System.Drawing.Size(500, 450),
+                StartPosition = FormStartPosition.CenterParent,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false,
+                MinimizeBox = false,
+            };
+
+            var labelTitle = new Label()
+            {
+                Text = "Share your municipal engagement:",
+                Location = new System.Drawing.Point(20, 20),
+                Size = new System.Drawing.Size(450, 30),
+                Font = new System.Drawing.Font("Arial", 10, System.Drawing.FontStyle.Bold),
+            };
+
+            var textBoxContent = new TextBox()
+            {
+                Text =
+                    "I'm actively engaged with my municipality through the Municipal App! \n\n"
+                    + "I've been participating in community events, staying informed with announcements, "
+                    + "and contributing to local improvements. Join me in making our community better! "
+                    + "#MunicipalityApp #CommunityEngagement #LocalGovernment #CivicParticipation",
+                Location = new System.Drawing.Point(20, 60),
+                Size = new System.Drawing.Size(450, 200),
+                Multiline = true,
+                ScrollBars = ScrollBars.Vertical,
+                Font = new System.Drawing.Font("Arial", 9),
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+            };
+
+            var labelPlatforms = new Label()
+            {
+                Text = "Choose platform to share:",
+                Location = new System.Drawing.Point(20, 280),
+                Size = new System.Drawing.Size(200, 20),
+                Font = new System.Drawing.Font("Arial", 9, System.Drawing.FontStyle.Bold),
+            };
+
+            var buttonFacebook = new Button()
+            {
+                Text = "Share on Facebook",
+                Location = new System.Drawing.Point(20, 310),
+                Size = new System.Drawing.Size(140, 45),
+                Font = new System.Drawing.Font("Arial", 9),
+                BackColor = System.Drawing.Color.FromArgb(66, 103, 178),
+                ForeColor = System.Drawing.Color.White,
+                FlatStyle = FlatStyle.Flat,
+            };
+
+            var buttonTwitter = new Button()
+            {
+                Text = "Share on Twitter",
+                Location = new System.Drawing.Point(180, 310),
+                Size = new System.Drawing.Size(140, 45),
+                Font = new System.Drawing.Font("Arial", 9),
+                BackColor = System.Drawing.Color.FromArgb(29, 161, 242),
+                ForeColor = System.Drawing.Color.White,
+                FlatStyle = FlatStyle.Flat,
+            };
+
+            var buttonLinkedIn = new Button()
+            {
+                Text = "Share on LinkedIn",
+                Location = new System.Drawing.Point(340, 310),
+                Size = new System.Drawing.Size(140, 45),
+                Font = new System.Drawing.Font("Arial", 9),
+                BackColor = System.Drawing.Color.FromArgb(0, 119, 181),
+                ForeColor = System.Drawing.Color.White,
+                FlatStyle = FlatStyle.Flat,
+            };
+
+            var buttonClose = new Button()
+            {
+                Text = "Close",
+                Location = new System.Drawing.Point(400, 370),
+                Size = new System.Drawing.Size(80, 35),
+                DialogResult = DialogResult.OK,
+                Font = new System.Drawing.Font("Arial", 9),
+            };
+
+            // Style the buttons
+            buttonFacebook.FlatAppearance.BorderSize = 0;
+            buttonFacebook.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(
+                54,
+                88,
+                153
+            );
+
+            buttonTwitter.FlatAppearance.BorderSize = 0;
+            buttonTwitter.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(
+                21,
+                132,
+                196
+            );
+
+            buttonLinkedIn.FlatAppearance.BorderSize = 0;
+            buttonLinkedIn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(
+                0,
+                96,
+                151
+            );
+
+            buttonFacebook.Click += (s, ev) => ShareOnPlatform("Facebook", textBoxContent.Text);
+            buttonTwitter.Click += (s, ev) => ShareOnPlatform("Twitter", textBoxContent.Text);
+            buttonLinkedIn.Click += (s, ev) => ShareOnPlatform("LinkedIn", textBoxContent.Text);
+
+            shareForm.Controls.AddRange(
+                new Control[]
+                {
+                    labelTitle,
+                    textBoxContent,
+                    labelPlatforms,
+                    buttonFacebook,
+                    buttonTwitter,
+                    buttonLinkedIn,
+                    buttonClose,
+                }
+            );
+            shareForm.ShowDialog();
+        }
+
+        private void ShareOnPlatform(string platform, string content)
+        {
+            // Record the social share
+            GamificationService.RecordSocialShare(platform, content, "engagement_share");
+
+            // Show success message
+            FeedbackService.ShowSuccess(
+                $"Content shared on {platform}!\nYou earned 10 points for sharing!",
+                "Share Successful"
+            );
+
+            // Show achievement notification if applicable
+            var profile = GamificationService.GetProfile();
+            if (profile.SocialSharesCount == 5)
+            {
+                FeedbackService.ShowToast(
+                    "Achievement Unlocked: Social Butterfly!",
+                    ToastType.Success
+                );
+            }
+        }
+
         private void buttonViewRecommendations_Click(object sender, EventArgs e)
         {
-            LoadRecommendations();
-            tabControl.SelectedTab = tabPageRecommendations;
+            // Determine current context and adapt button behavior
+            if (tabControl.SelectedTab == tabPageEvents)
+            {
+                // If on Events tab, register for selected event
+                if (listBoxEvents.SelectedIndex >= 0)
+                {
+                    buttonRegisterEvent_Click(sender, e);
+                }
+                else
+                {
+                    FeedbackService.ShowWarning(
+                        "Please select an event to register for.",
+                        "No Event Selected"
+                    );
+                }
+            }
+            else if (tabControl.SelectedTab == tabPageAnnouncements)
+            {
+                // If on Announcements tab, read selected announcement
+                if (listBoxAnnouncements.SelectedIndex >= 0)
+                {
+                    buttonReadAnnouncement_Click(sender, e);
+                }
+                else
+                {
+                    FeedbackService.ShowWarning(
+                        "Please select an announcement to read.",
+                        "No Announcement Selected"
+                    );
+                }
+            }
+            else
+            {
+                // If on Recommendations tab, show detailed popup
+                if (listBoxRecommendations.SelectedIndex >= 0)
+                {
+                    ShowRecommendationDetails();
+                }
+                else
+                {
+                    FeedbackService.ShowWarning(
+                        "Please select a recommendation to view details.",
+                        "No Recommendation Selected"
+                    );
+                }
+            }
+        }
+
+        private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateAdaptiveButton();
+        }
+
+        private void ListBoxRecommendations_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl.SelectedTab == tabPageRecommendations)
+            {
+                UpdateAdaptiveButton();
+            }
+        }
+
+        private void UpdateAdaptiveButton()
+        {
+            if (tabControl.SelectedTab == tabPageEvents)
+            {
+                buttonViewRecommendations.Text = "Register for Event";
+                buttonViewRecommendations.Enabled = true;
+            }
+            else if (tabControl.SelectedTab == tabPageAnnouncements)
+            {
+                buttonViewRecommendations.Text = "Read Announcement";
+                buttonViewRecommendations.Enabled = true;
+            }
+            else if (tabControl.SelectedTab == tabPageRecommendations)
+            {
+                buttonViewRecommendations.Text = "View Details";
+                buttonViewRecommendations.Enabled = listBoxRecommendations.SelectedIndex >= 0;
+            }
+        }
+
+        private void ShowRecommendationDetails()
+        {
+            var selectedIndex = listBoxRecommendations.SelectedIndex;
+            if (selectedIndex < 0 || selectedIndex >= _recommendations.Count)
+                return;
+
+            var recommendation = _recommendations[selectedIndex];
+
+            if (recommendation is Event evt)
+            {
+                ShowEventDetailsPopup(evt);
+            }
+            else if (recommendation is Announcement announcement)
+            {
+                ShowAnnouncementDetailsPopup(announcement);
+            }
+        }
+
+        private void ShowEventDetailsPopup(Event evt)
+        {
+            var details =
+                $"Event: {evt.EventName}\n\n"
+                + $"Description:\n{evt.EventDescription}\n\n"
+                + $"Date: {evt.EventDate:MMMM dd, yyyy 'at' HH:mm}\n"
+                + $"Location: {evt.EventLocation}\n"
+                + $"Category: {evt.EventCategory}\n"
+                + $"Status: {evt.EventStatus}";
+
+            var result = FeedbackService.ShowConfirmation(details, "Event Details - Register?");
+
+            if (result)
+            {
+                // Show registration dialog
+                var userName = ShowInputDialog("Enter your name:", "Event Registration");
+                if (string.IsNullOrEmpty(userName))
+                {
+                    FeedbackService.ShowWarning(
+                        "Name is required for registration.",
+                        "Missing Information"
+                    );
+                    return;
+                }
+
+                var userEmail = ShowInputDialog("Enter your email:", "Event Registration");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    FeedbackService.ShowWarning(
+                        "Email is required for registration.",
+                        "Missing Information"
+                    );
+                    return;
+                }
+
+                if (!IsValidEmail(userEmail))
+                {
+                    FeedbackService.ShowError(
+                        "Please enter a valid email address.",
+                        "Invalid Email"
+                    );
+                    return;
+                }
+
+                // Register for event
+                using (
+                    var progress = FeedbackService.ShowProgress(
+                        "Registering...",
+                        "Processing your registration..."
+                    )
+                )
+                {
+                    if (EventService.RegisterForEvent(evt.EventId, userName, userEmail))
+                    {
+                        GamificationService.AddPoints(
+                            25,
+                            "Registered for event",
+                            "event_registration",
+                            evt.EventId
+                        );
+                        FeedbackService.ShowSuccess(
+                            $"Successfully registered for {evt.EventName}!\n\nYou will receive a confirmation email at {userEmail}.",
+                            "Registration Confirmed"
+                        );
+                        LoadData(); // Refresh data
+                    }
+                    else
+                    {
+                        FeedbackService.ShowError(
+                            "Registration failed. This event may be full or no longer available.\nPlease try again or contact support.",
+                            "Registration Error"
+                        );
+                    }
+                }
+            }
+        }
+
+        private void ShowAnnouncementDetailsPopup(Announcement announcement)
+        {
+            var details =
+                $"Title: {announcement.AnnouncementTitle}\n\n"
+                + $"Description:\n{announcement.AnnouncementDescription}\n\n"
+                + $"Category: {announcement.AnnouncementCategory}\n"
+                + $"Location: {announcement.AnnouncementLocation}\n"
+                + $"Date: {announcement.AnnouncementDate:MMMM dd, yyyy 'at' HH:mm}";
+
+            var result = FeedbackService.ShowConfirmation(
+                details,
+                "Announcement Details - Mark as Read?"
+            );
+
+            if (result)
+            {
+                // Mark as read
+                AnnouncementService.MarkAnnouncementAsRead(announcement.AnnouncementId);
+                GamificationService.AddPoints(5, "Read announcement", "announcement_read");
+                FeedbackService.ShowToast(
+                    "You earned 5 points for reading this announcement!",
+                    ToastType.Success
+                );
+                LoadData(); // Refresh data
+            }
         }
 
         private void PopulateComboBoxes()

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Municipality_App.Models;
@@ -98,8 +99,9 @@ namespace Municipality_App.Services
             _profile.Activities.Add(activity);
             _profile.LastActivityAt = DateTime.Now;
 
-            // Check for new badges
+            // Check for new badges and achievements
             CheckAndUnlockBadges();
+            CheckAndUnlockAchievements();
 
             Persist();
         }
@@ -182,6 +184,214 @@ namespace Municipality_App.Services
 
             if (!_profile.UnlockedBadges.Contains("Well Informed") && announcementCount >= 10)
                 _profile.UnlockedBadges.Add("Well Informed");
+        }
+
+        // New methods for enhanced engagement features
+        public static void RecordFormCompletion(string formType)
+        {
+            EnsureInitialized();
+            _profile.FormCompletions++;
+
+            // Award points for form completion
+            int points = 5; // default
+            if (formType.ToLower() == "issue_report")
+                points = 15;
+            else if (formType.ToLower() == "event_registration")
+                points = 10;
+            else if (formType.ToLower() == "feedback")
+                points = 5;
+
+            AddPoints(points, $"Completed {formType} form", "form_completion");
+        }
+
+        public static void RecordSocialShare(string platform, string content, string shareType)
+        {
+            EnsureInitialized();
+            _profile.SocialSharesCount++;
+
+            var share = new SocialShare
+            {
+                Id = Guid.NewGuid().ToString(),
+                Platform = platform,
+                Content = content,
+                SharedAt = DateTime.Now,
+                PointsEarned = 10,
+                ShareType = shareType,
+            };
+
+            _profile.SocialShares.Add(share);
+            AddPoints(10, $"Shared on {platform}", "social_share");
+        }
+
+        public static void ParticipateInChallenge(string challengeId)
+        {
+            EnsureInitialized();
+            _profile.ChallengeParticipations++;
+
+            // Find the challenge and add to participated challenges
+            var challenge = GetActiveChallenges().FirstOrDefault(c => c.Id == challengeId);
+            if (challenge != null)
+            {
+                _profile.ParticipatedChallenges.Add(challenge);
+                AddPoints(
+                    challenge.PointsReward,
+                    $"Participated in challenge: {challenge.Title}",
+                    "challenge_participation"
+                );
+            }
+        }
+
+        public static List<CommunityChallenge> GetActiveChallenges()
+        {
+            return new List<CommunityChallenge>
+            {
+                new CommunityChallenge
+                {
+                    Id = "weekly_engagement",
+                    Title = "Weekly Engagement Champion",
+                    Description = "Complete 5 different activities this week",
+                    StartDate = DateTime.Now.AddDays(-7),
+                    EndDate = DateTime.Now.AddDays(7),
+                    PointsReward = 50,
+                    Category = "Engagement",
+                    IsActive = true,
+                    Requirements = new List<string>
+                    {
+                        "Report an issue",
+                        "Register for an event",
+                        "Read 3 announcements",
+                        "Share content",
+                        "Complete a form",
+                    },
+                },
+                new CommunityChallenge
+                {
+                    Id = "community_helper",
+                    Title = "Community Helper",
+                    Description = "Submit 3 issue reports this month",
+                    StartDate = DateTime.Now.AddDays(-30),
+                    EndDate = DateTime.Now.AddDays(30),
+                    PointsReward = 75,
+                    Category = "Community Service",
+                    IsActive = true,
+                    Requirements = new List<string>
+                    {
+                        "Submit 3 issue reports",
+                        "Get 1 issue resolved",
+                    },
+                },
+                new CommunityChallenge
+                {
+                    Id = "social_advocate",
+                    Title = "Social Media Advocate",
+                    Description = "Share 5 pieces of content this month",
+                    StartDate = DateTime.Now.AddDays(-30),
+                    EndDate = DateTime.Now.AddDays(30),
+                    PointsReward = 40,
+                    Category = "Social",
+                    IsActive = true,
+                    Requirements = new List<string>
+                    {
+                        "Share 5 pieces of content",
+                        "Use hashtag #MunicipalityApp",
+                    },
+                },
+            };
+        }
+
+        private static void CheckAndUnlockAchievements()
+        {
+            // Form completion achievements
+            if (!HasAchievement("Form Master") && _profile.FormCompletions >= 10)
+                UnlockAchievement("Form Master", "Complete 10 forms", "📝", 100, "Forms");
+
+            if (!HasAchievement("Form Expert") && _profile.FormCompletions >= 25)
+                UnlockAchievement("Form Expert", "Complete 25 forms", "📋", 250, "Forms");
+
+            // Social sharing achievements
+            if (!HasAchievement("Social Butterfly") && _profile.SocialSharesCount >= 5)
+                UnlockAchievement(
+                    "Social Butterfly",
+                    "Share 5 pieces of content",
+                    "🦋",
+                    50,
+                    "Social"
+                );
+
+            if (!HasAchievement("Community Influencer") && _profile.SocialSharesCount >= 20)
+                UnlockAchievement(
+                    "Community Influencer",
+                    "Share 20 pieces of content",
+                    "📢",
+                    200,
+                    "Social"
+                );
+
+            // Challenge participation achievements
+            if (!HasAchievement("Challenge Seeker") && _profile.ChallengeParticipations >= 3)
+                UnlockAchievement(
+                    "Challenge Seeker",
+                    "Participate in 3 challenges",
+                    "🏆",
+                    75,
+                    "Challenges"
+                );
+
+            if (!HasAchievement("Challenge Champion") && _profile.ChallengeParticipations >= 10)
+                UnlockAchievement(
+                    "Challenge Champion",
+                    "Participate in 10 challenges",
+                    "👑",
+                    300,
+                    "Challenges"
+                );
+
+            // Points-based achievements
+            if (!HasAchievement("Point Collector") && _profile.Points >= 1000)
+                UnlockAchievement("Point Collector", "Earn 1000 points", "💎", 500, "Points");
+
+            if (!HasAchievement("Point Master") && _profile.Points >= 5000)
+                UnlockAchievement("Point Master", "Earn 5000 points", "💫", 1000, "Points");
+        }
+
+        private static bool HasAchievement(string achievementName)
+        {
+            return _profile.Achievements.Any(a => a.Name == achievementName && a.IsUnlocked);
+        }
+
+        private static void UnlockAchievement(
+            string name,
+            string description,
+            string icon,
+            int pointsRequired,
+            string category
+        )
+        {
+            var achievement = new Achievement
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = name,
+                Description = description,
+                Icon = icon,
+                PointsRequired = pointsRequired,
+                UnlockedAt = DateTime.Now,
+                IsUnlocked = true,
+                Category = category,
+            };
+
+            _profile.Achievements.Add(achievement);
+        }
+
+        public static List<Achievement> GetUnlockedAchievements()
+        {
+            EnsureInitialized();
+            return _profile.Achievements.Where(a => a.IsUnlocked).ToList();
+        }
+
+        public static List<Achievement> GetAllAchievements()
+        {
+            EnsureInitialized();
+            return _profile.Achievements.ToList();
         }
 
         private static void Persist()

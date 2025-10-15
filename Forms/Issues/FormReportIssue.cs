@@ -18,32 +18,30 @@ namespace Municipality_App.Forms.Issues
         {
             InitializeComponent();
             ApplyMaterialTheme();
+            ConfigureFormStyles();
             PopulateCategories();
             SetupProgressTracking();
         }
 
-        private void ApplyMaterialTheme()
+        // Configure form styles for better rendering
+        private void ConfigureFormStyles()
         {
-            var materialSkinManager = MaterialSkinManager.Instance;
-            materialSkinManager.AddFormToManage(this);
-            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-            materialSkinManager.ColorScheme = new ColorScheme(
-                Primary.Blue600,
-                Primary.Blue700,
-                Primary.Blue500,
-                Accent.Blue400,
-                TextShade.WHITE
-            );
-
-            // Configure form for MaterialSkin borderless design
-            this.FormBorderStyle = FormBorderStyle.None;
-            this.StartPosition = FormStartPosition.CenterParent;
-
-            // Additional styling to prevent rendering artifacts
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             this.SetStyle(ControlStyles.UserPaint, true);
             this.SetStyle(ControlStyles.DoubleBuffer, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
+            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+        }
+
+        private void ApplyMaterialTheme()
+        {
+            ThemeService.ApplyTheme(this, isMainForm: false);
+
+            // Configure responsive layout
+            var optimalSize = ThemeService.ResponsiveLayout.GetOptimalFormSize(
+                ThemeService.FormSizes.IssueForm
+            );
+            this.Size = optimalSize;
         }
 
         private void PopulateCategories()
@@ -144,37 +142,24 @@ namespace Municipality_App.Forms.Issues
             var category = comboCategory.SelectedItem as string;
             var description = richDescription.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(location))
-            {
-                MessageBox.Show(
-                    this,
-                    "Please enter the location of the issue.",
-                    "Missing Location",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+            // Enhanced validation with better feedback
+            if (!FeedbackService.ValidateRequiredField(textLocation, "Location"))
                 return;
-            }
-            if (string.IsNullOrWhiteSpace(category))
-            {
-                MessageBox.Show(
-                    this,
-                    "Please select a category.",
-                    "Missing Category",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+
+            if (!FeedbackService.ValidateRequiredField(comboCategory, "Category"))
                 return;
-            }
-            if (string.IsNullOrWhiteSpace(description))
+
+            if (!FeedbackService.ValidateRequiredField(richDescription, "Description"))
+                return;
+
+            // Validate description length
+            if (description.Length < 20)
             {
-                MessageBox.Show(
-                    this,
-                    "Please provide a brief description.",
-                    "Missing Description",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
+                FeedbackService.ShowWarning(
+                    "Please provide a more detailed description (at least 20 characters).\nThis helps us better understand and address your issue.",
+                    "Description Too Short"
                 );
+                richDescription.Focus();
                 return;
             }
 
@@ -204,13 +189,18 @@ namespace Municipality_App.Forms.Issues
 
             progressEngagement.Value = 100;
             labelEngagement.Text = "Thank you! Your report has been submitted successfully.";
-            MessageBox.Show(
-                this,
-                "Your issue has been reported successfully.",
-                "Submitted",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
+
+            // Enhanced success feedback
+            FeedbackService.ShowSuccess(
+                $"Your issue has been reported successfully!\n\n"
+                    + $"Issue ID: {issue.Id}\n"
+                    + $"Category: {category}\n"
+                    + $"Location: {location}\n\n"
+                    + $"You earned {points} points for submitting this report.\n"
+                    + $"We will investigate and update you on the progress.",
+                "Issue Submitted Successfully"
             );
+
             this.Close();
         }
 

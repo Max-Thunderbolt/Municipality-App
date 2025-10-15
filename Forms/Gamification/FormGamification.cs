@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using MaterialSkin;
 using MaterialSkin.Controls;
+using Municipality_App.Models;
 using Municipality_App.Services;
 
 namespace Municipality_App.Forms.Gamification
@@ -13,31 +14,29 @@ namespace Municipality_App.Forms.Gamification
         {
             InitializeComponent();
             ApplyMaterialTheme();
+            ConfigureFormStyles();
             LoadGamificationData();
         }
 
-        private void ApplyMaterialTheme()
+        // Configure form styles for better rendering
+        private void ConfigureFormStyles()
         {
-            var materialSkinManager = MaterialSkinManager.Instance;
-            materialSkinManager.AddFormToManage(this);
-            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-            materialSkinManager.ColorScheme = new ColorScheme(
-                Primary.Blue600,
-                Primary.Blue700,
-                Primary.Blue500,
-                Accent.Blue400,
-                TextShade.WHITE
-            );
-
-            // Configure form for MaterialSkin borderless design
-            this.FormBorderStyle = FormBorderStyle.None;
-            this.StartPosition = FormStartPosition.CenterParent;
-
-            // Additional styling to prevent rendering artifacts
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             this.SetStyle(ControlStyles.UserPaint, true);
             this.SetStyle(ControlStyles.DoubleBuffer, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
+            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+        }
+
+        private void ApplyMaterialTheme()
+        {
+            ThemeService.ApplyTheme(this, isMainForm: false);
+
+            // Configure responsive layout
+            var optimalSize = ThemeService.ResponsiveLayout.GetOptimalFormSize(
+                ThemeService.FormSizes.GamificationForm
+            );
+            this.Size = optimalSize;
         }
 
         private void LoadGamificationData()
@@ -48,6 +47,8 @@ namespace Municipality_App.Forms.Gamification
                 var currentBadge = GamificationService.GetCurrentBadge();
                 var level = GamificationService.GetLevel();
                 var unlockedBadges = GamificationService.GetUnlockedBadges();
+                var achievements = GamificationService.GetUnlockedAchievements();
+                var challenges = GamificationService.GetActiveChallenges();
 
                 labelPoints.Text = $"Total Points: {profile.Points}";
                 labelLevel.Text = $"Current Level: {level}";
@@ -55,6 +56,7 @@ namespace Municipality_App.Forms.Gamification
                 labelIssuesSubmitted.Text = $"Issues Submitted: {profile.SubmittedIssues.Count}";
                 labelActivities.Text = $"Total Activities: {profile.Activities.Count}";
 
+                // Load badges
                 listBoxBadges.Items.Clear();
                 if (unlockedBadges.Length > 0)
                 {
@@ -68,6 +70,45 @@ namespace Municipality_App.Forms.Gamification
                     listBoxBadges.Items.Add("No badges unlocked yet. Keep participating!");
                 }
 
+                // Load achievements
+                listBoxAchievements.Items.Clear();
+                if (achievements.Count() > 0)
+                {
+                    foreach (var achievement in achievements.OrderByDescending(a => a.UnlockedAt))
+                    {
+                        listBoxAchievements.Items.Add(
+                            $"{achievement.Icon} {achievement.Name} - {achievement.Description}"
+                        );
+                    }
+                }
+                else
+                {
+                    listBoxAchievements.Items.Add(
+                        "No achievements unlocked yet. Keep participating!"
+                    );
+                }
+
+                // Load community challenges
+                listBoxChallenges.Items.Clear();
+                if (challenges.Count() > 0)
+                {
+                    foreach (var challenge in challenges.Where(c => c.IsActive))
+                    {
+                        var isParticipated = profile.ParticipatedChallenges.Any(pc =>
+                            pc.Id == challenge.Id
+                        );
+                        var status = isParticipated ? "✓ Participated" : "Available";
+                        listBoxChallenges.Items.Add(
+                            $"{challenge.Title} ({challenge.PointsReward} pts) - {status}"
+                        );
+                    }
+                }
+                else
+                {
+                    listBoxChallenges.Items.Add("No active challenges at the moment.");
+                }
+
+                // Load activities
                 listBoxActivities.Items.Clear();
                 var recentActivities = profile
                     .Activities.OrderByDescending(a => a.Timestamp)
@@ -89,6 +130,7 @@ namespace Municipality_App.Forms.Gamification
                     listBoxActivities.Items.Add("No activities yet. Start by reporting an issue!");
                 }
 
+                // Load issues
                 listBoxIssues.Items.Clear();
                 if (profile.SubmittedIssues.Count > 0)
                 {
@@ -111,6 +153,9 @@ namespace Municipality_App.Forms.Gamification
                 {
                     listBoxIssues.Items.Add("No issues submitted yet.");
                 }
+
+                // Update engagement statistics
+                UpdateEngagementStats(profile);
             }
             catch (Exception ex)
             {
@@ -121,6 +166,22 @@ namespace Municipality_App.Forms.Gamification
                     MessageBoxIcon.Error
                 );
             }
+        }
+
+        private void UpdateEngagementStats(UserProfile profile)
+        {
+            // Update form completion stats
+            if (labelFormCompletions != null)
+                labelFormCompletions.Text = $"Forms Completed: {profile.FormCompletions}";
+
+            // Update social sharing stats
+            if (labelSocialShares != null)
+                labelSocialShares.Text = $"Social Shares: {profile.SocialSharesCount}";
+
+            // Update challenge participation stats
+            if (labelChallengeParticipations != null)
+                labelChallengeParticipations.Text =
+                    $"Challenges: {profile.ChallengeParticipations}";
         }
 
         private string GetTimeAgo(DateTime dateTime)

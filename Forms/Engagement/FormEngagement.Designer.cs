@@ -21,16 +21,13 @@ namespace Municipality_App.Forms.Engagement
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageEvents = new System.Windows.Forms.TabPage();
             this.listBoxEvents = new System.Windows.Forms.ListBox();
-            this.buttonRegisterEvent = new System.Windows.Forms.Button();
             this.labelEvents = new MaterialSkin.Controls.MaterialLabel();
             this.tabPageAnnouncements = new System.Windows.Forms.TabPage();
             this.listBoxAnnouncements = new System.Windows.Forms.ListBox();
-            this.buttonReadAnnouncement = new System.Windows.Forms.Button();
             this.labelAnnouncements = new MaterialSkin.Controls.MaterialLabel();
             this.tabPageRecommendations = new System.Windows.Forms.TabPage();
             this.listBoxRecommendations = new System.Windows.Forms.ListBox();
             this.labelRecommendations = new MaterialSkin.Controls.MaterialLabel();
-            this.buttonViewRecommendations = new System.Windows.Forms.Button();
             this.groupBoxSearch = new System.Windows.Forms.GroupBox();
             this.textBoxSearch = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.labelSearch = new MaterialSkin.Controls.MaterialLabel();
@@ -42,8 +39,11 @@ namespace Municipality_App.Forms.Engagement
             this.labelEventStats = new MaterialSkin.Controls.MaterialLabel();
             this.labelAnnouncementStats = new MaterialSkin.Controls.MaterialLabel();
             this.labelSearchStats = new MaterialSkin.Controls.MaterialLabel();
-            this.buttonRefresh = new System.Windows.Forms.Button();
-            this.buttonClose = new System.Windows.Forms.Button();
+            this.buttonRefresh = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.buttonClose = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.buttonViewRecommendations = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.buttonShare = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.buttonJoinChallenge = new MaterialSkin.Controls.MaterialRaisedButton();
             this.tabControl.SuspendLayout();
             this.tabPageEvents.SuspendLayout();
             this.tabPageAnnouncements.SuspendLayout();
@@ -66,7 +66,6 @@ namespace Municipality_App.Forms.Engagement
             // tabPageEvents
             // 
             this.tabPageEvents.Controls.Add(this.listBoxEvents);
-            this.tabPageEvents.Controls.Add(this.buttonRegisterEvent);
             this.tabPageEvents.Controls.Add(this.labelEvents);
             this.tabPageEvents.Location = new System.Drawing.Point(4, 22);
             this.tabPageEvents.Name = "tabPageEvents";
@@ -84,18 +83,6 @@ namespace Municipality_App.Forms.Engagement
             this.listBoxEvents.Size = new System.Drawing.Size(540, 199);
             this.listBoxEvents.TabIndex = 0;
             // 
-            // buttonRegisterEvent
-            // 
-            this.buttonRegisterEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            this.buttonRegisterEvent.ForeColor = System.Drawing.Color.White;
-            this.buttonRegisterEvent.Location = new System.Drawing.Point(6, 230);
-            this.buttonRegisterEvent.Name = "buttonRegisterEvent";
-            this.buttonRegisterEvent.Size = new System.Drawing.Size(120, 30);
-            this.buttonRegisterEvent.TabIndex = 1;
-            this.buttonRegisterEvent.Text = "Register for Event";
-            this.buttonRegisterEvent.UseVisualStyleBackColor = false;
-            this.buttonRegisterEvent.Click += new System.EventHandler(this.buttonRegisterEvent_Click);
-            // 
             // labelEvents
             // 
             this.labelEvents.AutoSize = true;
@@ -112,7 +99,6 @@ namespace Municipality_App.Forms.Engagement
             // tabPageAnnouncements
             // 
             this.tabPageAnnouncements.Controls.Add(this.listBoxAnnouncements);
-            this.tabPageAnnouncements.Controls.Add(this.buttonReadAnnouncement);
             this.tabPageAnnouncements.Controls.Add(this.labelAnnouncements);
             this.tabPageAnnouncements.Location = new System.Drawing.Point(4, 22);
             this.tabPageAnnouncements.Name = "tabPageAnnouncements";
@@ -129,18 +115,6 @@ namespace Municipality_App.Forms.Engagement
             this.listBoxAnnouncements.Name = "listBoxAnnouncements";
             this.listBoxAnnouncements.Size = new System.Drawing.Size(540, 199);
             this.listBoxAnnouncements.TabIndex = 0;
-            // 
-            // buttonReadAnnouncement
-            // 
-            this.buttonReadAnnouncement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            this.buttonReadAnnouncement.ForeColor = System.Drawing.Color.White;
-            this.buttonReadAnnouncement.Location = new System.Drawing.Point(6, 230);
-            this.buttonReadAnnouncement.Name = "buttonReadAnnouncement";
-            this.buttonReadAnnouncement.Size = new System.Drawing.Size(120, 30);
-            this.buttonReadAnnouncement.TabIndex = 1;
-            this.buttonReadAnnouncement.Text = "Read Announcement";
-            this.buttonReadAnnouncement.UseVisualStyleBackColor = false;
-            this.buttonReadAnnouncement.Click += new System.EventHandler(this.buttonReadAnnouncement_Click);
             // 
             // labelAnnouncements
             // 
@@ -169,9 +143,9 @@ namespace Municipality_App.Forms.Engagement
             // listBoxRecommendations
             // 
             this.listBoxRecommendations.FormattingEnabled = true;
-            this.listBoxRecommendations.Location = new System.Drawing.Point(6, 25);
+            this.listBoxRecommendations.Location = new System.Drawing.Point(7, 28);
             this.listBoxRecommendations.Name = "listBoxRecommendations";
-            this.listBoxRecommendations.Size = new System.Drawing.Size(540, 238);
+            this.listBoxRecommendations.Size = new System.Drawing.Size(540, 199);
             this.listBoxRecommendations.TabIndex = 0;
             // 
             // labelRecommendations
@@ -186,16 +160,6 @@ namespace Municipality_App.Forms.Engagement
             this.labelRecommendations.Size = new System.Drawing.Size(135, 19);
             this.labelRecommendations.TabIndex = 1;
             this.labelRecommendations.Text = "Recommendations";
-            // 
-            // buttonViewRecommendations
-            // 
-            this.buttonViewRecommendations.Location = new System.Drawing.Point(12, 356);
-            this.buttonViewRecommendations.Name = "buttonViewRecommendations";
-            this.buttonViewRecommendations.Size = new System.Drawing.Size(150, 30);
-            this.buttonViewRecommendations.TabIndex = 2;
-            this.buttonViewRecommendations.Text = "View Recommendations";
-            this.buttonViewRecommendations.UseVisualStyleBackColor = true;
-            this.buttonViewRecommendations.Click += new System.EventHandler(this.buttonViewRecommendations_Click);
             // 
             // groupBoxSearch
             // 
@@ -337,8 +301,11 @@ namespace Municipality_App.Forms.Engagement
             // 
             // buttonRefresh
             // 
-            this.buttonRefresh.Location = new System.Drawing.Point(180, 356);
+            this.buttonRefresh.Depth = 0;
+            this.buttonRefresh.Location = new System.Drawing.Point(476, 356);
+            this.buttonRefresh.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonRefresh.Name = "buttonRefresh";
+            this.buttonRefresh.Primary = true;
             this.buttonRefresh.Size = new System.Drawing.Size(75, 30);
             this.buttonRefresh.TabIndex = 5;
             this.buttonRefresh.Text = "Refresh";
@@ -347,13 +314,55 @@ namespace Municipality_App.Forms.Engagement
             // 
             // buttonClose
             // 
+            this.buttonClose.Depth = 0;
             this.buttonClose.Location = new System.Drawing.Point(497, 544);
+            this.buttonClose.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Primary = true;
             this.buttonClose.Size = new System.Drawing.Size(75, 30);
             this.buttonClose.TabIndex = 6;
             this.buttonClose.Text = "Close";
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            // 
+            // buttonViewRecommendations
+            // 
+            this.buttonViewRecommendations.Depth = 0;
+            this.buttonViewRecommendations.Location = new System.Drawing.Point(12, 356);
+            this.buttonViewRecommendations.MouseState = MaterialSkin.MouseState.HOVER;
+            this.buttonViewRecommendations.Name = "buttonViewRecommendations";
+            this.buttonViewRecommendations.Primary = true;
+            this.buttonViewRecommendations.Size = new System.Drawing.Size(150, 30);
+            this.buttonViewRecommendations.TabIndex = 2;
+            this.buttonViewRecommendations.Text = "View Recommendations";
+            this.buttonViewRecommendations.UseVisualStyleBackColor = true;
+            this.buttonViewRecommendations.Click += new System.EventHandler(this.buttonViewRecommendations_Click);
+            // 
+            // buttonShare
+            // 
+            this.buttonShare.Depth = 0;
+            this.buttonShare.Location = new System.Drawing.Point(168, 356);
+            this.buttonShare.MouseState = MaterialSkin.MouseState.HOVER;
+            this.buttonShare.Name = "buttonShare";
+            this.buttonShare.Primary = true;
+            this.buttonShare.Size = new System.Drawing.Size(100, 30);
+            this.buttonShare.TabIndex = 7;
+            this.buttonShare.Text = "Share";
+            this.buttonShare.UseVisualStyleBackColor = true;
+            this.buttonShare.Click += new System.EventHandler(this.buttonShare_Click);
+            // 
+            // buttonJoinChallenge
+            // 
+            this.buttonJoinChallenge.Depth = 0;
+            this.buttonJoinChallenge.Location = new System.Drawing.Point(274, 356);
+            this.buttonJoinChallenge.MouseState = MaterialSkin.MouseState.HOVER;
+            this.buttonJoinChallenge.Name = "buttonJoinChallenge";
+            this.buttonJoinChallenge.Primary = true;
+            this.buttonJoinChallenge.Size = new System.Drawing.Size(120, 30);
+            this.buttonJoinChallenge.TabIndex = 8;
+            this.buttonJoinChallenge.Text = "Challenges";
+            this.buttonJoinChallenge.UseVisualStyleBackColor = true;
+            this.buttonJoinChallenge.Click += new System.EventHandler(this.buttonJoinChallenge_Click);
             // 
             // FormEngagement
             // 
@@ -364,9 +373,10 @@ namespace Municipality_App.Forms.Engagement
             this.Controls.Add(this.buttonRefresh);
             this.Controls.Add(this.groupBoxStatistics);
             this.Controls.Add(this.groupBoxSearch);
+            this.Controls.Add(this.buttonJoinChallenge);
+            this.Controls.Add(this.buttonShare);
             this.Controls.Add(this.buttonViewRecommendations);
             this.Controls.Add(this.tabControl);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FormEngagement";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Events & Announcements";
@@ -388,16 +398,13 @@ namespace Municipality_App.Forms.Engagement
 		private System.Windows.Forms.TabControl tabControl;
 		private System.Windows.Forms.TabPage tabPageEvents;
 		private System.Windows.Forms.ListBox listBoxEvents;
-		private System.Windows.Forms.Button buttonRegisterEvent;
 		private MaterialSkin.Controls.MaterialLabel labelEvents;
 		private System.Windows.Forms.TabPage tabPageAnnouncements;
 		private System.Windows.Forms.ListBox listBoxAnnouncements;
-		private System.Windows.Forms.Button buttonReadAnnouncement;
 		private MaterialSkin.Controls.MaterialLabel labelAnnouncements;
 		private System.Windows.Forms.TabPage tabPageRecommendations;
 		private System.Windows.Forms.ListBox listBoxRecommendations;
 		private MaterialSkin.Controls.MaterialLabel labelRecommendations;
-		private System.Windows.Forms.Button buttonViewRecommendations;
 		private System.Windows.Forms.GroupBox groupBoxSearch;
 		private MaterialSkin.Controls.MaterialSingleLineTextField textBoxSearch;
 		private MaterialSkin.Controls.MaterialLabel labelSearch;
@@ -409,9 +416,10 @@ namespace Municipality_App.Forms.Engagement
 		private MaterialSkin.Controls.MaterialLabel labelEventStats;
 		private MaterialSkin.Controls.MaterialLabel labelAnnouncementStats;
 		private MaterialSkin.Controls.MaterialLabel labelSearchStats;
-		private System.Windows.Forms.Button buttonRefresh;
-		private System.Windows.Forms.Button buttonClose;
-	}
+		private MaterialSkin.Controls.MaterialRaisedButton buttonRefresh;
+		private MaterialSkin.Controls.MaterialRaisedButton buttonClose;
+        private MaterialRaisedButton buttonViewRecommendations;
+        private MaterialRaisedButton buttonShare;
+        private MaterialRaisedButton buttonJoinChallenge;
+    }
 }
-
-
