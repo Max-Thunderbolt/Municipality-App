@@ -12,8 +12,6 @@ namespace Municipality_App.Services
     /// </summary>
     public static class RecommendationService
     {
-        #region Advanced Data Structures for Priority 2 Implementation
-
         /// <summary>
         /// Priority Queue for recommendation ranking using heap-based implementation
         /// Provides O(log n) insertion and O(log n) extraction for optimal performance
@@ -54,8 +52,6 @@ namespace Municipality_App.Services
         /// Cache expiration time for recommendation freshness (5 minutes)
         /// </summary>
         private static readonly TimeSpan CacheExpirationTime = TimeSpan.FromMinutes(5);
-
-        #endregion
 
         #region Supporting Data Structures
 
