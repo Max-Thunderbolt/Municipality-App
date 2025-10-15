@@ -23,7 +23,7 @@ namespace Municipality_App.Services
         public static class FormSizes
         {
             public static readonly Size MainForm = new Size(600, 500);
-            public static readonly Size EngagementForm = new Size(750, 625);
+            public static readonly Size EngagementForm = new Size(575, 625);
             public static readonly Size IssueForm = new Size(600, 700);
             public static readonly Size GamificationForm = new Size(650, 650);
         }

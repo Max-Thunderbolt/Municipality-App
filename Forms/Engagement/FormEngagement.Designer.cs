@@ -35,15 +35,19 @@ namespace Municipality_App.Forms.Engagement
             this.labelCategory = new MaterialSkin.Controls.MaterialLabel();
             this.comboBoxLocation = new System.Windows.Forms.ComboBox();
             this.labelLocation = new MaterialSkin.Controls.MaterialLabel();
-            this.groupBoxStatistics = new System.Windows.Forms.GroupBox();
-            this.labelEventStats = new MaterialSkin.Controls.MaterialLabel();
-            this.labelAnnouncementStats = new MaterialSkin.Controls.MaterialLabel();
-            this.labelSearchStats = new MaterialSkin.Controls.MaterialLabel();
+            this.dateTimePickerFrom = new System.Windows.Forms.DateTimePicker();
+            this.labelDateFrom = new MaterialSkin.Controls.MaterialLabel();
+            this.dateTimePickerTo = new System.Windows.Forms.DateTimePicker();
+            this.labelDateTo = new MaterialSkin.Controls.MaterialLabel();
             this.buttonRefresh = new MaterialSkin.Controls.MaterialRaisedButton();
             this.buttonClose = new MaterialSkin.Controls.MaterialRaisedButton();
             this.buttonViewRecommendations = new MaterialSkin.Controls.MaterialRaisedButton();
             this.buttonShare = new MaterialSkin.Controls.MaterialRaisedButton();
             this.buttonJoinChallenge = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.labelSearchStats = new MaterialSkin.Controls.MaterialLabel();
+            this.labelAnnouncementStats = new MaterialSkin.Controls.MaterialLabel();
+            this.labelEventStats = new MaterialSkin.Controls.MaterialLabel();
+            this.groupBoxStatistics = new System.Windows.Forms.GroupBox();
             this.tabControl.SuspendLayout();
             this.tabPageEvents.SuspendLayout();
             this.tabPageAnnouncements.SuspendLayout();
@@ -169,9 +173,13 @@ namespace Municipality_App.Forms.Engagement
             this.groupBoxSearch.Controls.Add(this.labelCategory);
             this.groupBoxSearch.Controls.Add(this.comboBoxLocation);
             this.groupBoxSearch.Controls.Add(this.labelLocation);
+            this.groupBoxSearch.Controls.Add(this.dateTimePickerFrom);
+            this.groupBoxSearch.Controls.Add(this.labelDateFrom);
+            this.groupBoxSearch.Controls.Add(this.dateTimePickerTo);
+            this.groupBoxSearch.Controls.Add(this.labelDateTo);
             this.groupBoxSearch.Location = new System.Drawing.Point(12, 392);
             this.groupBoxSearch.Name = "groupBoxSearch";
-            this.groupBoxSearch.Size = new System.Drawing.Size(560, 80);
+            this.groupBoxSearch.Size = new System.Drawing.Size(560, 120);
             this.groupBoxSearch.TabIndex = 3;
             this.groupBoxSearch.TabStop = false;
             this.groupBoxSearch.Text = "Search & Filter";
@@ -248,56 +256,47 @@ namespace Municipality_App.Forms.Engagement
             this.labelLocation.TabIndex = 5;
             this.labelLocation.Text = "Location:";
             // 
-            // groupBoxStatistics
+            // dateTimePickerFrom
             // 
-            this.groupBoxStatistics.Controls.Add(this.labelEventStats);
-            this.groupBoxStatistics.Controls.Add(this.labelAnnouncementStats);
-            this.groupBoxStatistics.Controls.Add(this.labelSearchStats);
-            this.groupBoxStatistics.Location = new System.Drawing.Point(12, 478);
-            this.groupBoxStatistics.Name = "groupBoxStatistics";
-            this.groupBoxStatistics.Size = new System.Drawing.Size(560, 60);
-            this.groupBoxStatistics.TabIndex = 4;
-            this.groupBoxStatistics.TabStop = false;
-            this.groupBoxStatistics.Text = "Statistics";
+            this.dateTimePickerFrom.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateTimePickerFrom.Location = new System.Drawing.Point(85, 80);
+            this.dateTimePickerFrom.Name = "dateTimePickerFrom";
+            this.dateTimePickerFrom.Size = new System.Drawing.Size(100, 20);
+            this.dateTimePickerFrom.TabIndex = 6;
             // 
-            // labelEventStats
+            // labelDateFrom
             // 
-            this.labelEventStats.AutoSize = true;
-            this.labelEventStats.Depth = 0;
-            this.labelEventStats.Font = new System.Drawing.Font("Roboto", 11F);
-            this.labelEventStats.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.labelEventStats.Location = new System.Drawing.Point(6, 20);
-            this.labelEventStats.MouseState = MaterialSkin.MouseState.HOVER;
-            this.labelEventStats.Name = "labelEventStats";
-            this.labelEventStats.Size = new System.Drawing.Size(70, 19);
-            this.labelEventStats.TabIndex = 0;
-            this.labelEventStats.Text = "Events: 0";
+            this.labelDateFrom.AutoSize = true;
+            this.labelDateFrom.Depth = 0;
+            this.labelDateFrom.Font = new System.Drawing.Font("Roboto", 11F);
+            this.labelDateFrom.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.labelDateFrom.Location = new System.Drawing.Point(6, 80);
+            this.labelDateFrom.MouseState = MaterialSkin.MouseState.HOVER;
+            this.labelDateFrom.Name = "labelDateFrom";
+            this.labelDateFrom.Size = new System.Drawing.Size(48, 19);
+            this.labelDateFrom.TabIndex = 7;
+            this.labelDateFrom.Text = "From:";
             // 
-            // labelAnnouncementStats
+            // dateTimePickerTo
             // 
-            this.labelAnnouncementStats.AutoSize = true;
-            this.labelAnnouncementStats.Depth = 0;
-            this.labelAnnouncementStats.Font = new System.Drawing.Font("Roboto", 11F);
-            this.labelAnnouncementStats.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.labelAnnouncementStats.Location = new System.Drawing.Point(6, 37);
-            this.labelAnnouncementStats.MouseState = MaterialSkin.MouseState.HOVER;
-            this.labelAnnouncementStats.Name = "labelAnnouncementStats";
-            this.labelAnnouncementStats.Size = new System.Drawing.Size(134, 19);
-            this.labelAnnouncementStats.TabIndex = 1;
-            this.labelAnnouncementStats.Text = "Announcements: 0";
+            this.dateTimePickerTo.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateTimePickerTo.Location = new System.Drawing.Point(280, 80);
+            this.dateTimePickerTo.Name = "dateTimePickerTo";
+            this.dateTimePickerTo.Size = new System.Drawing.Size(100, 20);
+            this.dateTimePickerTo.TabIndex = 8;
             // 
-            // labelSearchStats
+            // labelDateTo
             // 
-            this.labelSearchStats.AutoSize = true;
-            this.labelSearchStats.Depth = 0;
-            this.labelSearchStats.Font = new System.Drawing.Font("Roboto", 11F);
-            this.labelSearchStats.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.labelSearchStats.Location = new System.Drawing.Point(280, 20);
-            this.labelSearchStats.MouseState = MaterialSkin.MouseState.HOVER;
-            this.labelSearchStats.Name = "labelSearchStats";
-            this.labelSearchStats.Size = new System.Drawing.Size(87, 19);
-            this.labelSearchStats.TabIndex = 2;
-            this.labelSearchStats.Text = "Searches: 0";
+            this.labelDateTo.AutoSize = true;
+            this.labelDateTo.Depth = 0;
+            this.labelDateTo.Font = new System.Drawing.Font("Roboto", 11F);
+            this.labelDateTo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.labelDateTo.Location = new System.Drawing.Point(200, 80);
+            this.labelDateTo.MouseState = MaterialSkin.MouseState.HOVER;
+            this.labelDateTo.Name = "labelDateTo";
+            this.labelDateTo.Size = new System.Drawing.Size(31, 19);
+            this.labelDateTo.TabIndex = 9;
+            this.labelDateTo.Text = "To:";
             // 
             // buttonRefresh
             // 
@@ -315,7 +314,7 @@ namespace Municipality_App.Forms.Engagement
             // buttonClose
             // 
             this.buttonClose.Depth = 0;
-            this.buttonClose.Location = new System.Drawing.Point(497, 544);
+            this.buttonClose.Location = new System.Drawing.Point(497, 584);
             this.buttonClose.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Primary = true;
@@ -332,7 +331,7 @@ namespace Municipality_App.Forms.Engagement
             this.buttonViewRecommendations.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonViewRecommendations.Name = "buttonViewRecommendations";
             this.buttonViewRecommendations.Primary = true;
-            this.buttonViewRecommendations.Size = new System.Drawing.Size(150, 30);
+            this.buttonViewRecommendations.Size = new System.Drawing.Size(226, 30);
             this.buttonViewRecommendations.TabIndex = 2;
             this.buttonViewRecommendations.Text = "View Recommendations";
             this.buttonViewRecommendations.UseVisualStyleBackColor = true;
@@ -341,7 +340,7 @@ namespace Municipality_App.Forms.Engagement
             // buttonShare
             // 
             this.buttonShare.Depth = 0;
-            this.buttonShare.Location = new System.Drawing.Point(168, 356);
+            this.buttonShare.Location = new System.Drawing.Point(244, 356);
             this.buttonShare.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonShare.Name = "buttonShare";
             this.buttonShare.Primary = true;
@@ -354,7 +353,7 @@ namespace Municipality_App.Forms.Engagement
             // buttonJoinChallenge
             // 
             this.buttonJoinChallenge.Depth = 0;
-            this.buttonJoinChallenge.Location = new System.Drawing.Point(274, 356);
+            this.buttonJoinChallenge.Location = new System.Drawing.Point(350, 356);
             this.buttonJoinChallenge.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonJoinChallenge.Name = "buttonJoinChallenge";
             this.buttonJoinChallenge.Primary = true;
@@ -364,11 +363,62 @@ namespace Municipality_App.Forms.Engagement
             this.buttonJoinChallenge.UseVisualStyleBackColor = true;
             this.buttonJoinChallenge.Click += new System.EventHandler(this.buttonJoinChallenge_Click);
             // 
+            // labelSearchStats
+            // 
+            this.labelSearchStats.AutoSize = true;
+            this.labelSearchStats.Depth = 0;
+            this.labelSearchStats.Font = new System.Drawing.Font("Roboto", 11F);
+            this.labelSearchStats.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.labelSearchStats.Location = new System.Drawing.Point(280, 20);
+            this.labelSearchStats.MouseState = MaterialSkin.MouseState.HOVER;
+            this.labelSearchStats.Name = "labelSearchStats";
+            this.labelSearchStats.Size = new System.Drawing.Size(87, 19);
+            this.labelSearchStats.TabIndex = 2;
+            this.labelSearchStats.Text = "Searches: 0";
+            // 
+            // labelAnnouncementStats
+            // 
+            this.labelAnnouncementStats.AutoSize = true;
+            this.labelAnnouncementStats.Depth = 0;
+            this.labelAnnouncementStats.Font = new System.Drawing.Font("Roboto", 11F);
+            this.labelAnnouncementStats.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.labelAnnouncementStats.Location = new System.Drawing.Point(6, 37);
+            this.labelAnnouncementStats.MouseState = MaterialSkin.MouseState.HOVER;
+            this.labelAnnouncementStats.Name = "labelAnnouncementStats";
+            this.labelAnnouncementStats.Size = new System.Drawing.Size(134, 19);
+            this.labelAnnouncementStats.TabIndex = 1;
+            this.labelAnnouncementStats.Text = "Announcements: 0";
+            // 
+            // labelEventStats
+            // 
+            this.labelEventStats.AutoSize = true;
+            this.labelEventStats.Depth = 0;
+            this.labelEventStats.Font = new System.Drawing.Font("Roboto", 11F);
+            this.labelEventStats.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.labelEventStats.Location = new System.Drawing.Point(6, 20);
+            this.labelEventStats.MouseState = MaterialSkin.MouseState.HOVER;
+            this.labelEventStats.Name = "labelEventStats";
+            this.labelEventStats.Size = new System.Drawing.Size(70, 19);
+            this.labelEventStats.TabIndex = 0;
+            this.labelEventStats.Text = "Events: 0";
+            // 
+            // groupBoxStatistics
+            // 
+            this.groupBoxStatistics.Controls.Add(this.labelEventStats);
+            this.groupBoxStatistics.Controls.Add(this.labelAnnouncementStats);
+            this.groupBoxStatistics.Controls.Add(this.labelSearchStats);
+            this.groupBoxStatistics.Location = new System.Drawing.Point(12, 518);
+            this.groupBoxStatistics.Name = "groupBoxStatistics";
+            this.groupBoxStatistics.Size = new System.Drawing.Size(560, 60);
+            this.groupBoxStatistics.TabIndex = 4;
+            this.groupBoxStatistics.TabStop = false;
+            this.groupBoxStatistics.Text = "Statistics";
+            // 
             // FormEngagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 586);
+            this.ClientSize = new System.Drawing.Size(594, 635);
             this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.buttonRefresh);
             this.Controls.Add(this.groupBoxStatistics);
@@ -412,14 +462,18 @@ namespace Municipality_App.Forms.Engagement
 		private MaterialSkin.Controls.MaterialLabel labelCategory;
 		private MaterialSkin.Controls.MaterialLabel labelLocation;
 		private System.Windows.Forms.ComboBox comboBoxLocation;
-		private System.Windows.Forms.GroupBox groupBoxStatistics;
-		private MaterialSkin.Controls.MaterialLabel labelEventStats;
-		private MaterialSkin.Controls.MaterialLabel labelAnnouncementStats;
-		private MaterialSkin.Controls.MaterialLabel labelSearchStats;
+		private System.Windows.Forms.DateTimePicker dateTimePickerFrom;
+		private MaterialSkin.Controls.MaterialLabel labelDateFrom;
+		private System.Windows.Forms.DateTimePicker dateTimePickerTo;
+		private MaterialSkin.Controls.MaterialLabel labelDateTo;
 		private MaterialSkin.Controls.MaterialRaisedButton buttonRefresh;
 		private MaterialSkin.Controls.MaterialRaisedButton buttonClose;
         private MaterialRaisedButton buttonViewRecommendations;
         private MaterialRaisedButton buttonShare;
         private MaterialRaisedButton buttonJoinChallenge;
+        private MaterialLabel labelSearchStats;
+        private MaterialLabel labelAnnouncementStats;
+        private MaterialLabel labelEventStats;
+        private System.Windows.Forms.GroupBox groupBoxStatistics;
     }
 }

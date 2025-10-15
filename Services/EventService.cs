@@ -19,7 +19,7 @@ namespace Municipality_App.Services
         private static readonly Stack<EventRegistration> _registrationHistory =
             new Stack<EventRegistration>();
 
-        // Set for tracking user interests
+        // HashSet for tracking user interests
         private static readonly HashSet<string> _userInterests = new HashSet<string>();
 
         // Queue for event notifications

@@ -93,7 +93,6 @@
     <Compile Include="Models\EventRegistration.cs" />
     <Compile Include="Models\Announcement.cs" />
     <Compile Include="Models\UserSearch.cs" />
-    <Compile Include="Models\UserSearch.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\Main\FormMain.resx">

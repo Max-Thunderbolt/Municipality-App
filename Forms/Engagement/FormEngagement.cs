@@ -53,6 +53,14 @@ namespace Municipality_App.Forms.Engagement
             LoadRecommendations();
             UpdateStatistics();
             UpdateAdaptiveButton(); // Set initial button text
+            InitializeDatePickers();
+        }
+
+        private void InitializeDatePickers()
+        {
+            // Set default date range to last 30 days
+            dateTimePickerFrom.Value = DateTime.Now.AddDays(-30);
+            dateTimePickerTo.Value = DateTime.Now.AddDays(30);
         }
 
         private void LoadEvents()
@@ -120,6 +128,8 @@ namespace Municipality_App.Forms.Engagement
             textBoxSearch.TextChanged += TextBoxSearch_TextChanged;
             comboBoxCategory.SelectedIndexChanged += ComboBoxCategory_SelectedIndexChanged;
             comboBoxLocation.SelectedIndexChanged += ComboBoxLocation_SelectedIndexChanged;
+            dateTimePickerFrom.ValueChanged += DateTimePickerFrom_ValueChanged;
+            dateTimePickerTo.ValueChanged += DateTimePickerTo_ValueChanged;
             tabControl.SelectedIndexChanged += TabControl_SelectedIndexChanged;
             listBoxRecommendations.SelectedIndexChanged +=
                 ListBoxRecommendations_SelectedIndexChanged;
@@ -130,9 +140,7 @@ namespace Municipality_App.Forms.Engagement
             var searchQuery = textBoxSearch.Text.Trim();
             if (string.IsNullOrEmpty(searchQuery))
             {
-                LoadEvents();
-                LoadAnnouncements();
-                LoadRecommendations();
+                ApplyDateFilter(); // Use date filter instead of loading all
                 return;
             }
 
@@ -146,16 +154,28 @@ namespace Municipality_App.Forms.Engagement
             };
             SearchService.TrackSearch(search);
 
-            // Search events
-            var eventResults = EventService.SearchEvents(searchQuery);
+            // Get date range
+            var fromDate = dateTimePickerFrom.Value.Date;
+            var toDate = dateTimePickerTo.Value.Date;
+
+            // Search events with date filter
+            var eventResults = EventService
+                .SearchEvents(searchQuery)
+                .Where(evt => evt.EventDate.Date >= fromDate && evt.EventDate.Date <= toDate)
+                .ToList();
             listBoxEvents.Items.Clear();
             foreach (var evt in eventResults)
             {
                 listBoxEvents.Items.Add($"{evt.EventName} - {evt.EventDate:MMM dd, yyyy}");
             }
 
-            // Search announcements
-            var announcementResults = AnnouncementService.SearchAnnouncements(searchQuery);
+            // Search announcements with date filter
+            var announcementResults = AnnouncementService
+                .SearchAnnouncements(searchQuery)
+                .Where(ann =>
+                    ann.AnnouncementDate.Date >= fromDate && ann.AnnouncementDate.Date <= toDate
+                )
+                .ToList();
             listBoxAnnouncements.Items.Clear();
             foreach (var announcement in announcementResults)
             {
@@ -164,7 +184,7 @@ namespace Municipality_App.Forms.Engagement
                 );
             }
 
-            // Search recommendations
+            // Search recommendations with date filter
             SearchRecommendations(searchQuery);
         }
 
@@ -172,26 +192,35 @@ namespace Municipality_App.Forms.Engagement
         {
             if (string.IsNullOrEmpty(searchQuery))
             {
-                LoadRecommendations();
+                ApplyDateFilter(); // Use date filter instead of loading all
                 return;
             }
 
-            // Filter recommendations based on search query
+            // Get date range
+            var fromDate = dateTimePickerFrom.Value.Date;
+            var toDate = dateTimePickerTo.Value.Date;
+
+            // Filter recommendations based on search query and date range
             var filteredRecommendations = _recommendations
                 .Where(rec =>
                 {
+                    bool matchesSearch = false;
+                    bool matchesDate = false;
+
                     if (rec is Event evt)
                     {
-                        return evt.EventName.ToLower().Contains(searchQuery.ToLower())
+                        matchesSearch =
+                            evt.EventName.ToLower().Contains(searchQuery.ToLower())
                             || evt.EventDescription.ToLower().Contains(searchQuery.ToLower())
                             || evt.EventLocation.ToLower().Contains(searchQuery.ToLower())
                             || evt.EventCategory.ToLower().Contains(searchQuery.ToLower());
+                        matchesDate =
+                            evt.EventDate.Date >= fromDate && evt.EventDate.Date <= toDate;
                     }
                     else if (rec is Announcement announcement)
                     {
-                        return announcement
-                                .AnnouncementTitle.ToLower()
-                                .Contains(searchQuery.ToLower())
+                        matchesSearch =
+                            announcement.AnnouncementTitle.ToLower().Contains(searchQuery.ToLower())
                             || announcement
                                 .AnnouncementDescription.ToLower()
                                 .Contains(searchQuery.ToLower())
@@ -201,8 +230,11 @@ namespace Municipality_App.Forms.Engagement
                             || announcement
                                 .AnnouncementCategory.ToLower()
                                 .Contains(searchQuery.ToLower());
+                        matchesDate =
+                            announcement.AnnouncementDate.Date >= fromDate
+                            && announcement.AnnouncementDate.Date <= toDate;
                     }
-                    return false;
+                    return matchesSearch && matchesDate;
                 })
                 .ToList();
 
@@ -230,24 +262,32 @@ namespace Municipality_App.Forms.Engagement
             var selectedCategory = comboBoxCategory.SelectedItem?.ToString();
             if (string.IsNullOrEmpty(selectedCategory) || selectedCategory == "All Categories")
             {
-                LoadEvents();
-                LoadAnnouncements();
-                LoadRecommendations();
+                ApplyDateFilter(); // Use date filter instead of loading all
                 return;
             }
 
-            // Filter events by category
-            var categoryEvents = EventService.GetEventsByCategory(selectedCategory);
+            // Get date range
+            var fromDate = dateTimePickerFrom.Value.Date;
+            var toDate = dateTimePickerTo.Value.Date;
+
+            // Filter events by category and date
+            var categoryEvents = EventService
+                .GetEventsByCategory(selectedCategory)
+                .Where(evt => evt.EventDate.Date >= fromDate && evt.EventDate.Date <= toDate)
+                .ToList();
             listBoxEvents.Items.Clear();
             foreach (var evt in categoryEvents)
             {
                 listBoxEvents.Items.Add($"{evt.EventName} - {evt.EventDate:MMM dd, yyyy}");
             }
 
-            // Filter announcements by category
-            var categoryAnnouncements = AnnouncementService.GetAnnouncementsByCategory(
-                selectedCategory
-            );
+            // Filter announcements by category and date
+            var categoryAnnouncements = AnnouncementService
+                .GetAnnouncementsByCategory(selectedCategory)
+                .Where(ann =>
+                    ann.AnnouncementDate.Date >= fromDate && ann.AnnouncementDate.Date <= toDate
+                )
+                .ToList();
             listBoxAnnouncements.Items.Clear();
             foreach (var announcement in categoryAnnouncements)
             {
@@ -256,7 +296,7 @@ namespace Municipality_App.Forms.Engagement
                 );
             }
 
-            // Filter recommendations by category
+            // Filter recommendations by category and date
             FilterRecommendationsByCategory(selectedCategory);
         }
 
@@ -265,24 +305,32 @@ namespace Municipality_App.Forms.Engagement
             var selectedLocation = comboBoxLocation.SelectedItem?.ToString();
             if (string.IsNullOrEmpty(selectedLocation) || selectedLocation == "All Locations")
             {
-                LoadEvents();
-                LoadAnnouncements();
-                LoadRecommendations();
+                ApplyDateFilter(); // Use date filter instead of loading all
                 return;
             }
 
-            // Filter events by location
-            var locationEvents = EventService.GetEventsByLocation(selectedLocation);
+            // Get date range
+            var fromDate = dateTimePickerFrom.Value.Date;
+            var toDate = dateTimePickerTo.Value.Date;
+
+            // Filter events by location and date
+            var locationEvents = EventService
+                .GetEventsByLocation(selectedLocation)
+                .Where(evt => evt.EventDate.Date >= fromDate && evt.EventDate.Date <= toDate)
+                .ToList();
             listBoxEvents.Items.Clear();
             foreach (var evt in locationEvents)
             {
                 listBoxEvents.Items.Add($"{evt.EventName} - {evt.EventDate:MMM dd, yyyy}");
             }
 
-            // Filter announcements by location
-            var locationAnnouncements = AnnouncementService.GetAnnouncementsByLocation(
-                selectedLocation
-            );
+            // Filter announcements by location and date
+            var locationAnnouncements = AnnouncementService
+                .GetAnnouncementsByLocation(selectedLocation)
+                .Where(ann =>
+                    ann.AnnouncementDate.Date >= fromDate && ann.AnnouncementDate.Date <= toDate
+                )
+                .ToList();
             listBoxAnnouncements.Items.Clear();
             foreach (var announcement in locationAnnouncements)
             {
@@ -291,26 +339,40 @@ namespace Municipality_App.Forms.Engagement
                 );
             }
 
-            // Filter recommendations by location
+            // Filter recommendations by location and date
             FilterRecommendationsByLocation(selectedLocation);
         }
 
         private void FilterRecommendationsByCategory(string selectedCategory)
         {
+            // Get date range
+            var fromDate = dateTimePickerFrom.Value.Date;
+            var toDate = dateTimePickerTo.Value.Date;
+
             var filteredRecommendations = _recommendations
                 .Where(rec =>
                 {
+                    bool matchesCategory = false;
+                    bool matchesDate = false;
+
                     if (rec is Event evt)
                     {
-                        return evt.EventCategory.ToLower().Equals(selectedCategory.ToLower());
+                        matchesCategory = evt
+                            .EventCategory.ToLower()
+                            .Equals(selectedCategory.ToLower());
+                        matchesDate =
+                            evt.EventDate.Date >= fromDate && evt.EventDate.Date <= toDate;
                     }
                     else if (rec is Announcement announcement)
                     {
-                        return announcement
+                        matchesCategory = announcement
                             .AnnouncementCategory.ToLower()
                             .Equals(selectedCategory.ToLower());
+                        matchesDate =
+                            announcement.AnnouncementDate.Date >= fromDate
+                            && announcement.AnnouncementDate.Date <= toDate;
                     }
-                    return false;
+                    return matchesCategory && matchesDate;
                 })
                 .ToList();
 
@@ -335,20 +397,34 @@ namespace Municipality_App.Forms.Engagement
 
         private void FilterRecommendationsByLocation(string selectedLocation)
         {
+            // Get date range
+            var fromDate = dateTimePickerFrom.Value.Date;
+            var toDate = dateTimePickerTo.Value.Date;
+
             var filteredRecommendations = _recommendations
                 .Where(rec =>
                 {
+                    bool matchesLocation = false;
+                    bool matchesDate = false;
+
                     if (rec is Event evt)
                     {
-                        return evt.EventLocation.ToLower().Equals(selectedLocation.ToLower());
+                        matchesLocation = evt
+                            .EventLocation.ToLower()
+                            .Equals(selectedLocation.ToLower());
+                        matchesDate =
+                            evt.EventDate.Date >= fromDate && evt.EventDate.Date <= toDate;
                     }
                     else if (rec is Announcement announcement)
                     {
-                        return announcement
+                        matchesLocation = announcement
                             .AnnouncementLocation.ToLower()
                             .Equals(selectedLocation.ToLower());
+                        matchesDate =
+                            announcement.AnnouncementDate.Date >= fromDate
+                            && announcement.AnnouncementDate.Date <= toDate;
                     }
-                    return false;
+                    return matchesLocation && matchesDate;
                 })
                 .ToList();
 
@@ -604,6 +680,89 @@ namespace Municipality_App.Forms.Engagement
                 new Control[] { labelTitle, listBoxChallenges, buttonJoin, buttonClose }
             );
             challengeForm.ShowDialog();
+        }
+
+        private void DateTimePickerFrom_ValueChanged(object sender, EventArgs e)
+        {
+            ApplyDateFilter();
+        }
+
+        private void DateTimePickerTo_ValueChanged(object sender, EventArgs e)
+        {
+            ApplyDateFilter();
+        }
+
+        private void ApplyDateFilter()
+        {
+            var fromDate = dateTimePickerFrom.Value.Date;
+            var toDate = dateTimePickerTo.Value.Date;
+
+            // Ensure to date is not before from date
+            if (toDate < fromDate)
+            {
+                dateTimePickerTo.Value = fromDate;
+                toDate = fromDate;
+            }
+
+            // Filter events by date range
+            var filteredEvents = _currentEvents
+                .Where(evt => evt.EventDate.Date >= fromDate && evt.EventDate.Date <= toDate)
+                .ToList();
+
+            listBoxEvents.Items.Clear();
+            foreach (var evt in filteredEvents)
+            {
+                listBoxEvents.Items.Add($"{evt.EventName} - {evt.EventDate:MMM dd, yyyy}");
+            }
+
+            // Filter announcements by date range
+            var filteredAnnouncements = _currentAnnouncements
+                .Where(ann =>
+                    ann.AnnouncementDate.Date >= fromDate && ann.AnnouncementDate.Date <= toDate
+                )
+                .ToList();
+
+            listBoxAnnouncements.Items.Clear();
+            foreach (var announcement in filteredAnnouncements)
+            {
+                listBoxAnnouncements.Items.Add(
+                    $"{announcement.AnnouncementTitle} - {announcement.AnnouncementDate:MMM dd}"
+                );
+            }
+
+            // Filter recommendations by date range
+            var filteredRecommendations = _recommendations
+                .Where(rec =>
+                {
+                    if (rec is Event evt)
+                    {
+                        return evt.EventDate.Date >= fromDate && evt.EventDate.Date <= toDate;
+                    }
+                    else if (rec is Announcement announcement)
+                    {
+                        return announcement.AnnouncementDate.Date >= fromDate
+                            && announcement.AnnouncementDate.Date <= toDate;
+                    }
+                    return false;
+                })
+                .ToList();
+
+            listBoxRecommendations.Items.Clear();
+            foreach (var rec in filteredRecommendations.Take(10))
+            {
+                if (rec is Event evt)
+                {
+                    listBoxRecommendations.Items.Add(
+                        $"🎪 {evt.EventName} - {evt.EventDate:MMM dd}"
+                    );
+                }
+                else if (rec is Announcement announcement)
+                {
+                    listBoxRecommendations.Items.Add(
+                        $"📢 {announcement.AnnouncementTitle} - {announcement.AnnouncementDate:MMM dd}"
+                    );
+                }
+            }
         }
 
         private void buttonClose_Click(object sender, EventArgs e)

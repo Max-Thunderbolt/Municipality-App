@@ -3,36 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|c:\\users\\maxat\\onedrive - advtech ltd\\varsity college\\2025\\semester 2\\prog7312\\poe\\municipality app\\forms\\engagement\\formengagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:forms\\engagement\\formengagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\services\\eventservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:services\\eventservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\forms\\gamification\\formgamification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:forms\\gamification\\formgamification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\services\\recommendationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:services\\recommendationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\forms\\main\\formmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:forms\\main\\formmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\services\\announcementservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:services\\announcementservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\forms\\main\\formmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:forms\\main\\formmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\forms\\engagement\\formengagement.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:forms\\engagement\\formengagement.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\services\\themeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:services\\themeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\services\\searchservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:services\\searchservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\forms\\issues\\formreportissue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:forms\\issues\\formreportissue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|c:\\users\\maxat\\onedrive - advtech ltd\\varsity college\\2025\\semester 2\\prog7312\\poe\\municipality app\\models\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:models\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,100 +26,59 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "FormGamification.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Forms\\Gamification\\FormGamification.cs",
-              "RelativeDocumentMoniker": "Forms\\Gamification\\FormGamification.cs",
-              "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Forms\\Gamification\\FormGamification.cs [Design]",
-              "RelativeToolTip": "Forms\\Gamification\\FormGamification.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-15T06:35:15.612Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ThemeService.cs",
-              "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\ThemeService.cs",
-              "RelativeDocumentMoniker": "Services\\ThemeService.cs",
-              "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\ThemeService.cs",
-              "RelativeToolTip": "Services\\ThemeService.cs",
-              "ViewState": "AgIAAGQAAAAAAAAAAAAAAHoAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-15T06:05:53.638Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "SearchService.cs",
-              "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\SearchService.cs",
-              "RelativeDocumentMoniker": "Services\\SearchService.cs",
-              "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\SearchService.cs",
-              "RelativeToolTip": "Services\\SearchService.cs",
-              "ViewState": "AgIAAM8AAAAAAAAAAAAkwOEAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-14T12:47:53.02Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "FormReportIssue.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Forms\\Issues\\FormReportIssue.cs",
-              "RelativeDocumentMoniker": "Forms\\Issues\\FormReportIssue.cs",
-              "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Forms\\Issues\\FormReportIssue.cs [Design]",
-              "RelativeToolTip": "Forms\\Issues\\FormReportIssue.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-13T10:57:17.159Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "FormEngagement.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Forms\\Engagement\\FormEngagement.cs",
-              "RelativeDocumentMoniker": "Forms\\Engagement\\FormEngagement.cs",
-              "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Forms\\Engagement\\FormEngagement.cs [Design]",
-              "RelativeToolTip": "Forms\\Engagement\\FormEngagement.cs [Design]",
+              "Title": "EventService.cs",
+              "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\EventService.cs",
+              "RelativeDocumentMoniker": "Services\\EventService.cs",
+              "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\EventService.cs",
+              "RelativeToolTip": "Services\\EventService.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-13T10:57:13.746Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2025-10-15T09:23:30.663Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "FormMain.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Forms\\Main\\FormMain.cs",
-              "RelativeDocumentMoniker": "Forms\\Main\\FormMain.cs",
-              "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Forms\\Main\\FormMain.cs [Design]",
-              "RelativeToolTip": "Forms\\Main\\FormMain.cs [Design]",
+              "Title": "AnnouncementService.cs",
+              "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\AnnouncementService.cs",
+              "RelativeDocumentMoniker": "Services\\AnnouncementService.cs",
+              "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\AnnouncementService.cs",
+              "RelativeToolTip": "Services\\AnnouncementService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-13T10:49:50.693Z"
+              "WhenOpened": "2025-10-15T09:25:22.434Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "FormEngagement.Designer.cs",
-              "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Forms\\Engagement\\FormEngagement.Designer.cs",
-              "RelativeDocumentMoniker": "Forms\\Engagement\\FormEngagement.Designer.cs",
-              "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Forms\\Engagement\\FormEngagement.Designer.cs",
-              "RelativeToolTip": "Forms\\Engagement\\FormEngagement.Designer.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "RecommendationService.cs",
+              "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\RecommendationService.cs",
+              "RelativeDocumentMoniker": "Services\\RecommendationService.cs",
+              "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\RecommendationService.cs",
+              "RelativeToolTip": "Services\\RecommendationService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-15T06:10:56.008Z"
+              "WhenOpened": "2025-10-15T09:26:39.913Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "FormMain.cs",
-              "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Forms\\Main\\FormMain.cs",
-              "RelativeDocumentMoniker": "Forms\\Main\\FormMain.cs",
-              "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Forms\\Main\\FormMain.cs",
-              "RelativeToolTip": "Forms\\Main\\FormMain.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAwwGkAAAAAAAAAAAAAAA==",
+              "Title": "UserProfile.cs",
+              "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Models\\UserProfile.cs",
+              "RelativeDocumentMoniker": "Models\\UserProfile.cs",
+              "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Models\\UserProfile.cs",
+              "RelativeToolTip": "Models\\UserProfile.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAmwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-13T10:50:12.621Z"
+              "WhenOpened": "2025-10-15T09:35:52.844Z",
+              "EditorCaption": ""
             }
           ]
         }
