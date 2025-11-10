@@ -1,18 +1,20 @@
 using System;
-using System.Collections.Generic;
+using Municipality_App.Structures;
 
 namespace Municipality_App.Models
 {
     public class UserProfile
     {
         public int Points { get; set; }
-        public List<IssueReport> SubmittedIssues { get; set; } = new List<IssueReport>();
-        public List<string> UnlockedBadges { get; set; } = new List<string>();
-        public List<EngagementActivity> Activities { get; set; } = new List<EngagementActivity>();
-        public List<Achievement> Achievements { get; set; } = new List<Achievement>();
-        public List<CommunityChallenge> ParticipatedChallenges { get; set; } =
-            new List<CommunityChallenge>();
-        public List<SocialShare> SocialShares { get; set; } = new List<SocialShare>();
+        public CustomList<IssueReport> SubmittedIssues { get; set; } =
+            new CustomList<IssueReport>();
+        public CustomList<string> UnlockedBadges { get; set; } = new CustomList<string>();
+        public CustomList<EngagementActivity> Activities { get; set; } =
+            new CustomList<EngagementActivity>();
+        public CustomList<Achievement> Achievements { get; set; } = new CustomList<Achievement>();
+        public CustomList<CommunityChallenge> ParticipatedChallenges { get; set; } =
+            new CustomList<CommunityChallenge>();
+        public CustomList<SocialShare> SocialShares { get; set; } = new CustomList<SocialShare>();
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime LastActivityAt { get; set; } = DateTime.Now;
         public int FormCompletions { get; set; } = 0;
@@ -52,7 +54,7 @@ namespace Municipality_App.Models
         public string Category { get; set; }
         public bool IsActive { get; set; }
         public int ParticipantCount { get; set; }
-        public List<string> Requirements { get; set; } = new List<string>();
+        public CustomList<string> Requirements { get; set; } = new CustomList<string>();
     }
 
     public class SocialShare

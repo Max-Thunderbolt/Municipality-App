@@ -1,29 +1,30 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Municipality_App.Models;
+using Municipality_App.Structures;
 
 namespace Municipality_App.Services
 {
     public static class EventService
     {
         // Priority Queue for event management - events sorted by date and priority
-        private static readonly SortedDictionary<DateTime, List<Event>> _eventPriorityQueue =
-            new SortedDictionary<DateTime, List<Event>>();
+        private static readonly CustomSortedDictionary<
+            DateTime,
+            CustomList<Event>
+        > _eventPriorityQueue = new CustomSortedDictionary<DateTime, CustomList<Event>>();
 
         // Hash Table for quick event lookup by ID
-        private static readonly Dictionary<Guid, Event> _eventLookup =
-            new Dictionary<Guid, Event>();
+        private static readonly CustomDictionary<Guid, Event> _eventLookup =
+            new CustomDictionary<Guid, Event>();
 
         // Stack for event registration history (LIFO)
-        private static readonly Stack<EventRegistration> _registrationHistory =
-            new Stack<EventRegistration>();
+        private static readonly CustomStack<EventRegistration> _registrationHistory =
+            new CustomStack<EventRegistration>();
 
         // HashSet for tracking user interests
-        private static readonly HashSet<string> _userInterests = new HashSet<string>();
+        private static readonly CustomHashSet<string> _userInterests = new CustomHashSet<string>();
 
         // Queue for event notifications
-        private static readonly Queue<string> _eventNotifications = new Queue<string>();
+        private static readonly CustomQueue<string> _eventNotifications = new CustomQueue<string>();
 
         static EventService()
         {
@@ -32,7 +33,7 @@ namespace Municipality_App.Services
 
         private static void InitializeSampleEvents()
         {
-            var sampleEvents = new List<Event>
+            var sampleEvents = new CustomList<Event>
             {
                 new Event
                 {
@@ -95,7 +96,7 @@ namespace Municipality_App.Services
             // Add to priority queue (sorted by date)
             if (!_eventPriorityQueue.ContainsKey(evt.EventDate.Date))
             {
-                _eventPriorityQueue[evt.EventDate.Date] = new List<Event>();
+                _eventPriorityQueue.Add(evt.EventDate.Date, new CustomList<Event>());
             }
             _eventPriorityQueue[evt.EventDate.Date].Add(evt);
 
@@ -106,42 +107,91 @@ namespace Municipality_App.Services
             _eventNotifications.Enqueue($"New event added: {evt.EventName}");
         }
 
-        public static List<Event> GetUpcomingEvents()
+        public static CustomList<Event> GetUpcomingEvents()
         {
-            var upcomingEvents = new List<Event>();
+            var upcomingEvents = new CustomList<Event>();
             var currentDate = DateTime.Now.Date;
 
             foreach (var kvp in _eventPriorityQueue)
             {
                 if (kvp.Key >= currentDate)
                 {
-                    upcomingEvents.AddRange(
-                        kvp.Value.Where(e => e.EventStatus == EventStatus.Upcoming)
-                    );
+                    foreach (var evt in kvp.Value)
+                    {
+                        if (evt.EventStatus == EventStatus.Upcoming)
+                        {
+                            upcomingEvents.Add(evt);
+                        }
+                    }
                 }
             }
 
-            return upcomingEvents.OrderBy(e => e.EventDate).ToList();
+            // Sort by event date
+            for (int i = 0; i < upcomingEvents.Count - 1; i++)
+            {
+                for (int j = i + 1; j < upcomingEvents.Count; j++)
+                {
+                    if (upcomingEvents[i].EventDate > upcomingEvents[j].EventDate)
+                    {
+                        var temp = upcomingEvents[i];
+                        upcomingEvents[i] = upcomingEvents[j];
+                        upcomingEvents[j] = temp;
+                    }
+                }
+            }
+            return upcomingEvents;
         }
 
-        public static List<Event> GetEventsByCategory(string category)
+        public static CustomList<Event> GetEventsByCategory(string category)
         {
-            return _eventLookup
-                .Values.Where(e =>
-                    e.EventCategory.Equals(category, StringComparison.OrdinalIgnoreCase)
-                )
-                .OrderBy(e => e.EventDate)
-                .ToList();
+            var result = new CustomList<Event>();
+            foreach (var evt in _eventLookup.Values)
+            {
+                if (evt.EventCategory.Equals(category, StringComparison.OrdinalIgnoreCase))
+                {
+                    result.Add(evt);
+                }
+            }
+            // Sort by event date
+            for (int i = 0; i < result.Count - 1; i++)
+            {
+                for (int j = i + 1; j < result.Count; j++)
+                {
+                    if (result[i].EventDate > result[j].EventDate)
+                    {
+                        var temp = result[i];
+                        result[i] = result[j];
+                        result[j] = temp;
+                    }
+                }
+            }
+            return result;
         }
 
-        public static List<Event> GetEventsByLocation(string location)
+        public static CustomList<Event> GetEventsByLocation(string location)
         {
-            return _eventLookup
-                .Values.Where(e =>
-                    e.EventLocation.Contains(location) // , StringComparison.OrdinalIgnoreCase
-                )
-                .OrderBy(e => e.EventDate)
-                .ToList();
+            var result = new CustomList<Event>();
+            foreach (var evt in _eventLookup.Values)
+            {
+                if (evt.EventLocation != null && evt.EventLocation.Contains(location))
+                {
+                    result.Add(evt);
+                }
+            }
+            // Sort by event date
+            for (int i = 0; i < result.Count - 1; i++)
+            {
+                for (int j = i + 1; j < result.Count; j++)
+                {
+                    if (result[i].EventDate > result[j].EventDate)
+                    {
+                        var temp = result[i];
+                        result[i] = result[j];
+                        result[j] = temp;
+                    }
+                }
+            }
+            return result;
         }
 
         public static Event GetEventById(Guid eventId)
@@ -153,7 +203,7 @@ namespace Municipality_App.Services
             Guid eventId,
             string userName,
             string userEmail,
-            List<string> specialRequirements = null
+            CustomList<string> specialRequirements = null
         )
         {
             var evt = GetEventById(eventId);
@@ -165,7 +215,7 @@ namespace Municipality_App.Services
                 EventId = eventId,
                 UserName = userName,
                 UserEmail = userEmail,
-                SpecialRequirements = specialRequirements ?? new List<string>(),
+                SpecialRequirements = specialRequirements ?? new CustomList<string>(),
                 IsConfirmed = true,
             };
 
@@ -181,19 +231,19 @@ namespace Municipality_App.Services
             return true;
         }
 
-        public static List<EventRegistration> GetRegistrationHistory()
+        public static CustomList<EventRegistration> GetRegistrationHistory()
         {
             return _registrationHistory.ToList();
         }
 
-        public static List<string> GetUserInterests()
+        public static CustomList<string> GetUserInterests()
         {
             return _userInterests.ToList();
         }
 
-        public static List<string> GetEventNotifications()
+        public static CustomList<string> GetEventNotifications()
         {
-            var notifications = new List<string>();
+            var notifications = new CustomList<string>();
             while (_eventNotifications.Count > 0)
             {
                 notifications.Add(_eventNotifications.Dequeue());
@@ -201,21 +251,42 @@ namespace Municipality_App.Services
             return notifications;
         }
 
-        public static List<Event> SearchEvents(string searchQuery)
+        public static CustomList<Event> SearchEvents(string searchQuery)
         {
             if (string.IsNullOrWhiteSpace(searchQuery))
                 return GetUpcomingEvents();
 
             var query = searchQuery.ToLower();
-            return _eventLookup
-                .Values.Where(e =>
-                    e.EventName.ToLower().Contains(query)
-                    || e.EventDescription.ToLower().Contains(query)
-                    || e.EventLocation.ToLower().Contains(query)
-                    || e.EventCategory.ToLower().Contains(query)
+            var result = new CustomList<Event>();
+            foreach (var evt in _eventLookup.Values)
+            {
+                if (
+                    (evt.EventName != null && evt.EventName.ToLower().Contains(query))
+                    || (
+                        evt.EventDescription != null
+                        && evt.EventDescription.ToLower().Contains(query)
+                    )
+                    || (evt.EventLocation != null && evt.EventLocation.ToLower().Contains(query))
+                    || (evt.EventCategory != null && evt.EventCategory.ToLower().Contains(query))
                 )
-                .OrderBy(e => e.EventDate)
-                .ToList();
+                {
+                    result.Add(evt);
+                }
+            }
+            // Sort by event date
+            for (int i = 0; i < result.Count - 1; i++)
+            {
+                for (int j = i + 1; j < result.Count; j++)
+                {
+                    if (result[i].EventDate > result[j].EventDate)
+                    {
+                        var temp = result[i];
+                        result[i] = result[j];
+                        result[j] = temp;
+                    }
+                }
+            }
+            return result;
         }
 
         public static void UpdateEventStatus(Guid eventId, EventStatus newStatus)
@@ -229,23 +300,29 @@ namespace Municipality_App.Services
             }
         }
 
-        public static Dictionary<string, int> GetEventStatistics()
+        public static CustomDictionary<string, int> GetEventStatistics()
         {
-            var stats = new Dictionary<string, int>
+            var stats = new CustomDictionary<string, int>();
+            stats.Add("Total Events", _eventLookup.Count);
+
+            int upcomingCount = 0;
+            int ongoingCount = 0;
+            int completedCount = 0;
+            foreach (var evt in _eventLookup.Values)
             {
-                ["Total Events"] = _eventLookup.Count,
-                ["Upcoming Events"] = _eventLookup.Values.Count(e =>
-                    e.EventStatus == EventStatus.Upcoming
-                ),
-                ["Ongoing Events"] = _eventLookup.Values.Count(e =>
-                    e.EventStatus == EventStatus.Ongoing
-                ),
-                ["Completed Events"] = _eventLookup.Values.Count(e =>
-                    e.EventStatus == EventStatus.Completed
-                ),
-                ["Total Registrations"] = _registrationHistory.Count,
-                ["User Interests"] = _userInterests.Count,
-            };
+                if (evt.EventStatus == EventStatus.Upcoming)
+                    upcomingCount++;
+                else if (evt.EventStatus == EventStatus.Ongoing)
+                    ongoingCount++;
+                else if (evt.EventStatus == EventStatus.Completed)
+                    completedCount++;
+            }
+
+            stats.Add("Upcoming Events", upcomingCount);
+            stats.Add("Ongoing Events", ongoingCount);
+            stats.Add("Completed Events", completedCount);
+            stats.Add("Total Registrations", _registrationHistory.Count);
+            stats.Add("User Interests", _userInterests.Count);
 
             return stats;
         }

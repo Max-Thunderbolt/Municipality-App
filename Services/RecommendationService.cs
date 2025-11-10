@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using Municipality_App.Models;
+using Municipality_App.Structures;
 
 namespace Municipality_App.Services
 {
@@ -16,37 +15,42 @@ namespace Municipality_App.Services
         /// Priority Queue for recommendation ranking using heap-based implementation
         /// Provides O(log n) insertion and O(log n) extraction for optimal performance
         /// </summary>
-        private static readonly SortedDictionary<double, List<object>> _recommendationScores =
-            new SortedDictionary<double, List<object>>();
+        private static readonly CustomSortedDictionary<
+            double,
+            CustomList<object>
+        > _recommendationScores = new CustomSortedDictionary<double, CustomList<object>>();
 
         /// <summary>
         /// Thread-safe concurrent hash table for caching recommendation results
         /// Provides O(1) average-case lookup time for improved performance
         /// </summary>
-        private static readonly ConcurrentDictionary<
+        private static readonly CustomConcurrentDictionary<
             string,
             CachedRecommendation
-        > _recommendationCache = new ConcurrentDictionary<string, CachedRecommendation>();
+        > _recommendationCache = new CustomConcurrentDictionary<string, CachedRecommendation>();
 
         /// <summary>
         /// Hash table for tracking user preferences with fast O(1) lookup
         /// Uses HashSet for efficient set operations and duplicate prevention
         /// </summary>
-        private static readonly HashSet<string> _userPreferences = new HashSet<string>();
+        private static readonly CustomHashSet<string> _userPreferences =
+            new CustomHashSet<string>();
 
         /// <summary>
         /// Advanced recommendation history tracking with interaction metadata
         /// Uses Dictionary for O(1) lookup of recommendation interactions
         /// </summary>
-        private static readonly Dictionary<Guid, RecommendationInteraction> _recommendationHistory =
-            new Dictionary<Guid, RecommendationInteraction>();
+        private static readonly CustomDictionary<
+            Guid,
+            RecommendationInteraction
+        > _recommendationHistory = new CustomDictionary<Guid, RecommendationInteraction>();
 
         /// <summary>
         /// Priority queue for ranking recommendations by multiple criteria
         /// Implements custom comparer for sophisticated ranking algorithms
         /// </summary>
-        private static readonly SortedSet<RankedRecommendation> _priorityQueue =
-            new SortedSet<RankedRecommendation>(new RecommendationComparer());
+        private static readonly CustomSortedSet<RankedRecommendation> _priorityQueue =
+            new CustomSortedSet<RankedRecommendation>(new RecommendationComparer());
 
         /// <summary>
         /// Cache expiration time for recommendation freshness (5 minutes)
@@ -61,7 +65,7 @@ namespace Municipality_App.Services
         /// </summary>
         public class CachedRecommendation
         {
-            public List<object> Recommendations { get; set; }
+            public CustomList<object> Recommendations { get; set; }
             public DateTime CachedAt { get; set; }
             public string CacheKey { get; set; }
             public bool IsExpired => DateTime.Now - CachedAt > CacheExpirationTime;
@@ -136,7 +140,7 @@ namespace Municipality_App.Services
         /// Implements advanced algorithms for optimal performance and accuracy
         /// </summary>
         /// <returns>List of personalized recommendations ranked by priority queue</returns>
-        public static List<object> GetPersonalizedRecommendations()
+        public static CustomList<object> GetPersonalizedRecommendations()
         {
             try
             {
@@ -160,7 +164,12 @@ namespace Municipality_App.Services
 
                 // Get user's search patterns and interests
                 var searchHistory = SearchService.GetSearchHistory();
-                var recentSearches = searchHistory.Take(10).ToList();
+                var recentSearches = new CustomList<UserSearch>();
+                int takeCount = Math.Min(10, searchHistory.Count);
+                for (int i = 0; i < takeCount; i++)
+                {
+                    recentSearches.Add(searchHistory[i]);
+                }
                 var userInterests = EventService.GetUserInterests();
                 var readAnnouncements = SearchService.GetRecentSearches(5);
 
@@ -205,7 +214,7 @@ namespace Municipality_App.Services
         /// </summary>
         private static string GenerateCacheKey(UserProfile userProfile)
         {
-            var keyComponents = new List<string>
+            var keyComponents = new CustomList<string>
             {
                 $"user_{userProfile.Points}",
                 $"level_{GamificationService.GetLevel()}",
@@ -215,14 +224,17 @@ namespace Municipality_App.Services
                 $"timestamp_{DateTime.Now:yyyyMMddHHmm}" // 1-minute cache granularity
             };
 
-            return string.Join("_", keyComponents);
+            return string.Join("_", keyComponents.ToArray());
         }
 
         /// <summary>
         /// Caches recommendations with expiration tracking
         /// Implements cache invalidation strategy for data freshness
         /// </summary>
-        private static void CacheRecommendations(string cacheKey, List<object> recommendations)
+        private static void CacheRecommendations(
+            string cacheKey,
+            CustomList<object> recommendations
+        )
         {
             var cachedRecommendation = new CachedRecommendation
             {
@@ -242,9 +254,9 @@ namespace Municipality_App.Services
         /// Extracts top recommendations from priority queue
         /// Implements efficient extraction algorithm with O(k log n) complexity
         /// </summary>
-        private static List<object> ExtractTopRecommendationsFromPriorityQueue(int count)
+        private static CustomList<object> ExtractTopRecommendationsFromPriorityQueue(int count)
         {
-            var recommendations = new List<object>();
+            var recommendations = new CustomList<object>();
             var extractedCount = 0;
 
             foreach (var rankedRec in _priorityQueue)
@@ -263,7 +275,7 @@ namespace Municipality_App.Services
         /// Tracks recommendation generation for analytics and improvement
         /// Implements comprehensive tracking for recommendation algorithm optimization
         /// </summary>
-        private static void TrackRecommendationGeneration(List<object> recommendations)
+        private static void TrackRecommendationGeneration(CustomList<object> recommendations)
         {
             foreach (var rec in recommendations)
             {
@@ -285,17 +297,25 @@ namespace Municipality_App.Services
         /// Fallback recommendations when advanced algorithm fails
         /// Implements graceful degradation for system reliability
         /// </summary>
-        private static List<object> GetFallbackRecommendations()
+        private static CustomList<object> GetFallbackRecommendations()
         {
-            var fallbackRecommendations = new List<object>();
+            var fallbackRecommendations = new CustomList<object>();
 
             // Get basic upcoming events
-            var upcomingEvents = EventService.GetUpcomingEvents().Take(3);
-            fallbackRecommendations.AddRange(upcomingEvents);
+            var upcomingEvents = EventService.GetUpcomingEvents();
+            int eventCount = Math.Min(3, upcomingEvents.Count);
+            for (int i = 0; i < eventCount; i++)
+            {
+                fallbackRecommendations.Add(upcomingEvents[i]);
+            }
 
             // Get recent announcements
-            var recentAnnouncements = AnnouncementService.GetRecentAnnouncements(30).Take(2);
-            fallbackRecommendations.AddRange(recentAnnouncements);
+            var recentAnnouncements = AnnouncementService.GetRecentAnnouncements(30);
+            int announcementCount = Math.Min(2, recentAnnouncements.Count);
+            for (int i = 0; i < announcementCount; i++)
+            {
+                fallbackRecommendations.Add(recentAnnouncements[i]);
+            }
 
             return fallbackRecommendations;
         }
@@ -317,14 +337,14 @@ namespace Municipality_App.Services
         /// Enhanced event recommendations using priority queue algorithm
         /// Implements sophisticated ranking with O(log n) insertion complexity
         /// </summary>
-        private static List<Event> GetEventRecommendationsWithPriorityQueue(
+        private static CustomList<Event> GetEventRecommendationsWithPriorityQueue(
             UserProfile userProfile,
-            List<string> userInterests,
-            List<UserSearch> recentSearches
+            CustomList<string> userInterests,
+            CustomList<UserSearch> recentSearches
         )
         {
             var upcomingEvents = EventService.GetUpcomingEvents();
-            var rankedEvents = new List<Event>();
+            var rankedEvents = new CustomList<Event>();
 
             foreach (var evt in upcomingEvents)
             {
@@ -354,14 +374,14 @@ namespace Municipality_App.Services
         /// Enhanced announcement recommendations using priority queue algorithm
         /// Implements sophisticated ranking with O(log n) insertion complexity
         /// </summary>
-        private static List<Announcement> GetAnnouncementRecommendationsWithPriorityQueue(
+        private static CustomList<Announcement> GetAnnouncementRecommendationsWithPriorityQueue(
             UserProfile userProfile,
-            List<UserSearch> recentSearches,
-            List<UserSearch> allSearches
+            CustomList<UserSearch> recentSearches,
+            CustomList<UserSearch> allSearches
         )
         {
             var recentAnnouncements = AnnouncementService.GetRecentAnnouncements(30);
-            var rankedAnnouncements = new List<Announcement>();
+            var rankedAnnouncements = new CustomList<Announcement>();
 
             foreach (var announcement in recentAnnouncements)
             {
@@ -396,17 +416,27 @@ namespace Municipality_App.Services
             int rank = 0;
 
             // Check if user has interacted with similar events
-            var similarEventInteractions = _recommendationHistory
-                .Values.Where(interaction =>
+            int similarEventInteractions = 0;
+            foreach (var interaction in _recommendationHistory.Values)
+            {
+                if (
                     interaction.InteractionType == "registered"
                     || interaction.InteractionType == "viewed"
                 )
-                .Count();
+                {
+                    similarEventInteractions++;
+                }
+            }
 
             // Check user's category preferences
-            var categoryPreferences = userProfile
-                .Activities.Where(a => a.Type == "event_registration")
-                .Count();
+            int categoryPreferences = 0;
+            foreach (var activity in userProfile.Activities)
+            {
+                if (activity.Type == "event_registration")
+                {
+                    categoryPreferences++;
+                }
+            }
 
             // Check user's engagement level
             var engagementLevel = userProfile.Points / 100;
@@ -429,22 +459,37 @@ namespace Municipality_App.Services
             int rank = 0;
 
             // Check if user has read similar announcements
-            var similarAnnouncementInteractions = _recommendationHistory
-                .Values.Where(interaction =>
+            int similarAnnouncementInteractions = 0;
+            foreach (var interaction in _recommendationHistory.Values)
+            {
+                if (
                     interaction.InteractionType == "viewed"
                     || interaction.InteractionType == "shared"
                 )
-                .Count();
+                {
+                    similarAnnouncementInteractions++;
+                }
+            }
 
             // Check user's category interests based on submitted issues
-            var relevantIssueCategories = userProfile
-                .SubmittedIssues.Where(issue => issue.Category == announcement.AnnouncementCategory)
-                .Count();
+            int relevantIssueCategories = 0;
+            foreach (var issue in userProfile.SubmittedIssues)
+            {
+                if (issue.Category == announcement.AnnouncementCategory)
+                {
+                    relevantIssueCategories++;
+                }
+            }
 
             // Check user's announcement reading patterns
-            var announcementReadingPattern = userProfile
-                .Activities.Where(a => a.Type == "announcement_read")
-                .Count();
+            int announcementReadingPattern = 0;
+            foreach (var activity in userProfile.Activities)
+            {
+                if (activity.Type == "announcement_read")
+                {
+                    announcementReadingPattern++;
+                }
+            }
 
             // Calculate composite relevance rank
             rank =
@@ -455,13 +500,13 @@ namespace Municipality_App.Services
             return Math.Max(1, rank); // Ensure minimum rank of 1
         }
 
-        private static List<Event> GetEventRecommendations(
+        private static CustomList<Event> GetEventRecommendations(
             UserProfile userProfile,
-            List<string> userInterests,
-            List<UserSearch> recentSearches
+            CustomList<string> userInterests,
+            CustomList<UserSearch> recentSearches
         )
         {
-            var recommendations = new List<Event>();
+            var recommendations = new CustomList<Event>();
             var upcomingEvents = EventService.GetUpcomingEvents();
 
             foreach (var evt in upcomingEvents)
@@ -473,21 +518,44 @@ namespace Municipality_App.Services
                 }
             }
 
-            return recommendations
-                .OrderByDescending(e =>
-                    CalculateEventScore(e, userProfile, userInterests, recentSearches)
-                )
-                .Take(5)
-                .ToList();
+            // Sort by score descending and take top 5
+            var sortedRecommendations = new CustomList<Event>();
+            var scores = new CustomList<double>();
+            foreach (var evt in recommendations)
+            {
+                double score = CalculateEventScore(evt, userProfile, userInterests, recentSearches);
+                int insertIndex = 0;
+                for (int i = 0; i < scores.Count; i++)
+                {
+                    if (score <= scores[i])
+                    {
+                        insertIndex = i + 1;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                sortedRecommendations.Insert(insertIndex, evt);
+                scores.Insert(insertIndex, score);
+            }
+
+            var result = new CustomList<Event>();
+            int takeCount = Math.Min(5, sortedRecommendations.Count);
+            for (int i = 0; i < takeCount; i++)
+            {
+                result.Add(sortedRecommendations[i]);
+            }
+            return result;
         }
 
-        private static List<Announcement> GetAnnouncementRecommendations(
+        private static CustomList<Announcement> GetAnnouncementRecommendations(
             UserProfile userProfile,
-            List<UserSearch> recentSearches,
-            List<UserSearch> allSearches
+            CustomList<UserSearch> recentSearches,
+            CustomList<UserSearch> allSearches
         )
         {
-            var recommendations = new List<Announcement>();
+            var recommendations = new CustomList<Announcement>();
             var recentAnnouncements = AnnouncementService.GetRecentAnnouncements(30);
 
             foreach (var announcement in recentAnnouncements)
@@ -499,10 +567,39 @@ namespace Municipality_App.Services
                 }
             }
 
-            return recommendations
-                .OrderByDescending(a => CalculateAnnouncementScore(a, userProfile, recentSearches))
-                .Take(5)
-                .ToList();
+            // Sort by score descending and take top 5
+            var sortedRecommendations = new CustomList<Announcement>();
+            var scores = new CustomList<double>();
+            foreach (var announcement in recommendations)
+            {
+                double score = CalculateAnnouncementScore(
+                    announcement,
+                    userProfile,
+                    recentSearches
+                );
+                int insertIndex = 0;
+                for (int i = 0; i < scores.Count; i++)
+                {
+                    if (score <= scores[i])
+                    {
+                        insertIndex = i + 1;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                sortedRecommendations.Insert(insertIndex, announcement);
+                scores.Insert(insertIndex, score);
+            }
+
+            var result = new CustomList<Announcement>();
+            int takeCount = Math.Min(5, sortedRecommendations.Count);
+            for (int i = 0; i < takeCount; i++)
+            {
+                result.Add(sortedRecommendations[i]);
+            }
+            return result;
         }
 
         /// <summary>
@@ -527,8 +624,8 @@ namespace Municipality_App.Services
         private static double CalculateEventScore(
             Event evt,
             UserProfile userProfile,
-            List<string> userInterests,
-            List<UserSearch> recentSearches
+            CustomList<string> userInterests,
+            CustomList<UserSearch> recentSearches
         )
         {
             try
@@ -543,10 +640,17 @@ namespace Municipality_App.Services
                 }
 
                 // Factor 2: Interest Matching Algorithm (30% weight)
-                // Uses HashSet for O(1) lookup performance in interest matching
-                if (userInterests != null && userInterests.Contains(evt.EventCategory))
+                // Uses CustomHashSet for O(1) lookup performance in interest matching
+                if (userInterests != null)
                 {
-                    score += 0.3;
+                    foreach (var interest in userInterests)
+                    {
+                        if (interest == evt.EventCategory)
+                        {
+                            score += 0.3;
+                            break;
+                        }
+                    }
                 }
 
                 // Factor 3: Search Pattern Matching (20% weight)
@@ -628,7 +732,7 @@ namespace Municipality_App.Services
         private static double CalculateAnnouncementScore(
             Announcement announcement,
             UserProfile userProfile,
-            List<UserSearch> recentSearches
+            CustomList<UserSearch> recentSearches
         )
         {
             try
@@ -685,10 +789,15 @@ namespace Municipality_App.Services
                 }
 
                 // Factor 4: Category Relevance Algorithm (20% weight)
-                // Uses HashSet for O(1) lookup performance in category matching
-                var userIssueCategories =
-                    userProfile.SubmittedIssues?.Select(i => i.Category).Distinct().ToList()
-                    ?? new List<string>();
+                // Uses CustomHashSet for O(1) lookup performance in category matching
+                var userIssueCategories = new CustomHashSet<string>();
+                if (userProfile.SubmittedIssues != null)
+                {
+                    foreach (var issue in userProfile.SubmittedIssues)
+                    {
+                        userIssueCategories.Add(issue.Category);
+                    }
+                }
 
                 if (userIssueCategories.Contains(announcement.AnnouncementCategory))
                 {
@@ -734,12 +843,12 @@ namespace Municipality_App.Services
             return 0.0;
         }
 
-        public static List<string> GetSearchSuggestions(string partialQuery)
+        public static CustomList<string> GetSearchSuggestions(string partialQuery)
         {
             return SearchService.GetSearchSuggestions(partialQuery);
         }
 
-        public static List<Event> GetRecommendedEventsForUser()
+        public static CustomList<Event> GetRecommendedEventsForUser()
         {
             var userProfile = GamificationService.GetProfile();
             var userInterests = EventService.GetUserInterests();
@@ -748,7 +857,7 @@ namespace Municipality_App.Services
             return GetEventRecommendations(userProfile, userInterests, recentSearches);
         }
 
-        public static List<Announcement> GetRecommendedAnnouncementsForUser()
+        public static CustomList<Announcement> GetRecommendedAnnouncementsForUser()
         {
             var userProfile = GamificationService.GetProfile();
             var recentSearches = SearchService.GetRecentSearches(5);
@@ -760,45 +869,47 @@ namespace Municipality_App.Services
             );
         }
 
-        public static Dictionary<string, object> GetRecommendationAnalytics()
+        public static CustomDictionary<string, object> GetRecommendationAnalytics()
         {
-            var analytics = new Dictionary<string, object>
-            {
-                ["Total Recommendations Generated"] = _recommendationHistory.Count,
-                ["User Preferences Tracked"] = _userPreferences.Count,
-                ["Recommendation Score Ranges"] = GetRecommendationScoreRanges(),
-                ["Most Recommended Categories"] = GetMostRecommendedCategories(),
-                ["Recommendation Success Rate"] = GetRecommendationSuccessRate(),
-            };
+            var analytics = new CustomDictionary<string, object>();
+            analytics.Add("Total Recommendations Generated", _recommendationHistory.Count);
+            analytics.Add("User Preferences Tracked", _userPreferences.Count);
+            analytics.Add("Recommendation Score Ranges", GetRecommendationScoreRanges());
+            analytics.Add("Most Recommended Categories", GetMostRecommendedCategories());
+            analytics.Add("Recommendation Success Rate", GetRecommendationSuccessRate());
 
             return analytics;
         }
 
-        private static Dictionary<string, int> GetRecommendationScoreRanges()
+        private static CustomDictionary<string, int> GetRecommendationScoreRanges()
         {
-            var ranges = new Dictionary<string, int>
-            {
-                ["High (0.8-1.0)"] = 0,
-                ["Medium (0.5-0.8)"] = 0,
-                ["Low (0.0-0.5)"] = 0,
-            };
+            var ranges = new CustomDictionary<string, int>();
+            ranges.Add("High (0.8-1.0)", 0);
+            ranges.Add("Medium (0.5-0.8)", 0);
+            ranges.Add("Low (0.0-0.5)", 0);
 
             foreach (var score in _recommendationScores.Keys)
             {
                 if (score >= 0.8)
+                {
                     ranges["High (0.8-1.0)"]++;
+                }
                 else if (score >= 0.5)
+                {
                     ranges["Medium (0.5-0.8)"]++;
+                }
                 else
+                {
                     ranges["Low (0.0-0.5)"]++;
+                }
             }
 
             return ranges;
         }
 
-        private static List<string> GetMostRecommendedCategories()
+        private static CustomList<string> GetMostRecommendedCategories()
         {
-            var categoryCounts = new Dictionary<string, int>();
+            var categoryCounts = new CustomDictionary<string, int>();
 
             foreach (var recommendations in _recommendationScores.Values)
             {
@@ -813,17 +924,38 @@ namespace Municipality_App.Services
                     if (!string.IsNullOrEmpty(category))
                     {
                         if (!categoryCounts.ContainsKey(category))
-                            categoryCounts[category] = 0;
+                            categoryCounts.Add(category, 0);
                         categoryCounts[category]++;
                     }
                 }
             }
 
-            return categoryCounts
-                .OrderByDescending(kvp => kvp.Value)
-                .Select(kvp => kvp.Key)
-                .Take(5)
-                .ToList();
+            // Sort by count descending and take top 5
+            var sortedCategories = new CustomList<KeyValuePair<string, int>>();
+            foreach (var kvp in categoryCounts)
+            {
+                int insertIndex = 0;
+                for (int i = 0; i < sortedCategories.Count; i++)
+                {
+                    if (kvp.Value <= sortedCategories[i].Value)
+                    {
+                        insertIndex = i + 1;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                sortedCategories.Insert(insertIndex, kvp);
+            }
+
+            var result = new CustomList<string>();
+            int takeCount = Math.Min(5, sortedCategories.Count);
+            for (int i = 0; i < takeCount; i++)
+            {
+                result.Add(sortedCategories[i].Key);
+            }
+            return result;
         }
 
         private static double GetRecommendationSuccessRate()
@@ -877,7 +1009,7 @@ namespace Municipality_App.Services
             _userPreferences.Add(preference);
         }
 
-        public static List<string> GetUserPreferences()
+        public static CustomList<string> GetUserPreferences()
         {
             return _userPreferences.ToList();
         }

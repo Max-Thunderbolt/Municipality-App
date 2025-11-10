@@ -1,29 +1,32 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Municipality_App.Models;
+using Municipality_App.Structures;
 
 namespace Municipality_App.Services
 {
     public static class SearchService
     {
         // Sorted Dictionary for tracking search patterns by timestamp
-        private static readonly SortedDictionary<DateTime, UserSearch> _searchHistory =
-            new SortedDictionary<DateTime, UserSearch>();
+        private static readonly CustomSortedDictionary<DateTime, UserSearch> _searchHistory =
+            new CustomSortedDictionary<DateTime, UserSearch>();
 
         // Hash Table for quick search lookup by category
-        private static readonly Dictionary<string, List<UserSearch>> _searchesByCategory =
-            new Dictionary<string, List<UserSearch>>();
+        private static readonly CustomDictionary<
+            string,
+            CustomList<UserSearch>
+        > _searchesByCategory = new CustomDictionary<string, CustomList<UserSearch>>();
 
         // Set for tracking popular search terms
-        private static readonly HashSet<string> _popularSearchTerms = new HashSet<string>();
+        private static readonly CustomHashSet<string> _popularSearchTerms =
+            new CustomHashSet<string>();
 
         // Dictionary for tracking search frequency
-        private static readonly Dictionary<string, int> _searchFrequency =
-            new Dictionary<string, int>();
+        private static readonly CustomDictionary<string, int> _searchFrequency =
+            new CustomDictionary<string, int>();
 
         // List for tracking announcement reads
-        private static readonly List<Announcement> _readAnnouncements = new List<Announcement>();
+        private static readonly CustomList<Announcement> _readAnnouncements =
+            new CustomList<Announcement>();
 
         public static void TrackSearch(UserSearch search)
         {
@@ -36,7 +39,7 @@ namespace Municipality_App.Services
             // Add to category hash table
             if (!_searchesByCategory.ContainsKey(search.SearchCategory))
             {
-                _searchesByCategory[search.SearchCategory] = new List<UserSearch>();
+                _searchesByCategory.Add(search.SearchCategory, new CustomList<UserSearch>());
             }
             _searchesByCategory[search.SearchCategory].Add(search);
 
@@ -44,7 +47,7 @@ namespace Municipality_App.Services
             var searchKey = search.SearchQuery.ToLower();
             if (!_searchFrequency.ContainsKey(searchKey))
             {
-                _searchFrequency[searchKey] = 0;
+                _searchFrequency.Add(searchKey, 0);
             }
             _searchFrequency[searchKey]++;
 
@@ -57,41 +60,96 @@ namespace Municipality_App.Services
 
         public static void TrackAnnouncementRead(Announcement announcement)
         {
-            if (announcement != null && !_readAnnouncements.Contains(announcement))
+            if (announcement != null)
             {
-                _readAnnouncements.Add(announcement);
+                bool found = false;
+                foreach (var existing in _readAnnouncements)
+                {
+                    if (existing.AnnouncementId == announcement.AnnouncementId)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    _readAnnouncements.Add(announcement);
+                }
             }
         }
 
-        public static List<UserSearch> GetSearchHistory()
+        public static CustomList<UserSearch> GetSearchHistory()
         {
-            return _searchHistory.Values.OrderByDescending(s => s.SearchTimestamp).ToList();
+            var result = new CustomList<UserSearch>();
+            foreach (var search in _searchHistory.Values)
+            {
+                result.Add(search);
+            }
+            // Sort by timestamp descending
+            for (int i = 0; i < result.Count - 1; i++)
+            {
+                for (int j = i + 1; j < result.Count; j++)
+                {
+                    if (result[i].SearchTimestamp < result[j].SearchTimestamp)
+                    {
+                        var temp = result[i];
+                        result[i] = result[j];
+                        result[j] = temp;
+                    }
+                }
+            }
+            return result;
         }
 
-        public static List<UserSearch> GetSearchesByCategory(string category)
+        public static CustomList<UserSearch> GetSearchesByCategory(string category)
         {
-            return _searchesByCategory.TryGetValue(category, out List<UserSearch> searches)
-                ? searches.OrderByDescending(s => s.SearchTimestamp).ToList()
-                : new List<UserSearch>();
+            if (_searchesByCategory.TryGetValue(category, out CustomList<UserSearch> searches))
+            {
+                var result = new CustomList<UserSearch>();
+                foreach (var search in searches)
+                {
+                    result.Add(search);
+                }
+                // Sort by timestamp descending
+                for (int i = 0; i < result.Count - 1; i++)
+                {
+                    for (int j = i + 1; j < result.Count; j++)
+                    {
+                        if (result[i].SearchTimestamp < result[j].SearchTimestamp)
+                        {
+                            var temp = result[i];
+                            result[i] = result[j];
+                            result[j] = temp;
+                        }
+                    }
+                }
+                return result;
+            }
+            return new CustomList<UserSearch>();
         }
 
-        public static List<string> GetPopularSearchTerms()
+        public static CustomList<string> GetPopularSearchTerms()
         {
             return _popularSearchTerms.ToList();
         }
 
-        public static Dictionary<string, int> GetSearchFrequency()
+        public static CustomDictionary<string, int> GetSearchFrequency()
         {
-            return new Dictionary<string, int>(_searchFrequency);
+            var result = new CustomDictionary<string, int>();
+            foreach (var kvp in _searchFrequency)
+            {
+                result.Add(kvp.Key, kvp.Value);
+            }
+            return result;
         }
 
-        public static List<string> GetSearchSuggestions(string partialQuery)
+        public static CustomList<string> GetSearchSuggestions(string partialQuery)
         {
             if (string.IsNullOrWhiteSpace(partialQuery))
                 return GetPopularSearchTerms();
 
             var query = partialQuery.ToLower();
-            var suggestions = new List<string>();
+            var suggestions = new CustomHashSet<string>();
 
             // Find searches that start with the partial query
             foreach (var search in _searchHistory.Values)
@@ -105,84 +163,177 @@ namespace Municipality_App.Services
             // Add popular terms that contain the partial query
             foreach (var term in _popularSearchTerms)
             {
-                if (term.Contains(query) && !suggestions.Contains(term))
+                if (term.Contains(query))
                 {
                     suggestions.Add(term);
                 }
             }
 
-            return suggestions.Distinct().Take(10).ToList();
+            var result = suggestions.ToList();
+            // Limit to 10
+            if (result.Count > 10)
+            {
+                var limited = new CustomList<string>();
+                for (int i = 0; i < 10; i++)
+                {
+                    limited.Add(result[i]);
+                }
+                return limited;
+            }
+            return result;
         }
 
-        public static List<Announcement> GetRecommendedAnnouncements()
+        public static CustomList<Announcement> GetRecommendedAnnouncements()
         {
-            var recommendations = new List<Announcement>();
+            var recommendations = new CustomList<Announcement>();
 
             // Get user's read announcement categories
-            var readCategories = _readAnnouncements
-                .Select(a => a.AnnouncementCategory)
-                .Distinct()
-                .ToList();
+            var readCategories = new CustomHashSet<string>();
+            foreach (var announcement in _readAnnouncements)
+            {
+                readCategories.Add(announcement.AnnouncementCategory);
+            }
 
             // Get user's search categories
-            var searchCategories = _searchesByCategory.Keys.ToList();
+            var searchCategories = _searchesByCategory.Keys;
 
             // Combine categories for recommendations
-            var allCategories = readCategories.Union(searchCategories).Distinct().ToList();
+            var allCategories = new CustomHashSet<string>();
+            foreach (var category in readCategories)
+            {
+                allCategories.Add(category);
+            }
+            foreach (var category in searchCategories)
+            {
+                allCategories.Add(category);
+            }
 
+            var seenAnnouncements = new CustomHashSet<Guid>();
             foreach (var category in allCategories)
             {
                 var categoryAnnouncements = AnnouncementService.GetAnnouncementsByCategory(
                     category
                 );
-                recommendations.AddRange(categoryAnnouncements.Take(2)); // Limit to 2 per category
+                int count = 0;
+                foreach (var announcement in categoryAnnouncements)
+                {
+                    if (count >= 2)
+                        break;
+                    if (!seenAnnouncements.Contains(announcement.AnnouncementId))
+                    {
+                        recommendations.Add(announcement);
+                        seenAnnouncements.Add(announcement.AnnouncementId);
+                        count++;
+                    }
+                }
             }
 
-            return recommendations
-                .Distinct()
-                .OrderByDescending(a => a.AnnouncementDate)
-                .Take(5)
-                .ToList();
+            // Sort by date descending and take top 5
+            for (int i = 0; i < recommendations.Count - 1; i++)
+            {
+                for (int j = i + 1; j < recommendations.Count; j++)
+                {
+                    if (recommendations[i].AnnouncementDate < recommendations[j].AnnouncementDate)
+                    {
+                        var temp = recommendations[i];
+                        recommendations[i] = recommendations[j];
+                        recommendations[j] = temp;
+                    }
+                }
+            }
+
+            if (recommendations.Count > 5)
+            {
+                var limited = new CustomList<Announcement>();
+                for (int i = 0; i < 5; i++)
+                {
+                    limited.Add(recommendations[i]);
+                }
+                return limited;
+            }
+            return recommendations;
         }
 
-        public static List<Event> GetRecommendedEvents()
+        public static CustomList<Event> GetRecommendedEvents()
         {
-            var recommendations = new List<Event>();
+            var recommendations = new CustomList<Event>();
 
             // Get user's read announcement categories
-            var readCategories = _readAnnouncements
-                .Select(a => a.AnnouncementCategory)
-                .Distinct()
-                .ToList();
+            var readCategories = new CustomHashSet<string>();
+            foreach (var announcement in _readAnnouncements)
+            {
+                readCategories.Add(announcement.AnnouncementCategory);
+            }
 
             // Get user's search categories
-            var searchCategories = _searchesByCategory.Keys.ToList();
+            var searchCategories = _searchesByCategory.Keys;
 
             // Combine categories for recommendations
-            var allCategories = readCategories.Union(searchCategories).Distinct().ToList();
+            var allCategories = new CustomHashSet<string>();
+            foreach (var category in readCategories)
+            {
+                allCategories.Add(category);
+            }
+            foreach (var category in searchCategories)
+            {
+                allCategories.Add(category);
+            }
 
+            var seenEvents = new CustomHashSet<Guid>();
             foreach (var category in allCategories)
             {
                 var categoryEvents = EventService.GetEventsByCategory(category);
-                recommendations.AddRange(categoryEvents.Take(2)); // Limit to 2 per category
+                int count = 0;
+                foreach (var evt in categoryEvents)
+                {
+                    if (count >= 2)
+                        break;
+                    if (!seenEvents.Contains(evt.EventId))
+                    {
+                        recommendations.Add(evt);
+                        seenEvents.Add(evt.EventId);
+                        count++;
+                    }
+                }
             }
 
-            return recommendations.Distinct().OrderBy(e => e.EventDate).Take(5).ToList();
+            // Sort by date ascending and take top 5
+            for (int i = 0; i < recommendations.Count - 1; i++)
+            {
+                for (int j = i + 1; j < recommendations.Count; j++)
+                {
+                    if (recommendations[i].EventDate > recommendations[j].EventDate)
+                    {
+                        var temp = recommendations[i];
+                        recommendations[i] = recommendations[j];
+                        recommendations[j] = temp;
+                    }
+                }
+            }
+
+            if (recommendations.Count > 5)
+            {
+                var limited = new CustomList<Event>();
+                for (int i = 0; i < 5; i++)
+                {
+                    limited.Add(recommendations[i]);
+                }
+                return limited;
+            }
+            return recommendations;
         }
 
-        public static Dictionary<string, object> GetSearchAnalytics()
+        public static CustomDictionary<string, object> GetSearchAnalytics()
         {
-            var analytics = new Dictionary<string, object>
-            {
-                ["Total Searches"] = _searchHistory.Count,
-                ["Unique Search Terms"] = _searchFrequency.Count,
-                ["Popular Terms"] = _popularSearchTerms.Count,
-                ["Categories Searched"] = _searchesByCategory.Count,
-                ["Announcements Read"] = _readAnnouncements.Count,
-                ["Most Searched Category"] = GetMostSearchedCategory(),
-                ["Most Popular Term"] = GetMostPopularTerm(),
-                ["Search Success Rate"] = GetSearchSuccessRate(),
-            };
+            var analytics = new CustomDictionary<string, object>();
+            analytics.Add("Total Searches", _searchHistory.Count);
+            analytics.Add("Unique Search Terms", _searchFrequency.Count);
+            analytics.Add("Popular Terms", _popularSearchTerms.Count);
+            analytics.Add("Categories Searched", _searchesByCategory.Count);
+            analytics.Add("Announcements Read", _readAnnouncements.Count);
+            analytics.Add("Most Searched Category", GetMostSearchedCategory());
+            analytics.Add("Most Popular Term", GetMostPopularTerm());
+            analytics.Add("Search Success Rate", GetSearchSuccessRate());
 
             return analytics;
         }
@@ -192,7 +343,17 @@ namespace Municipality_App.Services
             if (_searchesByCategory.Count == 0)
                 return "None";
 
-            return _searchesByCategory.OrderByDescending(kvp => kvp.Value.Count).First().Key;
+            string maxCategory = "";
+            int maxCount = 0;
+            foreach (var kvp in _searchesByCategory)
+            {
+                if (kvp.Value.Count > maxCount)
+                {
+                    maxCount = kvp.Value.Count;
+                    maxCategory = kvp.Key;
+                }
+            }
+            return maxCategory;
         }
 
         private static string GetMostPopularTerm()
@@ -200,7 +361,17 @@ namespace Municipality_App.Services
             if (_searchFrequency.Count == 0)
                 return "None";
 
-            return _searchFrequency.OrderByDescending(kvp => kvp.Value).First().Key;
+            string maxTerm = "";
+            int maxFrequency = 0;
+            foreach (var kvp in _searchFrequency)
+            {
+                if (kvp.Value > maxFrequency)
+                {
+                    maxFrequency = kvp.Value;
+                    maxTerm = kvp.Key;
+                }
+            }
+            return maxTerm;
         }
 
         private static double GetSearchSuccessRate()
@@ -208,16 +379,45 @@ namespace Municipality_App.Services
             if (_searchHistory.Count == 0)
                 return 0.0;
 
-            var successfulSearches = _searchHistory.Values.Count(s => s.WasSuccessful);
+            int successfulSearches = 0;
+            foreach (var search in _searchHistory.Values)
+            {
+                if (search.WasSuccessful)
+                {
+                    successfulSearches++;
+                }
+            }
             return (double)successfulSearches / _searchHistory.Count * 100;
         }
 
-        public static List<UserSearch> GetRecentSearches(int count = 10)
+        public static CustomList<UserSearch> GetRecentSearches(int count = 10)
         {
-            return _searchHistory
-                .Values.OrderByDescending(s => s.SearchTimestamp)
-                .Take(count)
-                .ToList();
+            var allSearches = new CustomList<UserSearch>();
+            foreach (var search in _searchHistory.Values)
+            {
+                allSearches.Add(search);
+            }
+            // Sort by timestamp descending
+            for (int i = 0; i < allSearches.Count - 1; i++)
+            {
+                for (int j = i + 1; j < allSearches.Count; j++)
+                {
+                    if (allSearches[i].SearchTimestamp < allSearches[j].SearchTimestamp)
+                    {
+                        var temp = allSearches[i];
+                        allSearches[i] = allSearches[j];
+                        allSearches[j] = temp;
+                    }
+                }
+            }
+            // Take first count items
+            var result = new CustomList<UserSearch>();
+            int takeCount = Math.Min(count, allSearches.Count);
+            for (int i = 0; i < takeCount; i++)
+            {
+                result.Add(allSearches[i]);
+            }
+            return result;
         }
 
         public static void ClearSearchHistory()

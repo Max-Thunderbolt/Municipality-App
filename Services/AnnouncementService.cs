@@ -1,31 +1,34 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Municipality_App.Models;
+using Municipality_App.Structures;
 
 namespace Municipality_App.Services
 {
     public static class AnnouncementService
     {
         // Hash Table for quick announcement lookup by category
-        private static readonly Dictionary<string, List<Announcement>> _announcementsByCategory =
-            new Dictionary<string, List<Announcement>>();
+        private static readonly CustomDictionary<
+            string,
+            CustomList<Announcement>
+        > _announcementsByCategory = new CustomDictionary<string, CustomList<Announcement>>();
 
         // Hash Table for quick announcement lookup by ID
-        private static readonly Dictionary<Guid, Announcement> _announcementLookup =
-            new Dictionary<Guid, Announcement>();
+        private static readonly CustomDictionary<Guid, Announcement> _announcementLookup =
+            new CustomDictionary<Guid, Announcement>();
 
         // Sorted Dictionary for announcements sorted by date
-        private static readonly SortedDictionary<
+        private static readonly CustomSortedDictionary<
             DateTime,
-            List<Announcement>
-        > _announcementsByDate = new SortedDictionary<DateTime, List<Announcement>>();
+            CustomList<Announcement>
+        > _announcementsByDate = new CustomSortedDictionary<DateTime, CustomList<Announcement>>();
 
         // Set for tracking announcement categories
-        private static readonly HashSet<string> _announcementCategories = new HashSet<string>();
+        private static readonly CustomHashSet<string> _announcementCategories =
+            new CustomHashSet<string>();
 
         // Queue for announcement delivery
-        private static readonly Queue<Announcement> _announcementQueue = new Queue<Announcement>();
+        private static readonly CustomQueue<Announcement> _announcementQueue =
+            new CustomQueue<Announcement>();
 
         static AnnouncementService()
         {
@@ -34,7 +37,7 @@ namespace Municipality_App.Services
 
         private static void InitializeSampleAnnouncements()
         {
-            var sampleAnnouncements = new List<Announcement>
+            var sampleAnnouncements = new CustomList<Announcement>
             {
                 new Announcement
                 {
@@ -112,8 +115,10 @@ namespace Municipality_App.Services
             // Add to category hash table
             if (!_announcementsByCategory.ContainsKey(announcement.AnnouncementCategory))
             {
-                _announcementsByCategory[announcement.AnnouncementCategory] =
-                    new List<Announcement>();
+                _announcementsByCategory.Add(
+                    announcement.AnnouncementCategory,
+                    new CustomList<Announcement>()
+                );
             }
             _announcementsByCategory[announcement.AnnouncementCategory].Add(announcement);
 
@@ -124,7 +129,7 @@ namespace Municipality_App.Services
             var dateKey = announcement.AnnouncementDate.Date;
             if (!_announcementsByDate.ContainsKey(dateKey))
             {
-                _announcementsByDate[dateKey] = new List<Announcement>();
+                _announcementsByDate.Add(dateKey, new CustomList<Announcement>());
             }
             _announcementsByDate[dateKey].Add(announcement);
 
@@ -135,48 +140,124 @@ namespace Municipality_App.Services
             _announcementQueue.Enqueue(announcement);
         }
 
-        public static List<Announcement> GetAnnouncementsByCategory(string category)
+        public static CustomList<Announcement> GetAnnouncementsByCategory(string category)
         {
             if (string.IsNullOrWhiteSpace(category))
                 return GetAllAnnouncements();
 
-            return _announcementsByCategory.TryGetValue(
-                category,
-                out List<Announcement> announcements
+            if (
+                _announcementsByCategory.TryGetValue(
+                    category,
+                    out CustomList<Announcement> announcements
+                )
             )
-                ? announcements.OrderByDescending(a => a.AnnouncementDate).ToList()
-                : new List<Announcement>();
+            {
+                var result = new CustomList<Announcement>();
+                foreach (var announcement in announcements)
+                {
+                    result.Add(announcement);
+                }
+                // Sort by date descending
+                for (int i = 0; i < result.Count - 1; i++)
+                {
+                    for (int j = i + 1; j < result.Count; j++)
+                    {
+                        if (result[i].AnnouncementDate < result[j].AnnouncementDate)
+                        {
+                            var temp = result[i];
+                            result[i] = result[j];
+                            result[j] = temp;
+                        }
+                    }
+                }
+                return result;
+            }
+            return new CustomList<Announcement>();
         }
 
-        public static List<Announcement> GetAnnouncementsByLocation(string location)
+        public static CustomList<Announcement> GetAnnouncementsByLocation(string location)
         {
             if (string.IsNullOrWhiteSpace(location))
                 return GetAllAnnouncements();
 
-            return _announcementLookup
-                .Values.Where(a =>
-                    a.AnnouncementLocation != null
-                    && a.AnnouncementLocation.Contains(location) // ,StringComparison.OrdinalIgnoreCase
+            var result = new CustomList<Announcement>();
+            foreach (var announcement in _announcementLookup.Values)
+            {
+                if (
+                    announcement.AnnouncementLocation != null
+                    && announcement.AnnouncementLocation.Contains(location)
                 )
-                .OrderByDescending(a => a.AnnouncementDate)
-                .ToList();
+                {
+                    result.Add(announcement);
+                }
+            }
+            // Sort by date descending
+            for (int i = 0; i < result.Count - 1; i++)
+            {
+                for (int j = i + 1; j < result.Count; j++)
+                {
+                    if (result[i].AnnouncementDate < result[j].AnnouncementDate)
+                    {
+                        var temp = result[i];
+                        result[i] = result[j];
+                        result[j] = temp;
+                    }
+                }
+            }
+            return result;
         }
 
-        public static List<Announcement> GetRecentAnnouncements(int days = 7)
+        public static CustomList<Announcement> GetRecentAnnouncements(int days = 7)
         {
             var cutoffDate = DateTime.Now.AddDays(-days);
-            return _announcementLookup
-                .Values.Where(a => a.AnnouncementDate >= cutoffDate)
-                .OrderByDescending(a => a.AnnouncementDate)
-                .ToList();
+            var result = new CustomList<Announcement>();
+            foreach (var announcement in _announcementLookup.Values)
+            {
+                if (announcement.AnnouncementDate >= cutoffDate)
+                {
+                    result.Add(announcement);
+                }
+            }
+            // Sort by date descending
+            for (int i = 0; i < result.Count - 1; i++)
+            {
+                for (int j = i + 1; j < result.Count; j++)
+                {
+                    if (result[i].AnnouncementDate < result[j].AnnouncementDate)
+                    {
+                        var temp = result[i];
+                        result[i] = result[j];
+                        result[j] = temp;
+                    }
+                }
+            }
+            return result;
         }
 
-        public static List<Announcement> GetPendingAnnouncements()
+        public static CustomList<Announcement> GetPendingAnnouncements()
         {
-            return _announcementLookup
-                .Values.Where(a => a.AnnouncementStatus == AnnouncementStatus.Pending)
-                .OrderBy(a => a.AnnouncementDate)
-                .ToList();
+            var result = new CustomList<Announcement>();
+            foreach (var announcement in _announcementLookup.Values)
+            {
+                if (announcement.AnnouncementStatus == AnnouncementStatus.Pending)
+                {
+                    result.Add(announcement);
+                }
+            }
+            // Sort by date ascending
+            for (int i = 0; i < result.Count - 1; i++)
+            {
+                for (int j = i + 1; j < result.Count; j++)
+                {
+                    if (result[i].AnnouncementDate > result[j].AnnouncementDate)
+                    {
+                        var temp = result[i];
+                        result[i] = result[j];
+                        result[j] = temp;
+                    }
+                }
+            }
+            return result;
         }
 
         public static Announcement GetAnnouncementById(Guid announcementId)
@@ -186,32 +267,77 @@ namespace Municipality_App.Services
                 : null;
         }
 
-        public static List<Announcement> GetAllAnnouncements()
+        public static CustomList<Announcement> GetAllAnnouncements()
         {
-            return _announcementLookup.Values.OrderByDescending(a => a.AnnouncementDate).ToList();
+            var result = new CustomList<Announcement>();
+            foreach (var announcement in _announcementLookup.Values)
+            {
+                result.Add(announcement);
+            }
+            // Sort by date descending
+            for (int i = 0; i < result.Count - 1; i++)
+            {
+                for (int j = i + 1; j < result.Count; j++)
+                {
+                    if (result[i].AnnouncementDate < result[j].AnnouncementDate)
+                    {
+                        var temp = result[i];
+                        result[i] = result[j];
+                        result[j] = temp;
+                    }
+                }
+            }
+            return result;
         }
 
-        public static List<Announcement> SearchAnnouncements(string searchQuery)
+        public static CustomList<Announcement> SearchAnnouncements(string searchQuery)
         {
             if (string.IsNullOrWhiteSpace(searchQuery))
                 return GetAllAnnouncements();
 
             var query = searchQuery.ToLower();
-            return _announcementLookup
-                .Values.Where(a =>
-                    a.AnnouncementTitle.ToLower().Contains(query)
-                    || a.AnnouncementDescription.ToLower().Contains(query)
-                    || (
-                        a.AnnouncementLocation != null
-                        && a.AnnouncementLocation.ToLower().Contains(query)
+            var result = new CustomList<Announcement>();
+            foreach (var announcement in _announcementLookup.Values)
+            {
+                if (
+                    (
+                        announcement.AnnouncementTitle != null
+                        && announcement.AnnouncementTitle.ToLower().Contains(query)
                     )
-                    || a.AnnouncementCategory.ToLower().Contains(query)
+                    || (
+                        announcement.AnnouncementDescription != null
+                        && announcement.AnnouncementDescription.ToLower().Contains(query)
+                    )
+                    || (
+                        announcement.AnnouncementLocation != null
+                        && announcement.AnnouncementLocation.ToLower().Contains(query)
+                    )
+                    || (
+                        announcement.AnnouncementCategory != null
+                        && announcement.AnnouncementCategory.ToLower().Contains(query)
+                    )
                 )
-                .OrderByDescending(a => a.AnnouncementDate)
-                .ToList();
+                {
+                    result.Add(announcement);
+                }
+            }
+            // Sort by date descending
+            for (int i = 0; i < result.Count - 1; i++)
+            {
+                for (int j = i + 1; j < result.Count; j++)
+                {
+                    if (result[i].AnnouncementDate < result[j].AnnouncementDate)
+                    {
+                        var temp = result[i];
+                        result[i] = result[j];
+                        result[j] = temp;
+                    }
+                }
+            }
+            return result;
         }
 
-        public static List<string> GetAnnouncementCategories()
+        public static CustomList<string> GetAnnouncementCategories()
         {
             return _announcementCategories.ToList();
         }
@@ -225,9 +351,9 @@ namespace Municipality_App.Services
             }
         }
 
-        public static List<Announcement> GetAnnouncementsForDelivery()
+        public static CustomList<Announcement> GetAnnouncementsForDelivery()
         {
-            var announcements = new List<Announcement>();
+            var announcements = new CustomList<Announcement>();
             while (_announcementQueue.Count > 0)
             {
                 announcements.Add(_announcementQueue.Dequeue());
@@ -235,39 +361,65 @@ namespace Municipality_App.Services
             return announcements;
         }
 
-        public static Dictionary<string, int> GetAnnouncementStatistics()
+        public static CustomDictionary<string, int> GetAnnouncementStatistics()
         {
-            var stats = new Dictionary<string, int>
+            var stats = new CustomDictionary<string, int>();
+            stats.Add("Total Announcements", _announcementLookup.Count);
+
+            int sentCount = 0;
+            int pendingCount = 0;
+            foreach (var announcement in _announcementLookup.Values)
             {
-                ["Total Announcements"] = _announcementLookup.Count,
-                ["Sent Announcements"] = _announcementLookup.Values.Count(a =>
-                    a.AnnouncementStatus == AnnouncementStatus.Sent
-                ),
-                ["Pending Announcements"] = _announcementLookup.Values.Count(a =>
-                    a.AnnouncementStatus == AnnouncementStatus.Pending
-                ),
-                ["Categories"] = _announcementCategories.Count,
-                ["Recent (7 days)"] = GetRecentAnnouncements(7).Count,
-            };
+                if (announcement.AnnouncementStatus == AnnouncementStatus.Sent)
+                    sentCount++;
+                else if (announcement.AnnouncementStatus == AnnouncementStatus.Pending)
+                    pendingCount++;
+            }
+
+            stats.Add("Sent Announcements", sentCount);
+            stats.Add("Pending Announcements", pendingCount);
+            stats.Add("Categories", _announcementCategories.Count);
+            stats.Add("Recent (7 days)", GetRecentAnnouncements(7).Count);
 
             // Add category breakdown
             foreach (var category in _announcementCategories)
             {
-                stats[$"Category: {category}"] = _announcementsByCategory[category].Count;
+                stats.Add($"Category: {category}", _announcementsByCategory[category].Count);
             }
 
             return stats;
         }
 
-        public static List<Announcement> GetAnnouncementsByDateRange(
+        public static CustomList<Announcement> GetAnnouncementsByDateRange(
             DateTime startDate,
             DateTime endDate
         )
         {
-            return _announcementLookup
-                .Values.Where(a => a.AnnouncementDate >= startDate && a.AnnouncementDate <= endDate)
-                .OrderByDescending(a => a.AnnouncementDate)
-                .ToList();
+            var result = new CustomList<Announcement>();
+            foreach (var announcement in _announcementLookup.Values)
+            {
+                if (
+                    announcement.AnnouncementDate >= startDate
+                    && announcement.AnnouncementDate <= endDate
+                )
+                {
+                    result.Add(announcement);
+                }
+            }
+            // Sort by date descending
+            for (int i = 0; i < result.Count - 1; i++)
+            {
+                for (int j = i + 1; j < result.Count; j++)
+                {
+                    if (result[i].AnnouncementDate < result[j].AnnouncementDate)
+                    {
+                        var temp = result[i];
+                        result[i] = result[j];
+                        result[j] = temp;
+                    }
+                }
+            }
+            return result;
         }
     }
 }

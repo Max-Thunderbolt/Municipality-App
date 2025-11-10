@@ -11,7 +11,7 @@
       "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:services\\recommendationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|c:\\users\\maxat\\onedrive - advtech ltd\\varsity college\\2025\\semester 2\\prog7312\\poe\\municipality app\\services\\eventservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\services\\eventservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:services\\eventservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -40,7 +40,7 @@
               "RelativeDocumentMoniker": "Services\\GamificationService.cs",
               "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\GamificationService.cs",
               "RelativeToolTip": "Services\\GamificationService.cs",
-              "ViewState": "AgIAAEAAAAAAAAAAAAAAAFcAAAAvAAAAAAAAAA==",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAAAFcAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-15T11:59:53.416Z",
               "EditorCaption": ""
@@ -55,8 +55,7 @@
               "RelativeToolTip": "Services\\EventService.cs",
               "ViewState": "AgIAAFMAAAAAAAAAAAAAAHkAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-15T09:23:30.663Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-15T09:23:30.663Z"
             },
             {
               "$type": "Document",
@@ -68,8 +67,7 @@
               "RelativeToolTip": "Services\\AnnouncementService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-15T09:25:22.434Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-15T09:25:22.434Z"
             },
             {
               "$type": "Document",
@@ -81,8 +79,7 @@
               "RelativeToolTip": "Services\\RecommendationService.cs",
               "ViewState": "AgIAAM0BAAAAAAAAAAAYwOYBAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-15T09:26:39.913Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-15T09:26:39.913Z"
             },
             {
               "$type": "Document",
@@ -94,8 +91,7 @@
               "RelativeToolTip": "Models\\UserProfile.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-15T09:35:52.844Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-15T09:35:52.844Z"
             }
           ]
         }

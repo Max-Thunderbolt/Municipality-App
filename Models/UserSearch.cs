@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using Municipality_App.Structures;
 
 namespace Municipality_App.Models
 {
@@ -11,7 +11,7 @@ namespace Municipality_App.Models
         public string SearchCategory { get; set; }
         public string SearchLocation { get; set; }
         public int ResultCount { get; set; }
-        public List<string> SearchFilters { get; set; } = new List<string>();
+        public CustomList<string> SearchFilters { get; set; } = new CustomList<string>();
         public bool WasSuccessful { get; set; }
     }
 }

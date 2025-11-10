@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using Municipality_App.Structures;
 
 namespace Municipality_App.Models
 {
@@ -10,6 +10,6 @@ namespace Municipality_App.Models
         public string Location { get; set; }
         public string Category { get; set; }
         public string Description { get; set; }
-        public List<string> AttachmentFilePaths { get; set; } = new List<string>();
+        public CustomList<string> AttachmentFilePaths { get; set; } = new CustomList<string>();
     }
 }

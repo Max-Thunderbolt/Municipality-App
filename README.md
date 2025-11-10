@@ -226,61 +226,166 @@ The main interface provides access to all application features:
    - **Challenge participation**
 3. Use the **"Refresh"** button to update data
 
+## Custom Data Structures
+
+This application implements custom data structures from scratch, replacing all built-in .NET collections. All custom structures are located in the `Structures/` folder and provide the same functionality as their .NET counterparts while demonstrating fundamental computer science principles.
+
+### **CustomList<T>**
+
+- **Purpose**: Dynamic array-based list implementation
+- **Location**: `Structures/CustomList.cs`
+- **Implementation**: Dynamic array with automatic resizing
+- **Operations**: Add (O(1) amortized), Remove (O(n)), Contains (O(n)), IndexOf (O(n)), Insert (O(n))
+- **Features**: Automatic capacity management, indexed access, enumeration support
+- **Usage**: Used throughout the application for all list operations
+
+### **CustomDictionary<TKey, TValue>**
+
+- **Purpose**: Hash table implementation with chaining collision resolution
+- **Location**: `Structures/CustomDictionary.cs`
+- **Implementation**: Hash table with separate chaining for collision handling
+- **Operations**: Add (O(1) average), Remove (O(1) average), ContainsKey (O(1) average), TryGetValue (O(1) average)
+- **Features**: 
+  - Default capacity: 16, load factor: 0.75
+  - Automatic resizing when load factor exceeded
+  - Chaining for collision resolution
+  - Keys and Values collections
+- **Usage**: Event lookup, announcement lookup, search frequency tracking, analytics
+
+### **CustomHashSet<T>**
+
+- **Purpose**: Set implementation for unique element storage
+- **Location**: `Structures/CustomHashSet.cs`
+- **Implementation**: Uses CustomDictionary internally for O(1) operations
+- **Operations**: Add (O(1) average), Remove (O(1) average), Contains (O(1) average)
+- **Features**: Automatic uniqueness enforcement, efficient set operations
+- **Usage**: User preferences, user interests, announcement categories, popular search terms
+
+### **CustomStack<T>**
+
+- **Purpose**: LIFO (Last In, First Out) stack implementation
+- **Location**: `Structures/CustomStack.cs`
+- **Implementation**: Array-based stack with automatic resizing
+- **Operations**: Push (O(1) amortized), Pop (O(1)), Peek (O(1))
+- **Features**: Array-based storage, automatic capacity management
+- **Usage**: Event registration history tracking
+
+### **CustomQueue<T>**
+
+- **Purpose**: FIFO (First In, First Out) queue implementation
+- **Location**: `Structures/CustomQueue.cs`
+- **Implementation**: Circular array-based queue
+- **Operations**: Enqueue (O(1) amortized), Dequeue (O(1)), Peek (O(1))
+- **Features**: Circular array to optimize memory usage, automatic resizing
+- **Usage**: Event notifications, announcement delivery queue
+
+### **CustomSortedDictionary<TKey, TValue>**
+
+- **Purpose**: Sorted dictionary maintaining keys in sorted order
+- **Location**: `Structures/CustomSortedDictionary.cs`
+- **Implementation**: AVL (Adelson-Velsky and Landis) self-balancing binary search tree
+- **Operations**: Add (O(log n)), Remove (O(log n)), ContainsKey (O(log n)), TryGetValue (O(log n))
+- **Features**: 
+  - Self-balancing AVL tree ensures O(log n) operations
+  - Maintains keys in sorted order
+  - In-order traversal for sorted iteration
+  - Automatic tree rebalancing after insertions/deletions
+- **Usage**: Event priority queue (sorted by date), search history (sorted by timestamp), announcement date sorting
+
+### **CustomSortedSet<T>**
+
+- **Purpose**: Sorted set maintaining elements in sorted order
+- **Location**: `Structures/CustomSortedSet.cs`
+- **Implementation**: AVL self-balancing binary search tree (reuses tree structure from SortedDictionary)
+- **Operations**: Add (O(log n)), Remove (O(log n)), Contains (O(log n))
+- **Features**: 
+  - Self-balancing AVL tree
+  - Maintains elements in sorted order
+  - Automatic uniqueness enforcement
+- **Usage**: Priority queue for recommendation ranking
+
+### **CustomConcurrentDictionary<TKey, TValue>**
+
+- **Purpose**: Thread-safe dictionary for concurrent access
+- **Location**: `Structures/CustomConcurrentDictionary.cs`
+- **Implementation**: Thread-safe wrapper around CustomDictionary using lock statements
+- **Operations**: AddOrUpdate (thread-safe), TryGetValue (thread-safe), ContainsKey (thread-safe)
+- **Features**: 
+  - Fine-grained locking for thread safety
+  - Snapshot-based enumeration to avoid issues during iteration
+  - Thread-safe operations for multi-threaded scenarios
+- **Usage**: Recommendation cache for thread-safe caching
+
 ## Advanced Data Structures & Algorithms
 
-The application implements advanced data structures and algorithms for optimal performance:
+The application implements advanced data structures and algorithms for optimal performance using custom implementations:
 
 ### **Priority Queue (EventService)**
 
 - **Purpose**: Events sorted by date and priority
-- **Implementation**: `SortedDictionary<DateTime, List<Event>>`
+- **Implementation**: `CustomSortedDictionary<DateTime, CustomList<Event>>`
 - **Benefits**: O(log n) insertion, O(1) access to highest priority items
 - **Usage**: Event scheduling and management
 
 ### **Hash Table (AnnouncementService)**
 
 - **Purpose**: Fast announcement lookup by category
-- **Implementation**: `Dictionary<string, List<Announcement>>`
-- **Benefits**: O(1) average case lookup time
+- **Implementation**: `CustomDictionary<string, CustomList<Announcement>>`
+- **Benefits**: O(1) average case lookup time with chaining collision resolution
 - **Usage**: Categorized announcement storage and retrieval
 
 ### **Stack (Event Registration History)**
 
 - **Purpose**: LIFO (Last In, First Out) event registration tracking
-- **Implementation**: `Stack<EventRegistration>`
+- **Implementation**: `CustomStack<EventRegistration>`
 - **Benefits**: O(1) push/pop operations
 - **Usage**: Registration history and undo functionality
 
 ### **Sorted Dictionary (Search Analytics)**
 
 - **Purpose**: Search patterns sorted by timestamp
-- **Implementation**: `SortedDictionary<DateTime, UserSearch>`
-- **Benefits**: Chronological ordering with efficient range queries
+- **Implementation**: `CustomSortedDictionary<DateTime, UserSearch>`
+- **Benefits**: Chronological ordering with efficient range queries using AVL tree
 - **Usage**: Search history and analytics
 
 ### **Set (User Interests)**
 
 - **Purpose**: Unique user interest tracking
-- **Implementation**: `HashSet<string>`
+- **Implementation**: `CustomHashSet<string>`
 - **Benefits**: O(1) add/remove operations, automatic uniqueness
 - **Usage**: User preference management
 
 ### **Queue (Notifications)**
 
 - **Purpose**: FIFO (First In, First Out) notification delivery
-- **Implementation**: `Queue<string>`
-- **Benefits**: O(1) enqueue/dequeue operations
+- **Implementation**: `CustomQueue<string>`
+- **Benefits**: O(1) enqueue/dequeue operations with circular array
 - **Usage**: Event and announcement notifications
 
 ### **Advanced Recommendation Algorithm**
 
 - **Purpose**: Personalized content suggestions
 - **Implementation**: Multi-factor scoring system with priority queues
-- **Data Structures**: `SortedSet<RankedRecommendation>`, `ConcurrentDictionary` for caching
+- **Data Structures**: `CustomSortedSet<RankedRecommendation>`, `CustomConcurrentDictionary` for caching
 - **Factors**: User interests, search history, activity level, recency
 - **Benefits**: Improved user engagement and content discovery
 - **Performance**: O(log n) complexity with intelligent caching
 - **Algorithm Type**: Rule-based multi-factor scoring (not AI/ML)
+
+## Migration Notes
+
+All built-in .NET data structures have been replaced with custom implementations:
+
+- `List<T>` → `CustomList<T>`
+- `Dictionary<TKey, TValue>` → `CustomDictionary<TKey, TValue>`
+- `HashSet<T>` → `CustomHashSet<T>`
+- `Stack<T>` → `CustomStack<T>`
+- `Queue<T>` → `CustomQueue<T>`
+- `SortedDictionary<TKey, TValue>` → `CustomSortedDictionary<TKey, TValue>`
+- `SortedSet<T>` → `CustomSortedSet<T>`
+- `ConcurrentDictionary<TKey, TValue>` → `CustomConcurrentDictionary<TKey, TValue>`
+
+All LINQ operations have been replaced with manual iteration and custom sorting algorithms to maintain independence from built-in collections.
 
 ## Data Storage
 
@@ -313,7 +418,7 @@ The application implements advanced data structures and algorithms for optimal p
 - **Progress Tracking**: Real-time progress indicators
 - **File Attachments**: Support for images and documents
 - **Clean Architecture**: Proper separation of concerns
-- **Advanced Data Structures**: Priority queues, hash tables, stacks, and dictionaries
+- **Custom Data Structures**: Fully custom implementations of lists, dictionaries, hash sets, stacks, queues, sorted dictionaries, sorted sets, and concurrent dictionaries
 - **Recommendation System**: Smart suggestions based on user behavior and preferences
 - **Search Analytics**: Comprehensive search tracking and analysis
 - **Event Management**: Full event lifecycle management with registration

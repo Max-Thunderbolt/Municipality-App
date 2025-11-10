@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Municipality_App.Models;
+using Municipality_App.Structures;
 using Newtonsoft.Json;
 
 namespace Municipality_App.Services
@@ -171,14 +170,28 @@ namespace Municipality_App.Services
             )
                 _profile.UnlockedBadges.Add("Community Champion");
 
-            var eventCount = _profile.Activities.Count(a => a.Type == "event_attended");
+            int eventCount = 0;
+            foreach (var activity in _profile.Activities)
+            {
+                if (activity.Type == "event_attended")
+                {
+                    eventCount++;
+                }
+            }
             if (!_profile.UnlockedBadges.Contains("Event Attendee") && eventCount >= 1)
                 _profile.UnlockedBadges.Add("Event Attendee");
 
             if (!_profile.UnlockedBadges.Contains("Regular Attendee") && eventCount >= 3)
                 _profile.UnlockedBadges.Add("Regular Attendee");
 
-            var announcementCount = _profile.Activities.Count(a => a.Type == "announcement_read");
+            int announcementCount = 0;
+            foreach (var activity in _profile.Activities)
+            {
+                if (activity.Type == "announcement_read")
+                {
+                    announcementCount++;
+                }
+            }
             if (!_profile.UnlockedBadges.Contains("Informed Citizen") && announcementCount >= 5)
                 _profile.UnlockedBadges.Add("Informed Citizen");
 
@@ -229,7 +242,16 @@ namespace Municipality_App.Services
             _profile.ChallengeParticipations++;
 
             // Find the challenge and add to participated challenges
-            var challenge = GetActiveChallenges().FirstOrDefault(c => c.Id == challengeId);
+            CommunityChallenge challenge = null;
+            var activeChallenges = GetActiveChallenges();
+            foreach (var activeChallenge in activeChallenges)
+            {
+                if (activeChallenge.Id == challengeId)
+                {
+                    challenge = activeChallenge;
+                    break;
+                }
+            }
             if (challenge != null)
             {
                 _profile.ParticipatedChallenges.Add(challenge);
@@ -241,9 +263,9 @@ namespace Municipality_App.Services
             }
         }
 
-        public static List<CommunityChallenge> GetActiveChallenges()
+        public static CustomList<CommunityChallenge> GetActiveChallenges()
         {
-            return new List<CommunityChallenge>
+            return new CustomList<CommunityChallenge>
             {
                 new CommunityChallenge
                 {
@@ -255,7 +277,7 @@ namespace Municipality_App.Services
                     PointsReward = 50,
                     Category = "Engagement",
                     IsActive = true,
-                    Requirements = new List<string>
+                    Requirements = new CustomList<string>
                     {
                         "Report an issue",
                         "Register for an event",
@@ -274,7 +296,7 @@ namespace Municipality_App.Services
                     PointsReward = 75,
                     Category = "Community Service",
                     IsActive = true,
-                    Requirements = new List<string>
+                    Requirements = new CustomList<string>
                     {
                         "Submit 3 issue reports",
                         "Get 1 issue resolved",
@@ -290,7 +312,7 @@ namespace Municipality_App.Services
                     PointsReward = 40,
                     Category = "Social",
                     IsActive = true,
-                    Requirements = new List<string>
+                    Requirements = new CustomList<string>
                     {
                         "Share 5 pieces of content",
                         "Use hashtag #MunicipalityApp",
@@ -356,7 +378,14 @@ namespace Municipality_App.Services
 
         private static bool HasAchievement(string achievementName)
         {
-            return _profile.Achievements.Any(a => a.Name == achievementName && a.IsUnlocked);
+            foreach (var achievement in _profile.Achievements)
+            {
+                if (achievement.Name == achievementName && achievement.IsUnlocked)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private static void UnlockAchievement(
@@ -382,13 +411,21 @@ namespace Municipality_App.Services
             _profile.Achievements.Add(achievement);
         }
 
-        public static List<Achievement> GetUnlockedAchievements()
+        public static CustomList<Achievement> GetUnlockedAchievements()
         {
             EnsureInitialized();
-            return _profile.Achievements.Where(a => a.IsUnlocked).ToList();
+            var result = new CustomList<Achievement>();
+            foreach (var achievement in _profile.Achievements)
+            {
+                if (achievement.IsUnlocked)
+                {
+                    result.Add(achievement);
+                }
+            }
+            return result;
         }
 
-        public static List<Achievement> GetAllAchievements()
+        public static CustomList<Achievement> GetAllAchievements()
         {
             EnsureInitialized();
             return _profile.Achievements.ToList();

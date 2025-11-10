@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -7,12 +6,13 @@ using MaterialSkin;
 using MaterialSkin.Controls;
 using Municipality_App.Models;
 using Municipality_App.Services;
+using Municipality_App.Structures;
 
 namespace Municipality_App.Forms.Issues
 {
     public partial class FormReportIssue : MaterialForm
     {
-        private readonly List<string> _attachments = new List<string>();
+        private readonly CustomList<string> _attachments = new CustomList<string>();
 
         public FormReportIssue()
         {

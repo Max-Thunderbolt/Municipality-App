@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using Municipality_App.Structures;
 
 namespace Municipality_App.Models
 {
@@ -11,7 +11,7 @@ namespace Municipality_App.Models
         public string UserName { get; set; }
         public string UserEmail { get; set; }
         public bool IsConfirmed { get; set; }
-        public List<string> SpecialRequirements { get; set; } = new List<string>();
+        public CustomList<string> SpecialRequirements { get; set; } = new CustomList<string>();
         public DateTime LastModified { get; set; } = DateTime.Now;
     }
 }

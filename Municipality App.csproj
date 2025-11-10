@@ -87,6 +87,15 @@
     <Compile Include="Services\AnnouncementService.cs" />
     <Compile Include="Services\ThemeService.cs" />
     <Compile Include="Services\FeedbackService.cs" />
+    <Compile Include="Structures\CustomList.cs" />
+    <Compile Include="Structures\CustomDictionary.cs" />
+    <Compile Include="Structures\CustomHashSet.cs" />
+    <Compile Include="Structures\CustomStack.cs" />
+    <Compile Include="Structures\CustomQueue.cs" />
+    <Compile Include="Structures\Helpers\TreeNode.cs" />
+    <Compile Include="Structures\CustomSortedDictionary.cs" />
+    <Compile Include="Structures\CustomSortedSet.cs" />
+    <Compile Include="Structures\CustomConcurrentDictionary.cs" />
     <Compile Include="Models\IssueReport.cs" />
     <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Models\Event.cs" />
