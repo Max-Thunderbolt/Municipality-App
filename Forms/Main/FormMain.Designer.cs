@@ -71,15 +71,15 @@ namespace Municipality_App.Forms.Main
             // buttonStatus
             // 
             this.buttonStatus.Depth = 0;
-            this.buttonStatus.Enabled = false;
             this.buttonStatus.Location = new System.Drawing.Point(150, 200);
             this.buttonStatus.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonStatus.Name = "buttonStatus";
-            this.buttonStatus.Primary = false;
+            this.buttonStatus.Primary = true;
             this.buttonStatus.Size = new System.Drawing.Size(300, 48);
             this.buttonStatus.TabIndex = 2;
-            this.buttonStatus.Text = "Track Request Status (Coming Soon)";
+            this.buttonStatus.Text = "Track Service Request Status";
             this.buttonStatus.UseVisualStyleBackColor = true;
+            this.buttonStatus.Click += new System.EventHandler(this.buttonStatus_Click);
             // 
             // buttonClose
             // 

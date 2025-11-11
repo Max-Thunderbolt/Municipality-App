@@ -9,7 +9,7 @@ A comprehensive Windows Forms application designed to enhance civic engagement t
 - **Issue Reporting**: Comprehensive issue submission with file attachments
 - **Event Management**: Community event discovery and registration
 - **Announcement System**: Municipal announcement delivery and tracking
-- **Service Request Tracking**: Monitor submitted requests and their status (Part 3 - Not implemented)
+- **Service Request Tracking**: Advanced status explorer with ID search, timeline analytics, graph traversal, and priority insights (implemented in Part 3)
 
 ### Advanced Gamification System
 
@@ -61,6 +61,13 @@ Municipality App/
 └── Municipality App.csproj        # Project configuration
 ```
 
+**Part 3 additions**
+
+- `Forms/ServiceStatus/` – Windows Form and designer resources for the new status explorer.
+- `Services/ServiceRequestRepository.cs` / `ServiceRequestAnalytics.cs` – JSON-backed storage and advanced data-structure indexes.
+- `Structures/Trees/`, `Structures/Heaps/`, `Structures/Graphs/` – Custom implementations (basic tree, BST, AVL, red-black tree, min-heap, service graph).
+- `Data/service_requests.json` – Seed dataset of example municipal requests.
+
 ## Getting Started
 
 ### Prerequisites
@@ -96,6 +103,8 @@ msbuild "Municipality App.sln" /p:Configuration=Release
 
 # Or using dotnet CLI (may have resource generation issues)
 dotnet build "Municipality App.sln" --configuration Release
+
+> ⚠️ The .NET CLI on non-Visual Studio machines can fail with `GenerateResource` x86 host errors. Use Visual Studio/MSBuild on Windows for reliable builds.
 ```
 
 ### Running the Application
@@ -116,7 +125,7 @@ The main interface provides access to all application features:
 
 - **Report Issues**: Submit municipal problems and concerns
 - **Events & Announcements**: Engage with community events and announcements
-- **Track Request Status**: Monitor submitted service requests (Part 3 - Not implemented)
+- **Track Request Status**: Analyse and monitor service requests with graphs, trees, and priority queues
 - **View Activity → Your Progress**: Access detailed progress and achievements
 
 ### Reporting Issues
@@ -191,6 +200,20 @@ The main interface provides access to all application features:
 - **Weekly Engagement Champion**: Complete 5 different activities this week (50 points)
 - **Community Helper**: Submit 3 issue reports this month (75 points)
 - **Social Media Advocate**: Share 5 pieces of content this month (40 points)
+
+### Service Request Status
+
+1. Click **"Track Request Status"** from the main menu.
+2. Use the **ID search** bar to jump directly to a specific request (`SR-1001`, etc.). The search is backed by a custom **binary search tree** for O(log n) lookups.
+3. Filter by **status** or **priority** to rebuild the list using AVL ordering.
+4. Select a request to view:
+   - **AVL-sorted timeline** of status updates.
+   - **Balanced binary tree** view highlighting past and upcoming milestones.
+   - **Basic tree** grouping of lifecycle transitions.
+   - **Min-heap** insights showing the next urgent jobs in the queue.
+   - **Red-black tree** priority ranking across all requests.
+   - **Graph traversal summaries** (BFS cluster and MST routing) revealing relationships between related tickets.
+5. The insights list is regenerated on every selection, demonstrating the interplay between trees, heaps, and graph algorithms.
 
 ### Events & Announcements
 

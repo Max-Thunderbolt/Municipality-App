@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|c:\\users\\maxat\\onedrive - advtech ltd\\varsity college\\2025\\semester 2\\prog7312\\poe\\municipality app\\forms\\servicestatus\\formservicestatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:forms\\servicestatus\\formservicestatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|c:\\users\\maxat\\onedrive - advtech ltd\\varsity college\\2025\\semester 2\\prog7312\\poe\\municipality app\\services\\gamificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9A083793-A0FD-4388-9AFF-A49CE0515E4B}|Municipality App.csproj|solutionrelative:services\\gamificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -35,19 +39,31 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "FormServiceStatus.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Forms\\ServiceStatus\\FormServiceStatus.cs",
+              "RelativeDocumentMoniker": "Forms\\ServiceStatus\\FormServiceStatus.cs",
+              "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Forms\\ServiceStatus\\FormServiceStatus.cs [Design]*",
+              "RelativeToolTip": "Forms\\ServiceStatus\\FormServiceStatus.cs [Design]*",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-11T11:11:42.449Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "GamificationService.cs",
               "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\GamificationService.cs",
               "RelativeDocumentMoniker": "Services\\GamificationService.cs",
               "ToolTip": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\GamificationService.cs",
               "RelativeToolTip": "Services\\GamificationService.cs",
-              "ViewState": "AgIAAD0AAAAAAAAAAAAAAFcAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAwwE0AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-15T11:59:53.416Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "EventService.cs",
               "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\EventService.cs",
               "RelativeDocumentMoniker": "Services\\EventService.cs",
@@ -59,7 +75,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "AnnouncementService.cs",
               "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\AnnouncementService.cs",
               "RelativeDocumentMoniker": "Services\\AnnouncementService.cs",
@@ -71,7 +87,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "RecommendationService.cs",
               "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Services\\RecommendationService.cs",
               "RelativeDocumentMoniker": "Services\\RecommendationService.cs",
@@ -83,7 +99,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "UserProfile.cs",
               "DocumentMoniker": "C:\\Users\\maxat\\OneDrive - ADvTECH Ltd\\Varsity College\\2025\\Semester 2\\PROG7312\\POE\\Municipality App\\Models\\UserProfile.cs",
               "RelativeDocumentMoniker": "Models\\UserProfile.cs",

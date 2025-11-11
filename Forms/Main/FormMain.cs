@@ -5,6 +5,7 @@ using MaterialSkin.Controls;
 using Municipality_App.Forms.Engagement;
 using Municipality_App.Forms.Gamification;
 using Municipality_App.Forms.Issues;
+using Municipality_App.Forms.ServiceStatus;
 using Municipality_App.Services;
 
 namespace Municipality_App.Forms.Main
@@ -62,6 +63,14 @@ namespace Municipality_App.Forms.Main
         private void buttonEvents_Click(object sender, EventArgs e)
         {
             using (var form = new FormEngagement())
+            {
+                form.ShowDialog(this);
+            }
+        }
+
+        private void buttonStatus_Click(object sender, EventArgs e)
+        {
+            using (var form = new FormServiceStatus())
             {
                 form.ShowDialog(this);
             }

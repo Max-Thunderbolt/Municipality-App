@@ -73,12 +73,20 @@
     <Compile Include="Forms\Gamification\FormGamification.Designer.cs">
       <DependentUpon>FormGamification.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ServiceStatus\FormServiceStatus.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ServiceStatus\FormServiceStatus.Designer.cs">
+      <DependentUpon>FormServiceStatus.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Issues\FormReportIssue.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Issues\FormReportIssue.Designer.cs">
       <DependentUpon>FormReportIssue.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\ServiceRequestRepository.cs" />
+    <Compile Include="Services\ServiceRequestAnalytics.cs" />
     <Compile Include="Services\GamificationService.cs" />
     <Compile Include="Services\RecommendationService.cs" />
     <Compile Include="Services\SearchService.cs" />
@@ -92,6 +100,13 @@
     <Compile Include="Structures\CustomHashSet.cs" />
     <Compile Include="Structures\CustomStack.cs" />
     <Compile Include="Structures\CustomQueue.cs" />
+    <Compile Include="Structures\Heaps\MinHeap.cs" />
+    <Compile Include="Structures\Graphs\ServiceGraph.cs" />
+    <Compile Include="Structures\Trees\BasicTree.cs" />
+    <Compile Include="Structures\Trees\BinaryTree.cs" />
+    <Compile Include="Structures\Trees\BinarySearchTree.cs" />
+    <Compile Include="Structures\Trees\AvlTree.cs" />
+    <Compile Include="Structures\Trees\RedBlackTree.cs" />
     <Compile Include="Structures\Helpers\TreeNode.cs" />
     <Compile Include="Structures\CustomSortedDictionary.cs" />
     <Compile Include="Structures\CustomSortedSet.cs" />
@@ -100,6 +115,7 @@
     <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\EventRegistration.cs" />
+    <Compile Include="Models\ServiceRequest.cs" />
     <Compile Include="Models\Announcement.cs" />
     <Compile Include="Models\UserSearch.cs" />
     <Compile Include="Program.cs" />
@@ -115,6 +131,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Gamification\FormGamification.resx">
       <DependentUpon>FormGamification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ServiceStatus\FormServiceStatus.resx">
+      <DependentUpon>FormServiceStatus.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -138,6 +157,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <Content Include="Data\service_requests.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
