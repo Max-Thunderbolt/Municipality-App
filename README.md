@@ -9,7 +9,7 @@ A comprehensive Windows Forms application designed to enhance civic engagement t
 - **Issue Reporting**: Comprehensive issue submission with file attachments
 - **Event Management**: Community event discovery and registration
 - **Announcement System**: Municipal announcement delivery and tracking
-- **Service Request Tracking**: Advanced status explorer with ID search, timeline analytics, graph traversal, and priority insights (implemented in Part 3)
+- **Service Request Tracking**: Advanced status explorer with ID search, timeline analytics, graph traversal, and priority insights
 
 ### Advanced Gamification System
 
@@ -37,36 +37,42 @@ A comprehensive Windows Forms application designed to enhance civic engagement t
 
 ```
 Municipality App/
+├── Data/                           # Seed data sets
+│   └── service_requests.json       # Sample service request catalogue
+├── Docs/                           # Supporting documentation
+│   └── ServiceStatusReport.md      # Detailed write-up for Task 3 feature
 ├── Forms/                          # UI Layer
 │   ├── Main/                       # Main menu and navigation
-│   ├── Issues/                     # Issue reporting functionality
-│   ├── Engagement/                 # Events and announcements
-│   └── Gamification/              # Progress and achievements display
-├── Models/                         # Data Models
-│   ├── IssueReport.cs             # Issue data structure
-│   ├── UserProfile.cs             # User progress and achievements
-│   ├── Event.cs                    # Event data structure
-│   ├── Announcement.cs             # Announcement data structure
-│   └── UserSearch.cs               # Search analytics model
-├── Services/                       # Business Logic
-│   ├── GamificationService.cs     # Points, badges, and progress tracking
-│   ├── IssueRepository.cs         # Issue data management
-│   ├── EventService.cs            # Event management with priority queues
-│   ├── AnnouncementService.cs     # Announcement delivery system
-│   ├── RecommendationService.cs   # Rule-based recommendation engine
-│   ├── SearchService.cs           # Search analytics and tracking
-│   └── ThemeService.cs            # UI theming and responsive design
+│   ├── Issues/                     # Issue reporting workflow
+│   ├── Engagement/                 # Local events and announcements
+│   ├── Gamification/               # Progress, achievements, challenges
+│   └── ServiceStatus/              # Service request status explorer (Task 3)
+├── Models/                         # Data models
+│   ├── ServiceRequest.cs           # Service request + history
+│   ├── IssueReport.cs              # Issue reporting model
+│   ├── UserProfile.cs              # Gamification state
+│   ├── Event.cs / EventRegistration.cs
+│   ├── Announcement.cs
+│   └── UserSearch.cs
+├── Services/                       # Business logic + orchestration
+│   ├── ServiceRequestRepository.cs # JSON persistence for requests
+│   ├── ServiceRequestAnalytics.cs  # Advanced data-structure analytics
+│   ├── GamificationService.cs
+│   ├── IssueRepository.cs
+│   ├── EventService.cs
+│   ├── AnnouncementService.cs
+│   ├── RecommendationService.cs
+│   ├── SearchService.cs
+│   └── ThemeService.cs
+├── Structures/                     # Custom collection implementations
+│   ├── Custom*.cs                  # List, Dictionary, Queue, etc.
+│   ├── Trees/                      # BasicTree, BST, AVL, Red-Black helpers
+│   ├── Heaps/                      # MinHeap for urgency queue
+│   └── Graphs/                     # ServiceGraph with traversal + MST
 ├── Properties/                     # Application configuration
 ├── Program.cs                      # Application entry point
-└── Municipality App.csproj        # Project configuration
+└── Municipality App.csproj         # Project configuration
 ```
-
-**Part 3 additions**
-
-- `Forms/ServiceStatus/` – Windows Form and designer resources for the new status explorer.
-- `Services/ServiceRequestRepository.cs` / `ServiceRequestAnalytics.cs` – JSON-backed storage and advanced data-structure indexes.
-- `Structures/Trees/`, `Structures/Heaps/`, `Structures/Graphs/` – Custom implementations (basic tree, BST, AVL, red-black tree, min-heap, service graph).
-- `Data/service_requests.json` – Seed dataset of example municipal requests.
 
 ## Getting Started
 
@@ -268,7 +274,7 @@ This application implements custom data structures from scratch, replacing all b
 - **Location**: `Structures/CustomDictionary.cs`
 - **Implementation**: Hash table with separate chaining for collision handling
 - **Operations**: Add (O(1) average), Remove (O(1) average), ContainsKey (O(1) average), TryGetValue (O(1) average)
-- **Features**: 
+- **Features**:
   - Default capacity: 16, load factor: 0.75
   - Automatic resizing when load factor exceeded
   - Chaining for collision resolution
@@ -308,7 +314,7 @@ This application implements custom data structures from scratch, replacing all b
 - **Location**: `Structures/CustomSortedDictionary.cs`
 - **Implementation**: AVL (Adelson-Velsky and Landis) self-balancing binary search tree
 - **Operations**: Add (O(log n)), Remove (O(log n)), ContainsKey (O(log n)), TryGetValue (O(log n))
-- **Features**: 
+- **Features**:
   - Self-balancing AVL tree ensures O(log n) operations
   - Maintains keys in sorted order
   - In-order traversal for sorted iteration
@@ -321,7 +327,7 @@ This application implements custom data structures from scratch, replacing all b
 - **Location**: `Structures/CustomSortedSet.cs`
 - **Implementation**: AVL self-balancing binary search tree (reuses tree structure from SortedDictionary)
 - **Operations**: Add (O(log n)), Remove (O(log n)), Contains (O(log n))
-- **Features**: 
+- **Features**:
   - Self-balancing AVL tree
   - Maintains elements in sorted order
   - Automatic uniqueness enforcement
@@ -333,7 +339,7 @@ This application implements custom data structures from scratch, replacing all b
 - **Location**: `Structures/CustomConcurrentDictionary.cs`
 - **Implementation**: Thread-safe wrapper around CustomDictionary using lock statements
 - **Operations**: AddOrUpdate (thread-safe), TryGetValue (thread-safe), ContainsKey (thread-safe)
-- **Features**: 
+- **Features**:
   - Fine-grained locking for thread safety
   - Snapshot-based enumeration to avoid issues during iteration
   - Thread-safe operations for multi-threaded scenarios
@@ -395,20 +401,76 @@ The application implements advanced data structures and algorithms for optimal p
 - **Performance**: O(log n) complexity with intelligent caching
 - **Algorithm Type**: Rule-based multi-factor scoring (not AI/ML)
 
-## Migration Notes
+## Data Structures in Service Request Status
 
-All built-in .NET data structures have been replaced with custom implementations:
+The Task 3 Service Request Status feature brings together all of our custom data structures so the Windows Form can expose rich, efficient analytics. Each structure contributes a specific capability:
 
-- `List<T>` → `CustomList<T>`
-- `Dictionary<TKey, TValue>` → `CustomDictionary<TKey, TValue>`
-- `HashSet<T>` → `CustomHashSet<T>`
-- `Stack<T>` → `CustomStack<T>`
-- `Queue<T>` → `CustomQueue<T>`
-- `SortedDictionary<TKey, TValue>` → `CustomSortedDictionary<TKey, TValue>`
-- `SortedSet<T>` → `CustomSortedSet<T>`
-- `ConcurrentDictionary<TKey, TValue>` → `CustomConcurrentDictionary<TKey, TValue>`
+### **CustomList<T>**
 
-All LINQ operations have been replaced with manual iteration and custom sorting algorithms to maintain independence from built-in collections.
+- **Role in feature:** All repositories and analytics return `CustomList<T>` instances instead of .NET `List<T>`. The status form binds directly to these lists when populating the request grid, status history, and insight panel.
+- **Efficiency impact:** `CustomList<T>` delivers O(1) amortised append. When the repository hydrates the sample dataset, the list grows without repeated reallocations, ensuring the UI can reload data quickly.
+- **Example:** `ServiceRequestRepository.GetAll()` returns a `CustomList<ServiceRequest>` which the form iterates to render each row of the “Open and Historical Service Tickets” list.
+
+### **CustomDictionary<TKey,TValue> / CustomHashSet<T>**
+
+- **Role in feature:** The analytics layer uses dictionaries and hash sets when deduplicating categories, building adjacency lists, and tracking visited nodes during traversals.
+- **Efficiency impact:** Chaining-based dictionaries provide O(1) expected lookup/insert, keeping graph construction and category filter population fast even for large datasets.
+- **Example:** When users reload data, `PopulateCategoryFilter` walks the `CustomList` of requests, inserts category strings into a `CustomHashSet<string>`, and then repopulates the combo box without duplicates.
+
+### **CustomQueue<T> / CustomStack<T>**
+
+- **Role in feature:** `CustomQueue` appears inside BFS traversal, and `CustomStack` supports in-order tree enumerations without recursion.
+- **Efficiency impact:** Both structures guarantee O(1) enqueue/dequeue/pop operations, ensuring graph traversal remains linear in the number of nodes/edges.
+- **Example:** `ServiceGraph.BreadthFirstTraversal` enqueues neighbouring requests, such as the two Ward 7 waste tickets (`SR-1004`, `SR-1006`), and emits a relationship trail used in the insight “Graph BFS cluster: SR-1004 → SR-1006 (shared category/location).”
+
+### **BasicTree<ServiceRequestStatusUpdate>**
+
+- **Role in feature:** Represents each request’s lifecycle with the initial submission as root and every subsequent status as a child.
+- **Efficiency impact:** The n-ary tree provides O(n) traversal with minimal overhead, allowing the insights panel to summarise follow-up counts without converting to other structures.
+- **Example:** For `SR-1006`, the basic tree records “Submitted → Acknowledged → InProgress → QualityCheck,” yielding the message “Basic tree groups 3 follow-up updates after the initial submission.”
+
+### **BinaryTree<ServiceRequestStatusUpdate>**
+
+- **Role in feature:** `BuildBalancedTimeline` converts the AVL-sorted timeline into a height-balanced binary tree centred on the median update.
+- **Efficiency impact:** With a balanced structure, locating neighbours (previous/next milestones) is O(log n). We leverage this alongside the raw timeline to present predictive insights.
+- **Example:** When `SR-1006` is currently `InProgress`, the balanced tree highlights the next scheduled milestone, driving the message “Binary tree traversal spots the next milestone after 'InProgress' as 'QualityCheck' (2025-09-18 09:30).”
+
+### **BinarySearchTree<string, ServiceRequest>**
+
+- **Role in feature:** Stores each request keyed by `RequestId`, enabling logarithmic search when the user uses the “Find Request” button.
+- **Efficiency impact:** Searching by ID avoids scanning the entire list every time, keeping user interactions responsive even with large datasets.
+- **Example:** Typing `SR-1004` jumps straight to the Riverside waste ticket via `_idIndex.FindById`, selecting the row and revealing its insights.
+
+### **AvlTree<DateTime, ServiceRequestStatusUpdate>**
+
+- **Role in feature:** Maintains chronological status history per request. Insertions occur as analytics hydrates each `ServiceRequest`.
+- **Efficiency impact:** AVL balancing guarantees O(log n) insert and lookup, so we can add new status updates (even out of order) without degrading performance.
+- **Example:** The “Status Timeline (BST/AVL)” grid enumerates the AVL tree in-order, ensuring the `SR-1009` smart-light update history appears in the correct temporal order.
+
+### **RedBlackTree<ServiceRequestPriorityKey, ServiceRequest>**
+
+- **Role in feature:** Tracks prioritised ordering across all requests, allowing us to calculate each ticket’s rank.
+- **Efficiency impact:** Red-black trees reduce rotation overhead compared to AVL, making them ideal for frequent insertions while retaining O(log n) rank queries.
+- **Example:** The insight “Red-black tree priority rank: 2 of 9 tracked requests.” for `SR-1004` is derived from an in-order traversal of the red-black tree.
+
+### **MinHeap<ServiceRequest>**
+
+- **Role in feature:** Manages the urgency queue surfaced as “Min-heap urgent queue: next assignment is …”.
+- **Efficiency impact:** Each heapify operation is O(log n); building the heap from the request list is O(n). This provides a quick way to surface the next critical job (e.g., `SR-1002` Critical water leak).
+- **Example:** The heap compares priority, created date, and ID to ensure ties are deterministic, helping supervisors know which ticket needs immediate attention.
+
+### **ServiceGraph**
+
+- **Role in feature:** Models relationships between requests, connecting nodes that share category or location. Supplies BFS clusters and MST edges.
+- **Efficiency impact:** Graph traversals are O(V+E). Our implementation uses adjacency lists with `CustomDictionary` and `CustomList`, minimising memory and traversal overhead.
+- **Example:** For Ward 7 waste management, BFS reveals a chain `SR-1004 → SR-1006`, while the MST insight reports an edge weight combining priority difference and temporal distance—useful when planning combined site visits.
+
+### **Supporting Helpers**
+
+- **ServiceRequestAnalytics** orchestrates all the above structures. Its `BuildInsights` method converts raw data-structure outputs into the strings rendered in the UI.
+- **ServiceRequestRepository** ensures the analytics layer always receives `CustomList<ServiceRequest>` instances, maintaining compatibility with the custom collections.
+
+Together these data structures transform a static grid into an interactive, data-driven dashboard where each insight is backed by a purposeful algorithm with predictable performance characteristics.
 
 ## Data Storage
 
@@ -504,12 +566,6 @@ Municipality_App                    // Root namespace
 - **Memory Usage**: Monitor memory usage with large numbers of events/announcements
 - **UI Responsiveness**: All operations run on the main thread (synchronous)
 
-### Network Issues
-
-- **Offline Mode**: Application works completely offline
-- **Data Synchronization**: No network connectivity required
-- **File Sharing**: User profiles can be shared between installations
-
 ### Common Error Messages
 
 - **"File not found"**: Check file paths and permissions
@@ -525,6 +581,24 @@ Municipality_App                    // Root namespace
 - **Verify Dependencies**: Ensure all required .NET Framework components are installed
 - **Test Data**: Use sample data to test functionality before using real data
 - **Backup Data**: Always backup user profiles before making changes
+
+## Change Log
+
+Part 1 - 2 changes:
+
+1. Refined user engagement so that the chosen user engagement strategy is seamlessly integrated, positively influencing user participation.
+2. Updated README so that it is excellent, providing all relevant information for compiling, running, and using the software.
+3. Updated UI to ensure that the interface maintains a consistent color scheme and layout, enhancing user familiarity. Labels, buttons, and instructions are clear and easily understood. Feedback mechanisms are implemented effectively, keeping users informed. The interface is responsive, accommodating various screen sizes.
+4. Implemented event handlers for button clicks and user interactions, ensuring flawless functionality. Appropriate data structures (e.g., CustomList) are used efficiently to manage and organise user-reported issues.
+
+Part 2 - 3 changes:
+
+1. Incorporated custom data structures throughout the solution, including:
+   - `CustomList`, `CustomDictionary`, `CustomQueue`, `CustomStack`, `CustomSortedSet`, and `CustomSortedDictionary` for bespoke collection handling.
+   - Tree suite (`BasicTree`, `BinaryTree`, `BinarySearchTree`, `AvlTree`, `RedBlackTree`) to model timelines, rankings, and lookups.
+   - `MinHeap` for urgency queues and `ServiceGraph` for traversal + MST analytics.
+2. Enhanced the Local Events & Announcements experience, aligning the engagement form with the new data structures and recommendation services to deliver personalised, high-performance content.
+3. Strengthened the documentation and sample data footprint so that events, announcements, and engagement workflows can be demonstrated end-to-end during evaluation.
 
 ## License
 

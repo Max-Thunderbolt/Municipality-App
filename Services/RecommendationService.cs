@@ -654,7 +654,7 @@ namespace Municipality_App.Services
                 }
 
                 // Factor 3: Search Pattern Matching (20% weight)
-                // Implements fuzzy matching algorithm for search query relevance
+                // Includes exact matches AND related events in the same category
                 if (recentSearches != null)
                 {
                     foreach (var search in recentSearches)
@@ -667,15 +667,53 @@ namespace Municipality_App.Services
                         var eventDescLower = evt.EventDescription?.ToLower() ?? "";
                         var eventCategoryLower = evt.EventCategory?.ToLower() ?? "";
 
-                        // Multi-field fuzzy matching for comprehensive relevance
-                        if (
-                            eventNameLower.Contains(queryLower)
-                            || eventDescLower.Contains(queryLower)
-                            || eventCategoryLower.Contains(queryLower)
-                        )
+                        // Get events that match the search query to find the category
+                        var searchedEvents = EventService.SearchEvents(search.SearchQuery);
+                        bool isExactMatch = false;
+                        string searchedCategory = "";
+                        
+                        // Check if this event was in the search results (exact match)
+                        foreach (var searchedEvent in searchedEvents)
                         {
-                            score += 0.2;
-                            break; // Prevent double-counting for same search
+                            if (searchedEvent.EventId == evt.EventId)
+                            {
+                                isExactMatch = true;
+                            }
+                            // Capture the category of searched events
+                            if (string.IsNullOrEmpty(searchedCategory) && !string.IsNullOrEmpty(searchedEvent.EventCategory))
+                            {
+                                searchedCategory = searchedEvent.EventCategory.ToLower();
+                            }
+                        }
+                        
+                        // 1. Give high score to exact matches (the searched item itself)
+                        if (isExactMatch)
+                        {
+                            score += 0.25; // High priority for exact matches
+                        }
+                        
+                        // Also check for name matches
+                        if (eventNameLower.Equals(queryLower) || (eventNameLower.Contains(queryLower) && queryLower.Length > 3))
+                        {
+                            score += 0.25; // High priority for exact name matches
+                        }
+
+                        // 2. Give points to RELATED events in the same category as searched events
+                        if (!string.IsNullOrEmpty(searchedCategory) && eventCategoryLower == searchedCategory)
+                        {
+                            score += 0.2; // Related event in same category
+                        }
+
+                        // 3. Category keyword matching
+                        if (eventCategoryLower.Contains(queryLower))
+                        {
+                            score += 0.15; // Related by category keywords
+                        }
+
+                        // 4. Similar keywords in description
+                        if (eventDescLower.Contains(queryLower))
+                        {
+                            score += 0.1; // Related by description keywords
                         }
                     }
                 }
@@ -755,7 +793,7 @@ namespace Municipality_App.Services
                 // Older announcements get no recency bonus
 
                 // Factor 2: Search Pattern Matching (30% weight)
-                // Implements fuzzy matching algorithm for search query relevance
+                // Includes exact matches AND related announcements in the same category
                 if (recentSearches != null)
                 {
                     foreach (var search in recentSearches)
@@ -768,15 +806,53 @@ namespace Municipality_App.Services
                         var descLower = announcement.AnnouncementDescription?.ToLower() ?? "";
                         var categoryLower = announcement.AnnouncementCategory?.ToLower() ?? "";
 
-                        // Multi-field fuzzy matching for comprehensive relevance
-                        if (
-                            titleLower.Contains(queryLower)
-                            || descLower.Contains(queryLower)
-                            || categoryLower.Contains(queryLower)
-                        )
+                        // Get announcements that match the search query to find the category
+                        var searchedAnnouncements = AnnouncementService.SearchAnnouncements(search.SearchQuery);
+                        bool isExactMatch = false;
+                        string searchedCategory = "";
+                        
+                        // Check if this announcement was in the search results (exact match)
+                        foreach (var searchedAnnouncement in searchedAnnouncements)
                         {
-                            score += 0.3;
-                            break; // Prevent double-counting for same search
+                            if (searchedAnnouncement.AnnouncementId == announcement.AnnouncementId)
+                            {
+                                isExactMatch = true;
+                            }
+                            // Capture the category of searched announcements
+                            if (string.IsNullOrEmpty(searchedCategory) && !string.IsNullOrEmpty(searchedAnnouncement.AnnouncementCategory))
+                            {
+                                searchedCategory = searchedAnnouncement.AnnouncementCategory.ToLower();
+                            }
+                        }
+                        
+                        // 1. Give high score to exact matches (the searched item itself)
+                        if (isExactMatch)
+                        {
+                            score += 0.3; // High priority for exact matches
+                        }
+                        
+                        // Also check for title matches
+                        if (titleLower.Equals(queryLower) || (titleLower.Contains(queryLower) && queryLower.Length > 3))
+                        {
+                            score += 0.3; // High priority for exact title matches
+                        }
+
+                        // 2. Give points to RELATED announcements in the same category as searched announcements
+                        if (!string.IsNullOrEmpty(searchedCategory) && categoryLower == searchedCategory)
+                        {
+                            score += 0.3; // Related announcement in same category
+                        }
+
+                        // 3. Category keyword matching
+                        if (categoryLower.Contains(queryLower))
+                        {
+                            score += 0.2; // Related by category keywords
+                        }
+
+                        // 4. Similar keywords in description
+                        if (descLower.Contains(queryLower))
+                        {
+                            score += 0.15; // Related by description keywords
                         }
                     }
                 }
